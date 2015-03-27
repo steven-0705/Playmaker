@@ -37,6 +37,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         actionbar.setDisplayUseLogoEnabled(false);
         actionbar.setDisplayShowCustomEnabled(true);
         actionbar.setDisplayShowHomeEnabled(false);
+
         viewpager.setAdapter(ft);
         actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         actionbar.addTab(actionbar.newTab().setIcon(R.drawable.group_icon).setText("Group").setTabListener(this));
