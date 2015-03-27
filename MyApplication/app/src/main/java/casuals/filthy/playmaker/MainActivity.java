@@ -23,6 +23,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     ViewPager viewpager;
     FragmentPageAdapter ft;
 
+
     private static CheckBox checkBox1, checkBox2, checkBox3, checkBox4;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +53,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
             @Override
             public void onPageScrolled(int arg0, float arg1, int arg2) {
                 // TODO Auto-generated method stub
-                addListenerOnCheckBox();
+
 
             }
             @Override
@@ -69,110 +70,24 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     @Override
     public void onTabReselected(Tab tab, FragmentTransaction ft) {
         // TODO Auto-generated method stub
-        addListenerOnCheckBox();
+
 
     }
     @Override
     public void onTabSelected(Tab tab, FragmentTransaction ft) {
         viewpager.setCurrentItem(tab.getPosition());
-        addListenerOnCheckBox();
+
 
     }
     @Override
     public void onTabUnselected(Tab tab, FragmentTransaction ft) {
         // TODO Auto-generated method stub
-        addListenerOnCheckBox();
+
 
     }
 
 
-    public void addListenerOnCheckBox() {
-        if(checkBox1 == null) {
-            try {
-                checkBox1 = (CheckBox) findViewById(R.id.groupCheckBox1);
-                checkBox2 = (CheckBox) findViewById(R.id.groupCheckBox2);
-                checkBox3 = (CheckBox) findViewById(R.id.groupCheckBox3);
-                checkBox4 = (CheckBox) findViewById(R.id.groupCheckBox4);
 
-                checkBox1.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        //is chkIos checked?
-                        if (((CheckBox) v).isChecked()) {
-                            Toast.makeText(MainActivity.this,
-                                    "You Have selected Basketball", Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-                });
-
-                checkBox2.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        //is chkIos checked?
-                        if (((CheckBox) v).isChecked()) {
-                            Toast.makeText(MainActivity.this,
-                                    "You Have selected Baseball", Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-                });
-
-                checkBox3.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        //is chkIos checked?
-                        if (((CheckBox) v).isChecked()) {
-                            Toast.makeText(MainActivity.this,
-                                    "You Have selected LAN PARTY", Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-                });
-
-                checkBox4.setOnClickListener(new View.OnClickListener() {
-                    EditText blah = (EditText) findViewById(R.id.groupOther);
-                    @Override
-                    public void onClick(View v) {
-                        //is chkIos checked?
-                        if (((CheckBox) v).isChecked()) {
-                            //Creating the instance of PopupMenu
-                            PopupMenu popup = new PopupMenu(MainActivity.this, blah);
-                            popup.getMenu().add("Soccer");
-                            popup.getMenu().add("Football");
-                            popup.getMenu().add("Quidditch");
-                            popup.getMenu().add("Other");
-                            popup.show();
-
-                            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                                public boolean onMenuItemClick(MenuItem item) {
-                                    if(!item.getTitle().equals("Other")){
-                                        blah.setText(item.getTitle());
-                                        return true;
-                                    }
-                                    blah.setEnabled(true);
-                                    InputMethodManager imm = (InputMethodManager)getSystemService(
-                                            Context.INPUT_METHOD_SERVICE);
-                                    imm.showSoftInput(blah,0);
-                                    return false;
-                                }
-                            });
-
-
-                        }
-                        else{
-                            blah.setEnabled(false);
-                            blah.setText(null);
-                        }
-                    }
-                });
-            } catch (Exception e) {
-                return;
-            }
-        }
     }
 
 
@@ -181,5 +96,5 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 
 
-}
+
 

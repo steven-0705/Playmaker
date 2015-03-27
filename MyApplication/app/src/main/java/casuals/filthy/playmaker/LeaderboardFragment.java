@@ -108,7 +108,7 @@ public class LeaderboardFragment extends ListFragment {
                 popupWindow.dismiss();
             }});
         popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
-       
+
     }
 
 
