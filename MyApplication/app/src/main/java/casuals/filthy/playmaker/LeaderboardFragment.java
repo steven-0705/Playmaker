@@ -108,8 +108,7 @@ public class LeaderboardFragment extends ListFragment {
                 popupWindow.dismiss();
             }});
         popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
-        Toast mToast = Toast.makeText(this.getActivity(),"clicked:"+String.valueOf(position)+" "+ Entries.get(position-1).get(LeaderboardEntries.KEY_NAME) , Toast.LENGTH_SHORT);
-        mToast.show();
+       
     }
 
 
