@@ -19,8 +19,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import casuals.filthy.playmaker.data.DatabaseController;
-
 /**
  * Created by Chris on 3/26/2015.
  */
@@ -33,7 +31,7 @@ class ServletPostAsyncTask extends AsyncTask<Pair<Context, String>, Void, String
         String name = params[0].second;
 
         HttpClient httpClient = new DefaultHttpClient();
-        HttpPost httpPost = new HttpPost(DatabaseController.ServletURL); // 10.0.2.2 is localhost's IP address in Android emulator
+        HttpPost httpPost = new HttpPost(DataController.ServletURL); // 10.0.2.2 is localhost's IP address in Android emulator
         try {
             // Add name data to request
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
