@@ -18,7 +18,6 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener{
     ActionBar actionbar;
     ViewPager viewpager;
