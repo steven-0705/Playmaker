@@ -15,7 +15,7 @@ import data.metadata.UserLookup;
  */
 public class OfyService {
     static {
-        ObjectifyService.register(DataObject.class);
+        ObjectifyService.register(UserData.class);
         ObjectifyService.register(MetaDataObject.class);
     }
 

@@ -35,27 +35,30 @@ public class UsersServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String userName = req.getParameter("user_name");
         String userEmail = req.getParameter("user_email");
-        String userIdString = req.getParameter("user_id");
-        long userId;
+        String userId = req.getParameter("user_id");
 
         // lookup the user if the id was not specified
-        if (userIdString == null) {
-            UserLookup lookup = ofy().load().type(UserLookup.class).id(UserLookup.META_ID).now();
+        if (userId == null) {
+            /*UserLookup lookup = ofy().load().type(UserLookup.class).id(UserLookup.META_ID).now();
             if (lookup == null) {
                 resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 return;
             }
 
-            userId = lookup.getUserId(userEmail);
-        } else {
-            userId = Long.parseLong(userIdString);
+            userId = lookup.getUserId(userEmail);*/
+
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing user_id parameter");
+            return;
         }
 
         // get the User data
         UserData user = ofy().load().type(UserData.class).id(userId).now();
         if (user == null) {
-            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            //resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            //return;
+            doPut(req, resp);
             return;
         }
 
@@ -81,13 +84,14 @@ public class UsersServlet extends HttpServlet {
         // Create a new user by force
         String name = req.getParameter("user_name");
         String email = req.getParameter("user_email");
+        String userId = req.getParameter("user_id");
 
-        if (name == null || email == null) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        if (name == null || email == null || userId == null) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing parameters to create user");
             return;
         }
 
-        UserIdMgr idMgr = ofy().load().type(UserIdMgr.class).id(UserIdMgr.META_ID).now();
+        /*UserIdMgr idMgr = ofy().load().type(UserIdMgr.class).id(UserIdMgr.META_ID).now();
         long id;
         if (idMgr == null) {
             // create a the mgr
@@ -106,10 +110,17 @@ public class UsersServlet extends HttpServlet {
         // get next id
         id = idMgr.getNextId();
         lookup.addUser(email, id);
-        ofy().save().entities(lookup, idMgr).now();
+        ofy().save().entities(lookup, idMgr).now();*/
+
+        // check if user exists
+        UserData test = ofy().load().type(UserData.class).id(userId).now();
+        if (test != null) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "user already exists");
+            return;
+        }
 
         // create user
-        UserData user = new UserData(email, name, id);
+        UserData user = new UserData(email, name, userId);
         ofy().save().entity(user);
 
         // respond
