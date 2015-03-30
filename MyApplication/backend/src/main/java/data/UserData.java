@@ -27,9 +27,18 @@ public class UserData extends DataObject{
         groups = new ArrayList<UserGroup>();
     }
 
+    public void addGroup(GroupData group) {
+        groups.add(new UserGroup(group.name, group.id));
+    }
+
     protected class UserGroup {
         public String name;
         public long id;
+
+        public UserGroup(String name, long id) {
+            this.name = name;
+            this.id = id;
+        }
     }
 
 }
