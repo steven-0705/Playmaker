@@ -16,8 +16,10 @@ public class UserData extends DataObject{
     public String email;
     public List<Map<String, String>> groups;
 
-    public UserData(String email, String name, long id) {
-        this.id = id;
+    private UserData() {};
+
+    public UserData(String email, String name, long user_id) {
+        this.id = user_id;
         this.name = name;
         this.email = email;
 

@@ -11,10 +11,11 @@ import java.util.Map;
 @Subclass
 public class UserLookup extends MetaDataObject {
 
-
+    public static final long META_ID = 51232;
     private Map<String, Long> lookup;
 
     public UserLookup() {
+        data_id = META_ID;
         lookup = new HashMap<String, Long>();
     }
 

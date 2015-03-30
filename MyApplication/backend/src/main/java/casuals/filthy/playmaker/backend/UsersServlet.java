@@ -41,7 +41,7 @@ public class UsersServlet extends HttpServlet {
 
         // lookup the user if the id was not specified
         if (userIdString == null) {
-            UserLookup lookup = ofy().load().type(UserLookup.class).id(MetaDataObject.META_ID).now();
+            UserLookup lookup = ofy().load().type(UserLookup.class).id(UserLookup.META_ID).now();
             if (lookup == null) {
                 resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 return;
@@ -72,7 +72,7 @@ public class UsersServlet extends HttpServlet {
 
     @Override
      public void doPost(HttpServletRequest req, HttpServletResponse resp) {
-
+        // TODO Add support for changing name and adding groups
     }
 
     @Override
@@ -86,19 +86,31 @@ public class UsersServlet extends HttpServlet {
             return;
         }
 
-        UserIdMgr idMgr = ofy().load().type(UserIdMgr.class).id(MetaDataObject.META_ID).now();
+        UserIdMgr idMgr = ofy().load().type(UserIdMgr.class).id(UserIdMgr.META_ID).now();
         long id;
         if (idMgr == null) {
             // create a the mgr
             idMgr = new UserIdMgr();
         }
+        UserLookup lookup = ofy().load().type(UserLookup.class).id(UserLookup.META_ID).now();
+        if (lookup == null) {
+            // create a the mgr
+            lookup = new UserLookup();
+        }
+        if (lookup.getUserId(email) != -1) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "User already exists with this email");
+            return;
+        }
 
         // get next id
         id = idMgr.getNextId();
         ofy().save().entity(idMgr);
+        lookup.addUser(email, id);
+        ofy().save().entity(lookup);
 
         // create user
         UserData user = new UserData(email, name, id);
+        ofy().save().entity(user);
 
         // respond
         String userJson = gson.toJson(user);

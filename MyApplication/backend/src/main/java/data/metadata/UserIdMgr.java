@@ -9,7 +9,13 @@ import com.googlecode.objectify.annotation.Subclass;
 public class UserIdMgr extends MetaDataObject {
 
     // reserve 0 for null
+    public static final long META_ID = 12345;
+
     private long nextId = 1;
+
+    public UserIdMgr () {
+        data_id = META_ID;
+    }
 
     public long getNextId() {
         long next = nextId;
