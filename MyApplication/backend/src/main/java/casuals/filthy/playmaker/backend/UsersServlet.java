@@ -16,14 +16,21 @@ import javax.servlet.http.*;
 
 import data.UserData;
 import data.metadata.MetaDataObject;
+import data.metadata.UserIdMgr;
 import data.metadata.UserLookup;
 
-import static com.googlecode.objectify.ObjectifyService.*;
+import static casuals.filthy.playmaker.backend.OfyService.ofy;
 
 public class UsersServlet extends HttpServlet {
 
     private static final Logger logger = Logger.getLogger(UsersServlet.class.getName());
     private static Gson gson = new Gson();
+
+    static {
+        ObjectifyService.register(UserData.class);
+        ObjectifyService.register(UserLookup.class);
+        ObjectifyService.register(UserIdMgr.class);
+    }
 
 
     @Override
@@ -36,7 +43,7 @@ public class UsersServlet extends HttpServlet {
         if (userIdString == null) {
             UserLookup lookup = ofy().load().type(UserLookup.class).id(MetaDataObject.META_ID).now();
             if (lookup == null) {
-                resp.setIntHeader("No lookup table found", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 return;
             }
 
@@ -48,7 +55,7 @@ public class UsersServlet extends HttpServlet {
         // get the User data
         UserData user = ofy().load().type(UserData.class).id(userId).now();
         if (user == null) {
-            resp.setIntHeader("User not found", HttpServletResponse.SC_NOT_FOUND);
+            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
@@ -61,5 +68,50 @@ public class UsersServlet extends HttpServlet {
         resp.getWriter().write(userJson);
         resp.getWriter().flush();
         resp.getWriter().close();
+    }
+
+    @Override
+     public void doPost(HttpServletRequest req, HttpServletResponse resp) {
+
+    }
+
+    @Override
+    public void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        // Create a new user by force
+        String name = req.getParameter("user_name");
+        String email = req.getParameter("user_email");
+
+        if (name == null || email == null) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
+        UserIdMgr idMgr = ofy().load().type(UserIdMgr.class).id(MetaDataObject.META_ID).now();
+        long id;
+        if (idMgr == null) {
+            // create a the mgr
+            idMgr = new UserIdMgr();
+        }
+
+        // get next id
+        id = idMgr.getNextId();
+        ofy().save().entity(idMgr);
+
+        // create user
+        UserData user = new UserData(email, name, id);
+
+        // respond
+        String userJson = gson.toJson(user);
+        resp.setStatus(HttpServletResponse.SC_OK);
+        resp.setContentType("application/json");
+        resp.getWriter().write(userJson);
+        resp.getWriter().flush();
+        resp.getWriter().close();
+    }
+
+    @Override
+    public void doDelete(HttpServletRequest req, HttpServletResponse resp) {
+        // TODO this should probably be implemented at some point
+        resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
     }
 }

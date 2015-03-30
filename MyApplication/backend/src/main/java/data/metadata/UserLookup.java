@@ -1,11 +1,14 @@
 package data.metadata;
 
+import com.googlecode.objectify.annotation.Subclass;
+
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by Chris on 3/29/2015.
  */
+@Subclass
 public class UserLookup extends MetaDataObject {
 
 

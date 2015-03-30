@@ -13,12 +13,11 @@ public abstract class DataObject {
 
     @Id public long id;
     public String name;
-    public Date dateCreated;
+    public long dateCreated = System.currentTimeMillis();
     public long createdByUser;
 
     public DataObject() {
         id = 0;
-        dateCreated = new Date();
     }
 
 }

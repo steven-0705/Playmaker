@@ -8,7 +8,9 @@ import com.googlecode.objectify.annotation.*;
 @Entity
 public abstract class MetaDataObject {
 
-    public static final long META_ID = 100;
+    public static final long META_ID = 12345;
+
+    // Only supposed to be one of every meta-data object
     @Id final long data_id = META_ID;
     protected long version;
     protected boolean modified = false;
