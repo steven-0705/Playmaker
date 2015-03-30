@@ -73,6 +73,7 @@ public class UsersServlet extends HttpServlet {
     @Override
      public void doPost(HttpServletRequest req, HttpServletResponse resp) {
         // TODO Add support for changing name and adding groups
+        resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
     }
 
     @Override
@@ -104,9 +105,8 @@ public class UsersServlet extends HttpServlet {
 
         // get next id
         id = idMgr.getNextId();
-        ofy().save().entity(idMgr);
         lookup.addUser(email, id);
-        ofy().save().entity(lookup);
+        ofy().save().entities(lookup, idMgr).now();
 
         // create user
         UserData user = new UserData(email, name, id);
