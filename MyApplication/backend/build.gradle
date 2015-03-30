@@ -25,7 +25,7 @@ dependencies {
     appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.14'
     compile 'javax.servlet:servlet-api:2.5'
     compile files('lib/gson-2.2.4.jar')
-    compile files('lib/objectify-4.0b1.jar')
+    compile files('lib/objectify-5.1.5.jar')
 }
 
 appengine {
