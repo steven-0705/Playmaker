@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Created by Chris on 3/26/2015.
  */
-class ServletPostAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> {
+class ServletPostAsynchTask extends AsyncTask<Pair<Context, String>, Void, String> {
     private Context context;
 
     @Override
