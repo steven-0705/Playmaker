@@ -32,11 +32,20 @@
         android:layout_height="80dp"
         android:layout_marginTop="80dp"
         />
+    <EditText
+        android:id="@+id/edittime1"
+        android:layout_width="wrap_content"
+        android:layout_height="160dp"
+        android:layout_marginTop="300dp"
+        />
+
     <Button
         android:id="@+id/button1"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginTop="160dp"
+        android:text="Set Date"
         />
+
 
 </RelativeLayout>
