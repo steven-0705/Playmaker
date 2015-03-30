@@ -24,8 +24,10 @@ targetCompatibility = JavaVersion.VERSION_1_7
 dependencies {
     appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.14'
     compile 'javax.servlet:servlet-api:2.5'
-    compile files('lib/gson-2.2.4.jar')
-    compile files('lib/objectify-5.1.5.jar')
+    compile 'com.google.code.gson:gson:2.3.1'
+    compile 'com.google.appengine:appengine-endpoints:1.9.14'
+    compile 'com.google.appengine:appengine-endpoints-deps:1.9.14'
+    compile 'com.googlecode.objectify:objectify:5.0.3'
 }
 
 appengine {
