@@ -35,6 +35,15 @@ public class UserBean extends DataBean {
         this.groups = groups;
     }
 
+    @Override
+    public String toString() {
+        return "UserBean{" +
+                "id='" + id + '\'' +
+                ", email='" + email + '\'' +
+                ", groups=" + groups +
+                '}';
+    }
+
     protected class UserGroupBean {
         public String name;
         public long id;
@@ -53,6 +62,14 @@ public class UserBean extends DataBean {
 
         public void setId(long id) {
             this.id = id;
+        }
+
+        @Override
+        public String toString() {
+            return "UserGroupBean{" +
+                    "name='" + name + '\'' +
+                    ", id=" + id +
+                    '}';
         }
     }
 
