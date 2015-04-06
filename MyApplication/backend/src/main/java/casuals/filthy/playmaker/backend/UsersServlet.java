@@ -8,16 +8,18 @@ package casuals.filthy.playmaker.backend;
 
 import com.google.gson.Gson;
 import com.googlecode.objectify.ObjectifyService;
+import com.googlecode.objectify.annotation.Entity;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import javax.servlet.http.*;
 
+import data.DataObject;
+import data.GroupData;
 import data.UserData;
 import data.metadata.MetaDataObject;
-import data.metadata.UserIdMgr;
-import data.metadata.UserLookup;
 
 import static casuals.filthy.playmaker.backend.OfyService.ofy;
 
@@ -26,36 +28,22 @@ public class UsersServlet extends HttpServlet {
     private static final Logger logger = Logger.getLogger(UsersServlet.class.getName());
     private static Gson gson = new Gson();
 
-    static {
-        ObjectifyService.register(UserData.class);
-        ObjectifyService.register(UserLookup.class);
-        ObjectifyService.register(UserIdMgr.class);
-    }
-
-
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String userName = req.getParameter("user_name");
         String userEmail = req.getParameter("user_email");
-        String userIdString = req.getParameter("user_id");
-        long userId;
+        String userId = req.getParameter("user_id");
 
         // lookup the user if the id was not specified
-        if (userIdString == null) {
-            UserLookup lookup = ofy().load().type(UserLookup.class).id(UserLookup.META_ID).now();
-            if (lookup == null) {
-                resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                return;
-            }
-
-            userId = lookup.getUserId(userEmail);
-        } else {
-            userId = Long.parseLong(userIdString);
+        if (userId == null) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing user_id parameter");
+            return;
         }
 
         // get the User data
         UserData user = ofy().load().type(UserData.class).id(userId).now();
         if (user == null) {
-            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            doPut(req, resp);
             return;
         }
 
@@ -71,9 +59,47 @@ public class UsersServlet extends HttpServlet {
     }
 
     @Override
-     public void doPost(HttpServletRequest req, HttpServletResponse resp) {
-        // TODO Add support for changing name and adding groups
-        resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
+     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String userId = req.getParameter("user_id");
+        if (userId == null) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing user_id field");
+            return;
+        }
+        UserData user = ofy().load().type(UserData.class).id(userId).now();
+        if (user == null) {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND, "user not found");
+            return;
+        }
+
+        ArrayList<DataObject> saves = new ArrayList<DataObject>();
+        saves.add(user);
+
+        String groupIdString = req.getParameter("group_id");
+        if (groupIdString != null) {
+            long groupId = Long.parseLong(groupIdString);
+            GroupData group = ofy().load().type(GroupData.class).id(groupId).now();
+            if (group == null) {
+                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "group not found");
+                return;
+            }
+
+            //TODO add to the group side too
+            group.addUser(user);
+            user.addGroup(group);
+            saves.add(group);
+        }
+
+
+
+        // done with all requests, save and return
+        ofy().save().entities(saves).now();
+        // respond
+        String userJson = gson.toJson(user);
+        resp.setStatus(HttpServletResponse.SC_OK);
+        resp.setContentType("application/json");
+        resp.getWriter().write(userJson);
+        resp.getWriter().flush();
+        resp.getWriter().close();
     }
 
     @Override
@@ -81,36 +107,23 @@ public class UsersServlet extends HttpServlet {
         // Create a new user by force
         String name = req.getParameter("user_name");
         String email = req.getParameter("user_email");
+        String userId = req.getParameter("user_id");
 
-        if (name == null || email == null) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        if (name == null || email == null || userId == null) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing parameters to create user");
             return;
         }
 
-        UserIdMgr idMgr = ofy().load().type(UserIdMgr.class).id(UserIdMgr.META_ID).now();
-        long id;
-        if (idMgr == null) {
-            // create a the mgr
-            idMgr = new UserIdMgr();
-        }
-        UserLookup lookup = ofy().load().type(UserLookup.class).id(UserLookup.META_ID).now();
-        if (lookup == null) {
-            // create a the mgr
-            lookup = new UserLookup();
-        }
-        if (lookup.getUserId(email) != -1) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "User already exists with this email");
+        // check if user exists
+        UserData test = ofy().load().type(UserData.class).id(userId).now();
+        if (test != null) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "user already exists");
             return;
         }
-
-        // get next id
-        id = idMgr.getNextId();
-        lookup.addUser(email, id);
-        ofy().save().entities(lookup, idMgr).now();
 
         // create user
-        UserData user = new UserData(email, name, id);
-        ofy().save().entity(user);
+        UserData user = new UserData(email, name, userId);
+        ofy().save().entity(user).now();
 
         // respond
         String userJson = gson.toJson(user);

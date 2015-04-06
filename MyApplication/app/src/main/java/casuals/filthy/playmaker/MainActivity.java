@@ -2,23 +2,18 @@ package casuals.filthy.playmaker;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
-import android.app.Notification;
-import android.app.Service;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 
-import android.view.MenuItem;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.PopupMenu;
-import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends FragmentActivity implements ActionBar.TabListener{
+import casuals.filthy.playmaker.data.DatastoreAdapter;
+import casuals.filthy.playmaker.data.AsyncResponse;
+import casuals.filthy.playmaker.data.beans.UserBean;
+
+public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
     ActionBar actionbar;
     ViewPager viewpager;
     FragmentPageAdapter ft;
@@ -87,8 +82,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     }
 
 
-
-    }
+}
 
 
 
