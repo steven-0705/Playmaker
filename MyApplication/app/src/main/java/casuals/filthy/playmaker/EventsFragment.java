@@ -4,6 +4,8 @@ package casuals.filthy.playmaker;
  * Created by Shane on 3/19/2015.
  */
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,6 +20,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import java.util.Calendar;
 import java.util.Date;
+import android.content.Context;
+import android.widget.Toast;
 
 public class EventsFragment extends Fragment {
 
@@ -32,10 +36,11 @@ public class EventsFragment extends Fragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, items);
         dropdown.setAdapter(adapter);
 
-        final Button button = (Button) eventView.findViewById(R.id.button1);
-        final EditText editText = (EditText) eventView.findViewById(R.id.edittext1);
-        final EditText editTime = (EditText) eventView.findViewById(R.id.edittime1);
-        editTime.setEnabled(false);
+        //EditText editText = (EditText) eventView.findViewById(R.id.edittext1);
+        //final EditText askLoc = (EditText) eventView.findViewById(R.id.locationView);
+        //EditText getLoc = (EditText) eventView.findViewById(R.id.edittext2);
+        //final EditText editTime = (EditText) eventView.findViewById(R.id.edittime1);
+        //editTime.setEnabled(false);
         return eventView;
     }
 
@@ -43,14 +48,15 @@ public class EventsFragment extends Fragment {
 
         public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
-            super.onViewCreated(view, savedInstanceState);
+        super.onViewCreated(view, savedInstanceState);
         registerForContextMenu(getView());
         setHasOptionsMenu(true);
-            final Button button = (Button) view.findViewById(R.id.button1);
-            final EditText editTime = (EditText) view.findViewById(R.id.edittime1);
-            final String temp = "bug here";
-
-            button.setOnClickListener(new View.OnClickListener() {
+            final Button button1 = (Button) view.findViewById(R.id.button1);
+            final Button button2 = (Button) view.findViewById(R.id.button2);
+            final EditText getLoc = (EditText) view.findViewById(R.id.edittext2);
+            final EditText getOther = (EditText) view.findViewById(R.id.edittext1);
+            final Spinner getOption = (Spinner) view.findViewById(R.id.spinner1);
+            button1.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
@@ -64,16 +70,41 @@ public class EventsFragment extends Fragment {
                         public void onDateSet(DatePicker datepicker, int year, int month, int day) {
                             // TODO Auto-generated method stub
                             month = month + 1;
-                            editTime.append("" + month + "/" + day + "/" + year + "\n");
-                            temp.concat("" + month + "/" + day + "\n");
+                            //editTime.append("" + month + "/" + day + "/" + year + "\n");
+                            button1.setText("" + month + "/" + day + "/" + year);
                         }
                     }, mYear, mMonth, mDay);
                     DatePicker.setTitle("Select Date");
                     DatePicker.show();
-                    Log.w("Test", temp.toString());
                 }
             });
-            //return eventView;
-
+            button2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String loc = getLoc.getText().toString();
+                    String other = getOther.getText().toString();
+                    String option = getOption.getSelectedItem().toString();
+                    if (loc.isEmpty()) {
+                        Context context = v.getContext();
+                        CharSequence text = "Please provide an address";
+                        int duration = Toast.LENGTH_SHORT;
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                        return;
+                    }
+                    if (option=="Other" && other == "") {
+                        Context context = v.getContext();
+                        CharSequence text = "Please provide an event name";
+                        int duration = Toast.LENGTH_SHORT;
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                        return;
+                    }
+                    Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + loc);
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    startActivity(mapIntent);
+                }
+            });
     }
 }
