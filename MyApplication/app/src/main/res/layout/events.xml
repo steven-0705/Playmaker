@@ -9,12 +9,22 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="What type of Event do you want to create?"
+        android:text="What type of event do you want to create?"
         android:textSize="16sp"
         android:textStyle="bold"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="10dp"
          />
+
+    <TextView
+        android:id="@+id/locationView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Where will it take place?"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginTop="220dp"
+        />
 
     <Spinner
         android:id="@+id/spinner1"
@@ -32,11 +42,27 @@
         android:layout_height="80dp"
         android:layout_marginTop="80dp"
         />
+
+    <EditText
+        android:id="@+id/edittext2"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="240dp"
+        />
+
     <Button
         android:id="@+id/button1"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginTop="160dp"
+        android:text="Set Date"
+        />
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/edittext2"
+        android:text="Submit"
         />
 
 </RelativeLayout>
