@@ -19,7 +19,6 @@ import javax.servlet.http.*;
 import data.DataObject;
 import data.GroupData;
 import data.UserData;
-import data.metadata.MetaDataObject;
 
 import static casuals.filthy.playmaker.backend.OfyService.ofy;
 
