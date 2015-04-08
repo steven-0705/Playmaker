@@ -33,7 +33,18 @@ public class GroupData extends DataObject {
     }
 
     public void addEvent(EventData event) {
+        if (events == null)
+            events = new ArrayList<GroupEventData>();
+        events.add(new GroupEventData(event.name, event.date, event.id));
+    }
 
+    public boolean isUserAdmin(String userId) {
+        for (GroupUserData user: users) {
+            if (user.id.equals(userId))
+                return true;
+        }
+
+        return false;
     }
 
 
