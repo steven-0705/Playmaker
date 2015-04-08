@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import data.EventData;
 import data.GroupData;
+import data.UserData;
 
 import static casuals.filthy.playmaker.backend.OfyService.ofy;
 
@@ -52,12 +53,88 @@ public class EventsServlet extends HttpServlet {
 
         // create the event
         long id = DatastoreServiceFactory.getDatastoreService().allocateIds("event", 1).getStart().getId();
-        EventData event = new EventData(id, date, type);
+        EventData event = new EventData(id, date, type, group.id);
 
         group.addEvent(event);
 
         // put the data back
         ofy().save().entities(event, group).now();
+
+        // respond
+        String groupJson = gson.toJson(event);
+        resp.setStatus(HttpServletResponse.SC_OK);
+        resp.setContentType("application/json");
+        resp.getWriter().write(groupJson);
+        resp.getWriter().flush();
+        resp.getWriter().close();
+    }
+
+    @Override
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String groupIdString = req.getParameter("group_id");
+        String eventIdString = req.getParameter("event_id");
+
+        if (groupIdString == null || eventIdString == null) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing required field: group_id, event_id");
+            return;
+        }
+        long groupId = Long.parseLong(groupIdString);
+        long eventId = Long.parseLong(eventIdString);
+
+        EventData event = ofy().load().type(EventData.class).id(eventId).now();
+        if (event == null) {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND, "event not found");
+            return;
+        }
+
+        if (event.groupId != groupId) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "incorrect group id");
+            return;
+        }
+
+        // respond
+        String groupJson = gson.toJson(event);
+        resp.setStatus(HttpServletResponse.SC_OK);
+        resp.setContentType("application/json");
+        resp.getWriter().write(groupJson);
+        resp.getWriter().flush();
+        resp.getWriter().close();
+    }
+
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String groupIdString = req.getParameter("group_id");
+        String eventIdString = req.getParameter("event_id");
+        String userId = req.getParameter("user_id");
+
+        if (groupIdString == null || eventIdString == null) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing required field: group_id, event_id");
+            return;
+        }
+        long groupId = Long.parseLong(groupIdString);
+        long eventId = Long.parseLong(eventIdString);
+
+        EventData event = ofy().load().type(EventData.class).id(eventId).now();
+        if (event == null) {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND, "event not found");
+            return;
+        }
+
+        if (event.groupId != groupId) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "incorrect group id");
+            return;
+        }
+
+        if (userId != null) {
+            UserData user = ofy().load().type(UserData.class).id(userId).now();
+            if (user == null) {
+                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "user not found");
+                return;
+            }
+            event.addAttendee(user.id, user.name);
+        }
+
+        // put the data back
+        ofy().save().entity(event).now();
 
         // respond
         String groupJson = gson.toJson(event);

@@ -17,11 +17,13 @@ public class EventData extends DataObject {
     public long date;
     public String type;
     public Map<String, String> attending;
+    public long groupId;
 
-    public EventData(long id, long date, String type) {
+    public EventData(long id, long date, String type, long groupId) {
         this.id = id;
         this.date = date;
         this.type = type;
+        this.groupId = groupId;
     }
 
     public void addAttendee(String id, String name) {
