@@ -29,7 +29,7 @@ public class GroupsServlet extends HttpServlet {
     private static Gson gson = new Gson();
 
     @Override
-    public void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         // get the parameters
         String userId = req.getParameter("user_id");
         String groupName = req.getParameter("group_name");
@@ -89,9 +89,5 @@ public class GroupsServlet extends HttpServlet {
         resp.getWriter().flush();
         resp.getWriter().close();
     }
-
-
-
-
 
 }

@@ -47,6 +47,15 @@ public class GroupData extends DataObject {
         return false;
     }
 
+    public GroupEventData getEvent(long id) {
+        for (GroupEventData event: events) {
+            if (event.eventId == id)
+                return event;
+        }
+
+        return null;
+    }
+
 
     public class GroupUserData {
 

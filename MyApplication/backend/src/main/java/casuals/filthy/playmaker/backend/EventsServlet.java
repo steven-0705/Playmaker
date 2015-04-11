@@ -23,8 +23,13 @@ public class EventsServlet extends HttpServlet {
 
     public static Gson gson = new Gson();
 
-    @Override
-    public void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    /**
+     * Create a new event
+     * @param req
+     * @param resp
+     * @throws IOException
+     */
+    private void createEvent(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String userId = req.getParameter("user_id");
         String groupIdString = req.getParameter("group_id");
         String name = req.getParameter("event_name");
@@ -69,6 +74,12 @@ public class EventsServlet extends HttpServlet {
         resp.getWriter().close();
     }
 
+    /**
+     * Get an existing event
+     * @param req
+     * @param resp
+     * @throws IOException
+     */
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String groupIdString = req.getParameter("group_id");
@@ -78,6 +89,7 @@ public class EventsServlet extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing required field: group_id, event_id");
             return;
         }
+
         long groupId = Long.parseLong(groupIdString);
         long eventId = Long.parseLong(eventIdString);
 
@@ -101,15 +113,33 @@ public class EventsServlet extends HttpServlet {
         resp.getWriter().close();
     }
 
+    /**
+     * Make changes to an existing event
+     * @param req
+     * @param resp
+     * @throws IOException
+     */
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String groupIdString = req.getParameter("group_id");
         String eventIdString = req.getParameter("event_id");
-        String userId = req.getParameter("user_id");
 
-        if (groupIdString == null || eventIdString == null) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing required field: group_id, event_id");
+        // optional stuff
+        String userId = req.getParameter("user_id");
+        String name = req.getParameter("event_name");
+        String type = req.getParameter("event_type");
+        String dateString = req.getParameter("event_date");
+
+        if (groupIdString == null) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing required field: group_id");
             return;
         }
+
+        if (eventIdString == null) {
+            // create a new event
+            createEvent(req, resp);
+            return;
+        }
+
         long groupId = Long.parseLong(groupIdString);
         long eventId = Long.parseLong(eventIdString);
 
@@ -118,12 +148,14 @@ public class EventsServlet extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND, "event not found");
             return;
         }
+        GroupData group = ofy().load().type(GroupData.class).id(groupId).now();
 
         if (event.groupId != groupId) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "incorrect group id");
             return;
         }
 
+        // add user
         if (userId != null) {
             UserData user = ofy().load().type(UserData.class).id(userId).now();
             if (user == null) {
@@ -132,6 +164,33 @@ public class EventsServlet extends HttpServlet {
             }
             event.addAttendee(user.id, user.name);
         }
+
+        // admin abilities
+        if (name != null || type != null || dateString != null) {
+            // check to make sure admin
+            if (!group.isUserAdmin(userId)) {
+                resp.sendError(HttpServletResponse.SC_FORBIDDEN, "user is not admin");
+                return;
+            }
+
+            if (name != null) {
+                group.getEvent(eventId).name = name;
+                event.name = name;
+            }
+
+            if (type != null) {
+                event.type = type;
+            }
+
+            if (dateString != null) {
+                long date = Long.parseLong(dateString);
+                event.date = date;
+                group.getEvent(eventId).date = date;
+            }
+
+            ofy().save().entity(group).now();
+        }
+
 
         // put the data back
         ofy().save().entity(event).now();

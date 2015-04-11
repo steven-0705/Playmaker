@@ -41,9 +41,23 @@ public class UsersServlet extends HttpServlet {
 
         // get the User data
         UserData user = ofy().load().type(UserData.class).id(userId).now();
+        // missing, create
         if (user == null) {
-            doPut(req, resp);
-            return;
+            if (userName == null || userEmail == null || userId == null) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing parameters to create user");
+                return;
+            }
+
+            // check if user exists
+            UserData test = ofy().load().type(UserData.class).id(userId).now();
+            if (test != null) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "user already exists");
+                return;
+            }
+
+            // create user
+            user = new UserData(userEmail, userName, userId);
+            ofy().save().entity(user).now();
         }
 
         // convert to json
@@ -92,38 +106,6 @@ public class UsersServlet extends HttpServlet {
 
         // done with all requests, save and return
         ofy().save().entities(saves).now();
-        // respond
-        String userJson = gson.toJson(user);
-        resp.setStatus(HttpServletResponse.SC_OK);
-        resp.setContentType("application/json");
-        resp.getWriter().write(userJson);
-        resp.getWriter().flush();
-        resp.getWriter().close();
-    }
-
-    @Override
-    public void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        // Create a new user by force
-        String name = req.getParameter("user_name");
-        String email = req.getParameter("user_email");
-        String userId = req.getParameter("user_id");
-
-        if (name == null || email == null || userId == null) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing parameters to create user");
-            return;
-        }
-
-        // check if user exists
-        UserData test = ofy().load().type(UserData.class).id(userId).now();
-        if (test != null) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "user already exists");
-            return;
-        }
-
-        // create user
-        UserData user = new UserData(email, name, userId);
-        ofy().save().entity(user).now();
-
         // respond
         String userJson = gson.toJson(user);
         resp.setStatus(HttpServletResponse.SC_OK);
