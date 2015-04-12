@@ -28,6 +28,9 @@ public class UserData extends DataObject{
     }
 
     public void addGroup(GroupData group) {
+        if (groups == null) {
+            groups = new ArrayList<UserGroup>();
+        }
         groups.add(new UserGroup(group.name, group.id));
     }
 

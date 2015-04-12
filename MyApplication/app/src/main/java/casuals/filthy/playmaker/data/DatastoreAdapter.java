@@ -22,6 +22,7 @@ import java.io.InputStreamReader;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import casuals.filthy.playmaker.data.beans.GroupBean;
 import casuals.filthy.playmaker.data.beans.UserBean;
 
 /**
@@ -72,13 +73,23 @@ public class DatastoreAdapter {
                                             + "?user_id=" + userId + "&"
                                             + "user_name=" + userName + "&"
                                             + "user_email=" + userEmail);
-        HttpParams params = new BasicHttpParams();
+        /*HttpParams params = new BasicHttpParams();
         params.setParameter("user_id", userId);
         params.setParameter("user_name", userName);
-        params.setParameter("user_email", userEmail);
+        params.setParameter("user_email", userEmail);*/
         //get.setParams(params);
         // kick of async task
         type = UserBean.class;
+        ServletHttpAsyncTask request = new ServletHttpAsyncTask();
+        task = request;
+        request.execute(get);
+    }
+
+    public void getGroup(long groupId, String userId) {
+        HttpUriRequest get = new HttpGet(SERVER_URL + SERVLET_USERS
+                + "?user_id=" + userId + "&"
+                + "group_id=" + groupId);
+        type = GroupBean.class;
         ServletHttpAsyncTask request = new ServletHttpAsyncTask();
         task = request;
         request.execute(get);

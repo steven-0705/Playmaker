@@ -1,3 +1,5 @@
 MyApplication/app/app.iml
 MyApplication/backend/build/
 
+MyApplication/backend/backend.iml
+scripts/output.log

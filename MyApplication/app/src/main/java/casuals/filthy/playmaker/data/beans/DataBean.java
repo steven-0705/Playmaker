@@ -12,15 +12,7 @@ public class DataBean {
         return dateCreated;
     }
 
-    public void setDateCreated(long dateCreated) {
-        this.dateCreated = dateCreated;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 }

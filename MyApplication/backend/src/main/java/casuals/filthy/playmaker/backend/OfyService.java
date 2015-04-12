@@ -5,9 +5,9 @@ import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
 
 import data.DataObject;
+import data.EventData;
 import data.GroupData;
 import data.UserData;
-import data.metadata.MetaDataObject;
 
 /**
  * Created by Chris on 3/29/2015.
@@ -16,7 +16,7 @@ public class OfyService {
     static {
         ObjectifyService.register(UserData.class);
         ObjectifyService.register(GroupData.class);
-        ObjectifyService.register(MetaDataObject.class);
+        ObjectifyService.register(EventData.class);
     }
 
     public static Objectify ofy() {
