@@ -34,7 +34,7 @@ public class UserData extends DataObject{
         groups.add(new UserGroup(group.name, group.id));
     }
 
-    protected class UserGroup {
+    protected static class UserGroup {
         public String name;
         public long id;
 

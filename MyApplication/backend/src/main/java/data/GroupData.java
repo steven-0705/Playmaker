@@ -16,6 +16,8 @@ public class GroupData extends DataObject {
     public List<GroupUserData> users;
     public List<GroupEventData> events;
 
+    public GroupData() {};
+
     public GroupData(long id, String name) {
         this.id = id;
         this.name = name;
@@ -57,12 +59,14 @@ public class GroupData extends DataObject {
     }
 
 
-    public class GroupUserData {
+    public static class GroupUserData {
 
         public String name;
         public String id;
         public String type;
         public boolean admin;
+
+        public GroupUserData() {};
 
         public GroupUserData(String userId, String name) {
             id = userId;
@@ -80,10 +84,12 @@ public class GroupData extends DataObject {
 
     }
 
-    public class GroupEventData {
+    public static class GroupEventData {
         public String name;
         public long date;
         public long eventId;
+
+        public GroupEventData() {};
 
         public GroupEventData(String name, long date, long id) {
             this.name = name;

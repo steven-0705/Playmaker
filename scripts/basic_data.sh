@@ -33,4 +33,10 @@ echo "create event..."
 
 curl --data "" "$addr/groups/events?user_id=test1&group_id=1&event_name=event&event_type=unknown&event_date=5" >> output.log
 
+echo "add some users to event..."
+curl --data "" "$addr/groups/events?group_id=1&event_id=2&user_id=test3" >> output.log
+curl --data "" "$addr/groups/events?group_id=1&event_id=2&user_id=test2" >> output.log
+curl --data "" "$addr/groups/events?group_id=1&event_id=2&user_id=test4" >> output.log
+
+
 
