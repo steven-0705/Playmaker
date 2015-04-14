@@ -14,4 +14,27 @@ public abstract class DataObject {
     public long dateCreated = System.currentTimeMillis();
     public long createdByUser;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public long getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(long dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public long getCreatedByUser() {
+        return createdByUser;
+    }
+
+    public void setCreatedByUser(long createdByUser) {
+        this.createdByUser = createdByUser;
+    }
 }

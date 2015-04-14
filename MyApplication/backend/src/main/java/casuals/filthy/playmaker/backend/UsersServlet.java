@@ -47,7 +47,7 @@ public class UsersServlet extends HttpServlet {
         else {
             List<UserData> users = ofy().load().type(UserData.class).list();
             for (UserData u: users) {
-                if (userEmail.equals(u.email)) {
+                if (userEmail.equals(u.getEmail())) {
                     user = u;
                     break;
                 }

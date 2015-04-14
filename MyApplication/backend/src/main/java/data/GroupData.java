@@ -15,6 +15,7 @@ public class GroupData extends DataObject {
     public long id;
     public List<GroupUserData> users;
     public List<GroupEventData> events;
+    public List<String> eventTypes;
 
     public GroupData() {};
 
@@ -37,7 +38,8 @@ public class GroupData extends DataObject {
     public void addEvent(EventData event) {
         if (events == null)
             events = new ArrayList<GroupEventData>();
-        events.add(new GroupEventData(event.name, event.date, event.id));
+        events.add(new GroupEventData(event.getName(), event.getDate(), event.getId()));
+        addEventType(event.getType());
     }
 
     public boolean isUserAdmin(String userId) {
@@ -58,6 +60,20 @@ public class GroupData extends DataObject {
         return null;
     }
 
+    public void addEventType(String type) {
+        if (eventTypes == null) {
+            eventTypes = new ArrayList<String>();
+        }
+        eventTypes.add(type);
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public static class GroupUserData {
 
@@ -95,6 +111,10 @@ public class GroupData extends DataObject {
             this.name = name;
             this.date = date;
             this.eventId = id;
+        }
+
+        public void setName(String name) {
+            this.name = name;
         }
     }
 }
