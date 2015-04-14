@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import java.util.Calendar;
@@ -36,26 +37,31 @@ public class EventsFragment extends Fragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, items);
         dropdown.setAdapter(adapter);
 
-        //EditText editText = (EditText) eventView.findViewById(R.id.edittext1);
-        //final EditText askLoc = (EditText) eventView.findViewById(R.id.locationView);
-        //EditText getLoc = (EditText) eventView.findViewById(R.id.edittext2);
-        //final EditText editTime = (EditText) eventView.findViewById(R.id.edittime1);
-        //editTime.setEnabled(false);
         return eventView;
     }
 
     @Override
 
-        public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
-        super.onViewCreated(view, savedInstanceState);
-        registerForContextMenu(getView());
-        setHasOptionsMenu(true);
-            final Button button1 = (Button) view.findViewById(R.id.button1);
-            final Button button2 = (Button) view.findViewById(R.id.button2);
-            final EditText getLoc = (EditText) view.findViewById(R.id.edittext2);
-            final EditText getOther = (EditText) view.findViewById(R.id.edittext1);
-            final Spinner getOption = (Spinner) view.findViewById(R.id.spinner1);
+    super.onViewCreated(view, savedInstanceState);
+    registerForContextMenu(getView());
+    setHasOptionsMenu(true);;
+        final Button button1 = (Button) view.findViewById(R.id.button1);
+        final Button button2 = (Button) view.findViewById(R.id.button2);
+        final Button button3 = (Button) view.findViewById(R.id.additem);
+        final EditText getLoc = (EditText) view.findViewById(R.id.edittext2);
+        final EditText getOther = (EditText) view.findViewById(R.id.edittext1);
+        final EditText getTime = (EditText) view.findViewById(R.id.EditTime);
+        final EditText itemList = (EditText) view.findViewById(R.id.itemlist);
+        final String[] time = new String[3];
+        final Spinner getOption = (Spinner) view.findViewById(R.id.spinner1);
+        getTime.setEnabled(false);
+        itemList.setEnabled(false);
+        for (int i=0; i<time.length; i++) {
+            time[i] = "";
+        }
+
             button1.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -64,14 +70,25 @@ public class EventsFragment extends Fragment {
                     int mYear = currentDate.get(Calendar.YEAR);
                     int mMonth = currentDate.get(Calendar.MONTH);
                     int mDay = currentDate.get(Calendar.DAY_OF_MONTH);
+                    int i = 0;
 
                     DatePickerDialog DatePicker;
                     DatePicker = new DatePickerDialog(v.getContext(), new DatePickerDialog.OnDateSetListener() {
                         public void onDateSet(DatePicker datepicker, int year, int month, int day) {
                             // TODO Auto-generated method stub
                             month = month + 1;
-                            //editTime.append("" + month + "/" + day + "/" + year + "\n");
-                            button1.setText("" + month + "/" + day + "/" + year);
+                            String temp = "" + month + "/" + day + "/" + year;
+                            for (int i=0; i<time.length; i++){ // This loop and these checks are necessary because Android is dumb and detects a single Click twice
+                                if (time[i].matches("")) {
+                                    time[i] = (temp);
+                                    break;
+                                }
+                                if (time[i].matches(temp)) {
+                                    break;
+                                }
+                            }
+                            temp = time[0] + "\n" + time[1] + "\n" + time[2] + "\n";
+                            getTime.setText(temp); // sets the Text field to a max of 3 dates
                         }
                     }, mYear, mMonth, mDay);
                     DatePicker.setTitle("Select Date");
@@ -106,5 +123,11 @@ public class EventsFragment extends Fragment {
                     startActivity(mapIntent);
                 }
             });
+        button3.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+
+             }
+        });
     }
 }
