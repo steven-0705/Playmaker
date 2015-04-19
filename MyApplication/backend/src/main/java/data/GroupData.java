@@ -16,6 +16,8 @@ public class GroupData extends DataObject {
     public List<GroupUserData> users;
     public List<GroupEventData> events;
     public List<String> eventTypes;
+    public List<PollData> polls;
+    public List<Notification> notifications;
 
     public GroupData() {};
 
@@ -24,6 +26,9 @@ public class GroupData extends DataObject {
         this.name = name;
         users = new ArrayList<GroupUserData>();
         events = new ArrayList<GroupEventData>();
+        eventTypes = new ArrayList<String>();
+        polls = new ArrayList<PollData>();
+        notifications = new ArrayList<Notification>();
     }
 
 
@@ -65,6 +70,26 @@ public class GroupData extends DataObject {
             eventTypes = new ArrayList<String>();
         }
         eventTypes.add(type);
+    }
+
+    public PollData getPoll(long id) {
+        for (PollData poll: polls) {
+            if (poll.getId() == id)
+                return poll;
+        }
+        return null;
+    }
+
+    public void addPoll(PollData poll) {
+        polls.add(poll);
+    }
+
+    public void addNotification(String name, String body) {
+        if (notifications == null) {
+            notifications = new ArrayList<>();
+        }
+
+        notifications.add(new Notification(name, System.currentTimeMillis(), body));
     }
 
     public long getId() {
@@ -115,6 +140,30 @@ public class GroupData extends DataObject {
 
         public void setName(String name) {
             this.name = name;
+        }
+    }
+
+    public static class Notification {
+        public String name;
+        public String body;
+        public long date;
+
+        public Notification(String name, long date, String body) {
+            this.name = name;
+            this.date = date;
+            this.body = body;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getBody() {
+            return body;
+        }
+
+        public long getDate() {
+            return date;
         }
     }
 }
