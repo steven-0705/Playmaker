@@ -58,6 +58,14 @@ public class UserData extends DataObject{
         this.email = email;
     }
 
+    public List<UserGroup> getGroups() {
+        return groups;
+    }
+
+    public List<Invite> getInvites() {
+        return invites;
+    }
+
     protected static class UserGroup {
         public String name;
         public long id;

@@ -68,7 +68,7 @@ public class UserTests {
         // retrieve the user
         params.remove("user_id");
         resp = Utils.getReq(Utils.USERS_URL, params);
-        System.out.println(resp);
+        //System.out.println(resp);
 
         user = gson.fromJson(resp, UserData.class);
         assertEquals("test3", user.getId());
