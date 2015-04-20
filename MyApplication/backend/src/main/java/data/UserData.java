@@ -16,6 +16,7 @@ public class UserData extends DataObject{
     @Id public String id;
     public String email;
     public List<UserGroup> groups;
+    public List<Invite> invites;
 
     private UserData() {};
 
@@ -31,7 +32,14 @@ public class UserData extends DataObject{
         if (groups == null) {
             groups = new ArrayList<UserGroup>();
         }
-        groups.add(new UserGroup(group.name, group.id));
+        groups.add(new UserGroup(group.getName(), group.getId()));
+    }
+
+    public void invite(String inviter, long groupId) {
+        if (invites == null)
+            invites = new ArrayList<Invite>();
+
+        invites.add(new Invite(groupId, inviter, System.currentTimeMillis()));
     }
 
     public String getId() {
@@ -50,6 +58,14 @@ public class UserData extends DataObject{
         this.email = email;
     }
 
+    public List<UserGroup> getGroups() {
+        return groups;
+    }
+
+    public List<Invite> getInvites() {
+        return invites;
+    }
+
     protected static class UserGroup {
         public String name;
         public long id;
@@ -57,6 +73,30 @@ public class UserData extends DataObject{
         public UserGroup(String name, long id) {
             this.name = name;
             this.id = id;
+        }
+    }
+
+    protected static class Invite {
+        public String inviter;
+        public long groupId;
+        public long date;
+
+        public Invite(long groupId, String inviter, long date) {
+            this.groupId = groupId;
+            this.inviter = inviter;
+            this.date = date;
+        }
+
+        public String getInviter() {
+            return inviter;
+        }
+
+        public long getDate() {
+            return date;
+        }
+
+        public long getGroupId() {
+            return groupId;
         }
     }
 

@@ -16,6 +16,8 @@ public class GroupData extends DataObject {
     public List<GroupUserData> users;
     public List<GroupEventData> events;
     public List<String> eventTypes;
+    public List<PollData> polls;
+    public List<Notification> notifications;
 
     public GroupData() {};
 
@@ -24,10 +26,17 @@ public class GroupData extends DataObject {
         this.name = name;
         users = new ArrayList<GroupUserData>();
         events = new ArrayList<GroupEventData>();
+        eventTypes = new ArrayList<String>();
+        polls = new ArrayList<PollData>();
+        notifications = new ArrayList<Notification>();
     }
 
 
     public void addUser(UserData user) {
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getId().equals(user.getId()))
+                return;
+        }
         users.add(new GroupUserData(user.id, user.name));
     }
 
@@ -67,12 +76,52 @@ public class GroupData extends DataObject {
         eventTypes.add(type);
     }
 
+    public PollData getPoll(long id) {
+        for (PollData poll: polls) {
+            if (poll.getId() == id)
+                return poll;
+        }
+        return null;
+    }
+
+    public void addPoll(PollData poll) {
+        polls.add(poll);
+    }
+
+    public void addNotification(String name, String body) {
+        if (notifications == null) {
+            notifications = new ArrayList<>();
+        }
+
+        notifications.add(new Notification(name, System.currentTimeMillis(), body));
+    }
+
     public long getId() {
         return id;
     }
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public List<GroupUserData> getUsers() {
+        return users;
+    }
+
+    public List<GroupEventData> getEvents() {
+        return events;
+    }
+
+    public List<String> getEventTypes() {
+        return eventTypes;
+    }
+
+    public List<PollData> getPolls() {
+        return polls;
+    }
+
+    public List<Notification> getNotifications() {
+        return notifications;
     }
 
     public static class GroupUserData {
@@ -96,8 +145,21 @@ public class GroupData extends DataObject {
             this.admin = admin;
         }
 
+        public String getName() {
+            return name;
+        }
 
+        public String getId() {
+            return id;
+        }
 
+        public String getType() {
+            return type;
+        }
+
+        public boolean isAdmin() {
+            return admin;
+        }
     }
 
     public static class GroupEventData {
@@ -115,6 +177,42 @@ public class GroupData extends DataObject {
 
         public void setName(String name) {
             this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public long getDate() {
+            return date;
+        }
+
+        public long getEventId() {
+            return eventId;
+        }
+    }
+
+    public static class Notification {
+        public String name;
+        public String body;
+        public long date;
+
+        public Notification(String name, long date, String body) {
+            this.name = name;
+            this.date = date;
+            this.body = body;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getBody() {
+            return body;
+        }
+
+        public long getDate() {
+            return date;
         }
     }
 }
