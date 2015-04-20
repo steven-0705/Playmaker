@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.TextView;
 
 /**
  * Created by Shane on 3/27/2015.
@@ -24,10 +25,16 @@ private CheckBox checkBox1, checkBox2, checkBox3, checkBox4;
             return userView;
         }
 
-//        @Override
-//        public void onViewCreated(View view, Bundle savedInstanceState)
-//        {
-//            super.onViewCreated(view, savedInstanceState);
+        @Override
+        public void onViewCreated(View view, Bundle savedInstanceState)
+       {
+            super.onViewCreated(view, savedInstanceState);
+           TextView display = (TextView) getView().findViewById(R.id.user_display);
+           display.setText(MainActivity.getName());
+           TextView name = (TextView) getView().findViewById(R.id.user_favoriteText);
+           name.setText(MainActivity.getEmail());
+           TextView id = (TextView) getView().findViewById(R.id.user_user);
+           id.setText(MainActivity.getId());
 //            Button test = (Button) getView().findViewById(R.id.button);
 //            test.setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -42,6 +49,6 @@ private CheckBox checkBox1, checkBox2, checkBox3, checkBox4;
 //
 //                }
 //            });
-//        }
+       }
 
 }

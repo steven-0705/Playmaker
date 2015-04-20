@@ -8,9 +8,11 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.widget.CheckBox;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import casuals.filthy.playmaker.data.DatastoreAdapter;
@@ -41,16 +43,34 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 
 
-public class MainActivity extends BaseActivity implements ActionBar.TabListener{
+
+public class MainActivity extends BaseActivity implements ActionBar.TabListener, AsyncResponse{
     ActionBar actionbar;
     ViewPager viewpager;
     FragmentPageAdapter ft;
-
+    static String id;
+    static String email;
+    static String name;
+    DatastoreAdapter test = new DatastoreAdapter(this);
+    //call getUser
 
     private static CheckBox checkBox1, checkBox2, checkBox3, checkBox4;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle extras = getIntent().getExtras();
+        if(extras !=null)
+        {
+            id = extras.getString("ID");
+            email = extras.getString("EMAIL");
+            name = extras.getString("DISPLAY_NAME");
+            if(id != null && email != null && name != null)
+            {
+               // test.getUser(id,name, email);
+            }
+        }
+
+
 
         setContentView(R.layout.activity_main);
         viewpager = (ViewPager) findViewById(R.id.pager);
@@ -138,6 +158,22 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener{
     @Override
     public void signOut() {
         super.signOut();
+    }
+
+    @Override
+    public void response(Object o) {
+        //where we call getUser
+        TextView testing = (TextView) findViewById(R.id.user_otherText);
+        testing.setText("it made it");
+    }
+    static public String getName(){
+        return name;
+    }
+    static public String getEmail(){
+        return email;
+    }
+    static public String getId(){
+        return id;
     }
 }
 
