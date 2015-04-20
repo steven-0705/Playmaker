@@ -191,7 +191,6 @@ public class EventsServlet extends HttpServlet {
             ofy().save().entity(group).now();
         }
 
-
         // put the data back
         ofy().save().entity(event).now();
 
