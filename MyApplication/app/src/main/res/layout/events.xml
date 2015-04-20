@@ -64,12 +64,24 @@
         android:layout_centerHorizontal="true"
         android:text="Add Item"
         />
+
+    <TextView
+        android:id="@+id/listview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your items will appear here"
+        android:layout_centerHorizontal="true"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_below="@id/additem"
+        />
+
     <EditText
         android:id="@+id/itemlist"
+        android:gravity="top"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_below="@+id/additem"
-        android:text="Your items will appear here"
+        android:layout_height="100dp"
+        android:layout_below="@+id/listview"
         />
     <TextView
         android:id="@+id/locationView"

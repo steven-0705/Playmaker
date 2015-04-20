@@ -3,14 +3,19 @@ package casuals.filthy.playmaker;
 /**
  * Created by Shane on 3/19/2015.
  */
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
+import android.preference.Preference;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.*;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
@@ -58,47 +63,67 @@ public class EventsFragment extends Fragment {
         final Spinner getOption = (Spinner) view.findViewById(R.id.spinner1);
         getTime.setEnabled(false);
         itemList.setEnabled(false);
+        getOther.setEnabled(false);
         for (int i=0; i<time.length; i++) {
             time[i] = "";
         }
 
-            button1.setOnClickListener(new View.OnClickListener() {
+        getOption.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
-                @Override
-                public void onClick(View v) {
-                    Calendar currentDate = Calendar.getInstance();
-                    int mYear = currentDate.get(Calendar.YEAR);
-                    int mMonth = currentDate.get(Calendar.MONTH);
-                    int mDay = currentDate.get(Calendar.DAY_OF_MONTH);
-                    int i = 0;
-
-                    DatePickerDialog DatePicker;
-                    DatePicker = new DatePickerDialog(v.getContext(), new DatePickerDialog.OnDateSetListener() {
-                        public void onDateSet(DatePicker datepicker, int year, int month, int day) {
-                            // TODO Auto-generated method stub
-                            month = month + 1;
-                            String temp = "" + month + "/" + day + "/" + year;
-                            for (int i=0; i<time.length; i++){ // This loop and these checks are necessary because Android is dumb and detects a single Click twice
-                                if (time[i].matches("")) {
-                                    time[i] = (temp);
-                                    break;
-                                }
-                                if (time[i].matches(temp)) {
-                                    break;
-                                }
-                            }
-                            temp = time[0] + "\n" + time[1] + "\n" + time[2] + "\n";
-                            getTime.setText(temp); // sets the Text field to a max of 3 dates
-                        }
-                    }, mYear, mMonth, mDay);
-                    DatePicker.setTitle("Select Date");
-                    DatePicker.show();
+            @Override
+            public void onItemSelected(AdapterView av, View v, int pos, long id) {
+                if (getOption.getSelectedItem().toString().matches("Other")) {
+                    getOther.setEnabled(true);
+                } else {
+                    getOther.setEnabled(false);
                 }
-            });
-            button2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String loc = getLoc.getText().toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView av) {
+            }
+        });
+
+        button1.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Calendar currentDate = Calendar.getInstance();
+                int mYear = currentDate.get(Calendar.YEAR);
+                int mMonth = currentDate.get(Calendar.MONTH);
+                int mDay = currentDate.get(Calendar.DAY_OF_MONTH);
+                int i = 0;
+
+                DatePickerDialog DatePicker;
+                DatePicker = new DatePickerDialog(v.getContext(), new DatePickerDialog.OnDateSetListener() {
+                        public void onDateSet(DatePicker datepicker, int year, int month, int day) {
+                        // TODO Auto-generated method stub
+                        month = month + 1;
+                        String temp = "" + month + "/" + day + "/" + year;
+                        for (int i=0; i<time.length; i++){ // This loop and these checks are necessary because Android is dumb and detects a single Click twice
+                            if (time[i].matches("")) {
+                                time[i] = (temp);
+                                break;
+                            }
+                            if (time[i].matches(temp)) {
+                                break;
+                            }
+                        }
+                        temp = time[0] + "\n" + time[1] + "\n" + time[2] + "\n";
+                        getTime.setText(temp); // sets the Text field to a max of 3 dates
+                    }
+                    }, mYear, mMonth, mDay);
+                DatePicker.setTitle("Select Date");
+                DatePicker.show();
+            }
+        });
+
+        button2.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                  /*String loc = getLoc.getText().toString();
                     String other = getOther.getText().toString();
                     String option = getOption.getSelectedItem().toString();
                     if (loc.isEmpty()) {
@@ -120,14 +145,40 @@ public class EventsFragment extends Fragment {
                     Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + loc);
                     Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                     mapIntent.setPackage("com.google.android.apps.maps");
-                    startActivity(mapIntent);
-                }
-            });
-        button3.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View v) {
+                    startActivity(mapIntent);*/
 
-             }
+                    /*EditTextPreference Input;
+                    Input = new EditTextPreference(v.getContext(), new EditTextPreference.OnPreferenceClickListener() {
+                        public void onPreferenceClick(EditTextPreference Input) {
+                            Log.w("Tag:", Input.getText());
+                        }
+
+                    });*/
+
+                Log.w("Date 1:", time[0]);
+                Log.w("Date 2:", time[1]);
+                Log.w("Date 3:", time[2]);
+            }
+        });
+
+        button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
+                final EditText input= new EditText(v.getContext());
+                alert.setTitle("Add an item!");
+                alert.setView(input);
+
+                alert.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String temp = input.getText().toString();
+                        itemList.append(temp + ", ");
+                    }
+                });
+
+                alert.show();
+            }
         });
     }
 }
