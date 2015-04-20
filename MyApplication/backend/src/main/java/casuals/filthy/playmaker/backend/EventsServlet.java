@@ -162,7 +162,7 @@ public class EventsServlet extends HttpServlet {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND, "user not found");
                 return;
             }
-            event.addAttendee(user.id, user.name);
+            event.addAttendee(user.getId(), user.getName());
         }
 
         // admin abilities
@@ -174,7 +174,7 @@ public class EventsServlet extends HttpServlet {
             }
 
             if (name != null) {
-                group.getEvent(eventId).name = name;
+                group.getEvent(eventId).setName(name);
                 event.name = name;
             }
 

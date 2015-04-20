@@ -34,7 +34,23 @@ public class UserData extends DataObject{
         groups.add(new UserGroup(group.name, group.id));
     }
 
-    protected class UserGroup {
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    protected static class UserGroup {
         public String name;
         public long id;
 

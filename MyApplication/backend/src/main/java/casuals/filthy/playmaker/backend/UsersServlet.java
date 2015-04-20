@@ -12,6 +12,7 @@ import com.googlecode.objectify.annotation.Entity;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.servlet.http.*;
@@ -34,13 +35,25 @@ public class UsersServlet extends HttpServlet {
         String userId = req.getParameter("user_id");
 
         // lookup the user if the id was not specified
-        if (userId == null) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing user_id parameter");
+        if (userId == null && userEmail == null) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing user_id or user_email parameter");
             return;
         }
 
         // get the User data
-        UserData user = ofy().load().type(UserData.class).id(userId).now();
+        UserData user = null;
+        if (userId != null)
+            user = ofy().load().type(UserData.class).id(userId).now();
+        else {
+            List<UserData> users = ofy().load().type(UserData.class).list();
+            for (UserData u: users) {
+                if (userEmail.equals(u.getEmail())) {
+                    user = u;
+                    break;
+                }
+            }
+        }
+
         // missing, create
         if (user == null) {
             if (userName == null || userEmail == null || userId == null) {
