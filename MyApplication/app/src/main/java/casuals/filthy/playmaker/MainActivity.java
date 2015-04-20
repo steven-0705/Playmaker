@@ -8,8 +8,10 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
@@ -41,7 +43,7 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 
 
-public class MainActivity extends BaseActivity implements ActionBar.TabListener{
+public class MainActivity extends BaseActivity implements ActionBar.TabListener, AsyncResponse{
     ActionBar actionbar;
     ViewPager viewpager;
     FragmentPageAdapter ft;
@@ -51,6 +53,21 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.i("Main Activity","Start Adapter Test");
+        DatastoreAdapter dsa = new DatastoreAdapter(this);
+
+        dsa.createUser("nis239", "nickisanto08", "nickisanto08@gmail.com");
+//        dsa.getUser("nis239", "nickisanto08@gmail.com");
+//
+//        dsa.joinGroup(1, "nis239");
+//        dsa.createGroup(1, "nis239");
+//        dsa.getGroup(1);
+
+//        dsa.createEvent("nis239", 1, "testEvent", "testType", 12345);
+//        dsa.getEvent(1,1234);
+//        dsa.joinEvent(1, 12345, "nis239");
+        Log.i("Main Activity","End Adapter Test");
 
         setContentView(R.layout.activity_main);
         viewpager = (ViewPager) findViewById(R.id.pager);
@@ -139,6 +156,17 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener{
     public void signOut() {
         super.signOut();
     }
+
+
+    public void response(Object data) {
+        Log.i("OUTPUTMAINACT", "startcall");
+
+        if(data != null)
+            Log.i("OUTPUTMAINACT",data.toString());
+        else
+            Log.i("OUTPUTMAINACT", "NULL");
+    }
+
 }
 
 
