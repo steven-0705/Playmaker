@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import casuals.filthy.playmaker.data.beans.EventBean;
 import casuals.filthy.playmaker.data.beans.GroupBean;
 import casuals.filthy.playmaker.data.beans.UserBean;
 
@@ -199,7 +200,7 @@ public class DatastoreAdapter {
         HttpUriRequest get = new HttpGet(SERVER_URL + SERVLET_EVENTS
                                             + "?group_id=" + groupId + "&"
                                             + "event_id=" + eventId);
-        type = GroupBean.class;
+        type = EventBean.class;
         ServletHttpAsyncTask request = new ServletHttpAsyncTask();
         task = request;
         request.execute(get);
@@ -221,7 +222,7 @@ public class DatastoreAdapter {
                                             + "event_name=" + eventName + "&"
                                             + "event_type" + eventType + "&"
                                             + "event_date=" + eventDate);
-        type = GroupBean.class;
+        type = EventBean.class;
         ServletHttpAsyncTask request = new ServletHttpAsyncTask();
         task = request;
         request.execute(post);
@@ -260,7 +261,7 @@ public class DatastoreAdapter {
                                             + "?user_id=" + userId + "&"
                                             + "group_id=" + groupId + "&"
                                             + "event_id=" + eventId);
-        type = GroupBean.class;
+        type = EventBean.class;
         ServletHttpAsyncTask request = new ServletHttpAsyncTask();
         task = request;
         request.execute(post);
