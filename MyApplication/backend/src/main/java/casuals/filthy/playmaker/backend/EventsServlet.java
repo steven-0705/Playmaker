@@ -3,7 +3,9 @@ package casuals.filthy.playmaker.backend;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.gson.Gson;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -25,16 +27,15 @@ public class EventsServlet extends HttpServlet {
 
     /**
      * Create a new event
-     * @param req
      * @param resp
      * @throws IOException
      */
-    private void createEvent(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String userId = req.getParameter("user_id");
-        String groupIdString = req.getParameter("group_id");
-        String name = req.getParameter("event_name");
-        String type = req.getParameter("event_type");
-        String dateString = req.getParameter("event_date");
+    private void createEvent(HashMap<String, String> params, HttpServletResponse resp) throws IOException {
+        String userId = params.get("user_id");
+        String groupIdString = params.get("group_id");
+        String name = params.get("event_name");
+        String type = params.get("event_type");
+        String dateString = params.get("event_date");
 
         if (userId == null || groupIdString == null || name == null || type == null || dateString == null) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing required field: user_id, group_id, event_name, event_type, event_date");
@@ -58,7 +59,7 @@ public class EventsServlet extends HttpServlet {
 
         // create the event
         long id = DatastoreServiceFactory.getDatastoreService().allocateIds("event", 1).getStart().getId();
-        EventData event = new EventData(id, date, type, group.id);
+        EventData event = new EventData(id, date, type, group.id, name);
 
         group.addEvent(event);
 
@@ -120,14 +121,15 @@ public class EventsServlet extends HttpServlet {
      * @throws IOException
      */
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String groupIdString = req.getParameter("group_id");
-        String eventIdString = req.getParameter("event_id");
+        HashMap<String, String> params = ServletUtils.getParams(req.getInputStream());
+        String groupIdString = params.get("group_id");//req.getParameter("group_id");
+        String eventIdString = params.get("event_id");//req.getParameter("event_id");
 
         // optional stuff
-        String userId = req.getParameter("user_id");
-        String name = req.getParameter("event_name");
-        String type = req.getParameter("event_type");
-        String dateString = req.getParameter("event_date");
+        String userId = params.get("user_id");//req.getParameter("user_id");
+        String name = params.get("event_name");//req.getParameter("event_name");
+        String type = params.get("event_type");//req.getParameter("event_type");
+        String dateString = params.get("event_date");//req.getParameter("event_date");
 
         if (groupIdString == null) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing required field: group_id");
@@ -136,7 +138,7 @@ public class EventsServlet extends HttpServlet {
 
         if (eventIdString == null) {
             // create a new event
-            createEvent(req, resp);
+            createEvent(params, resp);
             return;
         }
 

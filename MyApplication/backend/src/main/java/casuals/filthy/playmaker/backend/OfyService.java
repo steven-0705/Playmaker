@@ -4,7 +4,6 @@ import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
 
-import data.DataObject;
 import data.EventData;
 import data.GroupData;
 import data.GroupUserDetailed;
@@ -20,7 +19,7 @@ public class OfyService {
         ObjectifyService.register(GroupData.class);
         ObjectifyService.register(EventData.class);
         ObjectifyService.register(GroupUserDetailed.class);
-        //ObjectifyService.register(PollData.class);
+        ObjectifyService.register(PollData.class);
     }
 
     public static Objectify ofy() {

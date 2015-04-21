@@ -1,20 +1,25 @@
 package tests;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import data.EventData;
 import data.GroupData;
 import data.UserData;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 /**
  * Created by Chris on 4/17/2015.
@@ -75,7 +80,7 @@ public class Utils {
             return null;
         } catch (IOException e) {
             e.printStackTrace();
-            assertFalse("IO exceoption", false);
+            assertFalse("IO exception", false);
             return null;
         }
     }
@@ -88,7 +93,10 @@ public class Utils {
             connection.setDoOutput(true);
             connection.setRequestMethod("POST");
 
-            connection.getOutputStream().flush();
+
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
+            writer.write(gson.toJson(params));
+            writer.flush();
 
             if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 
@@ -101,15 +109,22 @@ public class Utils {
 
                 return sb.toString();
             } else {
+                /*BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+                String line;
+                StringBuilder sb = new StringBuilder();
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
+                System.out.println(sb.toString());*/
                 return "" + connection.getResponseCode();
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            assertFalse("Malformed url", false);
+            assertTrue("Malformed url", false);
             return null;
         } catch (IOException e) {
             e.printStackTrace();
-            assertFalse("IO exceoption", false);
+            assertTrue("IO exceoption", false);
             return null;
         }
     }
@@ -152,6 +167,20 @@ public class Utils {
         String resp = Utils.postReq(Utils.USERS_URL, params);
         UserData user = gson.fromJson(resp, UserData.class);
         return user;
+    }
+
+    public static EventData addEvent(String userId, long groupId, String name, String type, long date) {
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("user_id", userId);
+        params.put("group_id", groupId+"");
+        params.put("event_name", name);
+        params.put("event_type", type);
+        params.put("event_date", date+"");
+
+        String resp = Utils.postReq(Utils.EVENTS_URL, params);
+        //System.out.println(resp);
+        EventData event = gson.fromJson(resp, EventData.class);
+        return event;
     }
 
 }
