@@ -192,12 +192,7 @@ public class DatastoreAdapter {
      * @return Returns json event of the event
      */
     public void createEvent(String userId, long groupId, String eventName, String eventType, long eventDate) {
-        HttpPost post = new HttpPost(SERVER_URL + SERVLET_EVENTS
-                                            + "?user_id=" + userId + "&"
-                                            + "group_id=" + groupId + "&"
-                                            + "event_name=" + eventName + "&"
-                                            + "event_type" + eventType + "&"
-                                            + "event_date=" + eventDate);
+        HttpPost post = new HttpPost(SERVER_URL + SERVLET_EVENTS);
 
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("user_id", userId);
@@ -228,10 +223,7 @@ public class DatastoreAdapter {
      * @return returns the updated event data
      */
     public void joinEvent(long groupId, long eventId, String userId) {
-        HttpPost post = new HttpPost(SERVER_URL + SERVLET_EVENTS
-                                            + "?user_id=" + userId + "&"
-                                            + "group_id=" + groupId + "&"
-                                            + "event_id=" + eventId);
+        HttpPost post = new HttpPost(SERVER_URL + SERVLET_EVENTS);
 
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("user_id", userId);
