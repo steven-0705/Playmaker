@@ -1,34 +1,99 @@
 package casuals.filthy.playmaker.data.beans;
 
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Chris on 4/9/2015.
- */
 public class GroupBean extends DataBean {
 
     public long id;
-    public List<GroupUserBean> users;
-    public List<GroupEventBean> events;
+    public List<GroupUserData> users;
+    public List<GroupEventData> events;
+    public List<String> eventTypes;
+    public List<PollBean> polls;
+    public List<Notification> notifications;
+
+    public GroupBean() {};
+
+    public GroupBean(long id, String name) {
+        this.id = id;
+        this.name = name;
+        users = new ArrayList<GroupUserData>();
+        events = new ArrayList<GroupEventData>();
+        eventTypes = new ArrayList<String>();
+        polls = new ArrayList<PollBean>();
+        notifications = new ArrayList<Notification>();
+    }
+
+    public boolean isUserAdmin(String userId) {
+        for (GroupUserData user: users) {
+            if (user.id.equals(userId))
+                return true;
+        }
+
+        return false;
+    }
+
+    public GroupEventData getEvent(long id) {
+        for (GroupEventData event: events) {
+            if (event.eventId == id)
+                return event;
+        }
+
+        return null;
+    }
+
+    public PollBean getPoll(long id) {
+        for (PollBean poll: polls) {
+            if (poll.getId() == id)
+                return poll;
+        }
+        return null;
+    }
 
     public long getId() {
         return id;
     }
 
-    public List<GroupUserBean> getUsers() {
+    public List<GroupUserData> getUsers() {
         return users;
     }
 
-    public List<GroupEventBean> getEvents() {
+    public List<GroupEventData> getEvents() {
         return events;
     }
 
-    public class GroupUserBean {
+    public List<String> getEventTypes() {
+        return eventTypes;
+    }
+
+    public List<PollBean> getPolls() {
+        return polls;
+    }
+
+    public List<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public static class GroupUserData {
 
         public String name;
         public String id;
         public String type;
         public boolean admin;
+
+        public GroupUserData() {};
+
+        public GroupUserData(String userId, String name) {
+            id = userId;
+            this.name = name;
+            admin = false;
+        }
+
+        public GroupUserData(String userId, String name, boolean admin) {
+            id = userId;
+            this.name = name;
+            this.admin = admin;
+        }
 
         public String getName() {
             return name;
@@ -45,14 +110,20 @@ public class GroupBean extends DataBean {
         public boolean isAdmin() {
             return admin;
         }
-
     }
 
-    public class GroupEventBean {
-
+    public static class GroupEventData {
         public String name;
         public long date;
         public long eventId;
+
+        public GroupEventData() {};
+
+        public GroupEventData(String name, long date, long id) {
+            this.name = name;
+            this.date = date;
+            this.eventId = id;
+        }
 
         public String getName() {
             return name;
@@ -67,4 +138,27 @@ public class GroupBean extends DataBean {
         }
     }
 
+    public static class Notification {
+        public String name;
+        public String body;
+        public long date;
+
+        public Notification(String name, long date, String body) {
+            this.name = name;
+            this.date = date;
+            this.body = body;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getBody() {
+            return body;
+        }
+
+        public long getDate() {
+            return date;
+        }
+    }
 }

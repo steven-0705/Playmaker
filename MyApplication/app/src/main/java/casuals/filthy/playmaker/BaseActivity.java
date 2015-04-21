@@ -132,7 +132,7 @@ public class BaseActivity extends FragmentActivity implements
     private boolean mServerHasToken = true;
 
     private SignInButton mSignInButton;
-    private Button mSignOutButton;
+
     private TextView mStatus, mProfile;
     public static int login = 0;
 
@@ -142,14 +142,12 @@ public class BaseActivity extends FragmentActivity implements
         setContentView(R.layout.google_login);
 
         mSignInButton = (SignInButton) findViewById(R.id.sign_in_button);
-        mSignOutButton = (Button) findViewById(R.id.sign_out_button);
         mStatus = (TextView) findViewById(R.id.sign_in_status);
         mProfile = (TextView) findViewById(R.id.textView12);
 
 
         // Button listeners
         mSignInButton.setOnClickListener(this);
-        mSignOutButton.setOnClickListener(this);
 
 
 
@@ -211,16 +209,16 @@ public class BaseActivity extends FragmentActivity implements
                     mSignInProgress = STATE_SIGN_IN;
                     mGoogleApiClient.connect();
                     break;
-                case R.id.sign_out_button:
-                    // We clear the default account on sign out so that Google Play
-                    // services will not return an onConnected callback without user
-                    // interaction.
-                    if (mGoogleApiClient.isConnected()) {
-                        Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-                        mGoogleApiClient.disconnect();
-                    }
-                    onSignedOut();
-                    break;
+//                case R.id.sign_out_button:
+//                    // We clear the default account on sign out so that Google Play
+//                    // services will not return an onConnected callback without user
+//                    // interaction.
+//                    if (mGoogleApiClient.isConnected()) {
+//                        Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+//                        mGoogleApiClient.disconnect();
+//                    }
+//                    onSignedOut();
+//                    break;
             }
         }
 
@@ -249,7 +247,7 @@ public class BaseActivity extends FragmentActivity implements
 
         // Update the user interface to reflect that the user is signed in.
         mSignInButton.setEnabled(false);
-        mSignOutButton.setEnabled(true);
+
 
 
 
@@ -373,9 +371,13 @@ public class BaseActivity extends FragmentActivity implements
 
     @Override
     public void onResult(LoadPeopleResult peopleData) {
+        Log.i(TAG, "we made it here");
             if(mGoogleApiClient.isConnected() && login==1) {
+                Person currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
-
+               i.putExtra("ID",currentUser.getId());
+                i.putExtra("DISPLAY_NAME",currentUser.getDisplayName());
+               i.putExtra("EMAIL",Plus.AccountApi.getAccountName(mGoogleApiClient));
                 startActivity(i);
                 finish();
             }
@@ -385,7 +387,7 @@ public class BaseActivity extends FragmentActivity implements
     private void onSignedOut() {
         // Update the UI to reflect that the user is signed out.
         mSignInButton.setEnabled(true);
-        mSignOutButton.setEnabled(false);
+
 
 
 
@@ -442,5 +444,7 @@ public class BaseActivity extends FragmentActivity implements
         }
         onSignedOut();
     }
+
+
 
 }
