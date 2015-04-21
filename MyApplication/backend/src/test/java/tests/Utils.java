@@ -87,7 +87,7 @@ public class Utils {
 
     public static String postReq(String urlString, Map<String, String> params) {
         try {
-            URL url = new URL(urlString + makeParams(params));
+            URL url = new URL(urlString);// + makeParams(params));
             //System.out.println(url.toString());
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setDoOutput(true);
@@ -134,8 +134,9 @@ public class Utils {
         params.put("user_id", id);
         params.put("user_name", name);
         params.put("user_email", email);
+        params.put("action", "login");
 
-        String resp = Utils.getReq(Utils.USERS_URL, params);
+        String resp = Utils.postReq(Utils.USERS_URL, params);
         UserData user = gson.fromJson(resp, UserData.class);
         return user;
     }
@@ -163,6 +164,7 @@ public class Utils {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("user_id", userId);
         params.put("group_id", groupId+"");
+        params.put("action", "join");
 
         String resp = Utils.postReq(Utils.USERS_URL, params);
         UserData user = gson.fromJson(resp, UserData.class);

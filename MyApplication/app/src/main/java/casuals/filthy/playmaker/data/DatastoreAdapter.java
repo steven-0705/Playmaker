@@ -15,6 +15,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
@@ -25,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -38,7 +40,7 @@ import casuals.filthy.playmaker.data.beans.UserBean;
  */
 public class DatastoreAdapter {
 
-    public static final String SERVER_URL = "http://localhost:8080"; //"http://playmaker-app.appspot.com";
+    public static final String SERVER_URL = "http://playmaker-app.appspot.com";
     public static final String SERVLET_USERS = "/users";
     public static final String SERVLET_GROUPS = "/groups";
     public static final String SERVLET_EVENTS = "/groups/events";
@@ -73,41 +75,30 @@ public class DatastoreAdapter {
     /**
      *
      * @param userId
-     * @param userEmail
-     * @return Returns the specified user or null of an error occurs
-     */
-    public void getUser(String userId, String userEmail) {
-        HttpUriRequest get = new HttpGet(SERVER_URL + SERVLET_USERS
-                                            + "?user_id=" + userId + "&"
-                                            + "user_email=" + userEmail);
-        /*HttpParams params = new BasicHttpParams();
-        params.setParameter("user_id", userId);
-        params.setParameter("user_name", userName);
-        params.setParameter("user_email", userEmail);*/
-        //get.setParams(params);
-        // kick of async task
-        type = UserBean.class;
-        ServletHttpAsyncTask request = new ServletHttpAsyncTask();
-        task = request;
-        request.execute(get);
-    }
-
-    /**
-     *
-     * @param userId
      * @param userName
      * @param userEmail
      * @return Returns the specified user or null of an error occurs
      */
-    public void createUser(String userId, String userName, String userEmail) {
-        HttpUriRequest get = new HttpGet(SERVER_URL + SERVLET_USERS
-                                            + "?user_id=" + userId + "&"
-                                            + "user_name=" + userName + "&"
-                                            + "user_email=" + userEmail);
+    public void getUser(String userId, String userName, String userEmail) {
+        HttpPost post = new HttpPost(SERVER_URL + SERVLET_USERS);
+
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("user_id", userId);
+        params.put("user_name", userName);
+        params.put("user_email", userEmail);
+        params.put("action", "login");
+        post.setHeader("Content-Type", "application/json");
+        try {
+            post.setEntity(new StringEntity(gson.toJson(params)));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+
         type = UserBean.class;
         ServletHttpAsyncTask request = new ServletHttpAsyncTask();
         task = request;
-        request.execute(get);
+        request.execute(post);
     }
 
     /**
@@ -117,30 +108,22 @@ public class DatastoreAdapter {
      * @return Returns updated version of the user
      */
     public void joinGroup(long groupId, String userId) {
-        HttpUriRequest post = new HttpPost(SERVER_URL + SERVLET_USERS
-                                            + "?group_id=" + groupId + "&"
-                                            + "user_id=" + userId);
+        HttpPost post = new HttpPost(SERVER_URL + SERVLET_USERS);
+
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("user_id", userId);
+        params.put("group_id", groupId+"");
+        params.put("action", "join");
+        post.setHeader("Content-Type", "application/json");
+        try {
+            post.setEntity(new StringEntity(gson.toJson(params)));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         type = UserBean.class;
         ServletHttpAsyncTask request = new ServletHttpAsyncTask();
         task = request;
         request.execute(post);
-
-//        HttpPost httppost = new HttpPost(SERVER_URL + SERVLET_USERS);
-//
-//        try {
-//            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-//            nameValuePairs.add(new BasicNameValuePair("user_id", userId));
-//            nameValuePairs.add(new BasicNameValuePair("group_id", groupId + ""));
-//            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-//
-//            type = GroupBean.class;
-//            ServletHttpAsyncTask request = new ServletHttpAsyncTask();
-//            task = request;
-//            request.execute(httppost);
-//
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
     }
 
     /**
@@ -164,30 +147,23 @@ public class DatastoreAdapter {
      * @return returns a json object of type group
      */
     public void createGroup(String groupName, String userId) {
-        HttpUriRequest post = new HttpPost(SERVER_URL + SERVLET_GROUPS
-                                            + "?group_name=" + groupName
-                                            + "user_id=" + userId);
+        HttpPost post = new HttpPost(SERVER_URL + SERVLET_GROUPS);
+
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("user_id", userId);
+        params.put("group_name", groupName);
+        params.put("action", "create");
+        post.setHeader("Content-Type", "application/json");
+        try {
+            post.setEntity(new StringEntity(gson.toJson(params)));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
         type = GroupBean.class;
         ServletHttpAsyncTask request = new ServletHttpAsyncTask();
         task = request;
         request.execute(post);
-
-//        HttpPost httppost = new HttpPost(SERVER_URL + SERVLET_GROUPS);
-//
-//        try {
-//            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-//            nameValuePairs.add(new BasicNameValuePair("user_id", userId));
-//            nameValuePairs.add(new BasicNameValuePair("group_id", groupId + ""));
-//            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-//
-//            type = GroupBean.class;
-//            ServletHttpAsyncTask request = new ServletHttpAsyncTask();
-//            task = request;
-//            request.execute(httppost);
-//
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
     }
 
     /**
@@ -216,37 +192,32 @@ public class DatastoreAdapter {
      * @return Returns json event of the event
      */
     public void createEvent(String userId, long groupId, String eventName, String eventType, long eventDate) {
-        HttpUriRequest post = new HttpPost(SERVER_URL + SERVLET_EVENTS
+        HttpPost post = new HttpPost(SERVER_URL + SERVLET_EVENTS
                                             + "?user_id=" + userId + "&"
                                             + "group_id=" + groupId + "&"
                                             + "event_name=" + eventName + "&"
                                             + "event_type" + eventType + "&"
                                             + "event_date=" + eventDate);
+
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("user_id", userId);
+        params.put("group_id", groupId+"");
+        params.put("event_name", eventName);
+        params.put("event_type", eventType);
+        params.put("event_date", eventDate+"");
+        params.put("action", "create");
+        post.setHeader("Content-Type", "application/json");
+        try {
+            post.setEntity(new StringEntity(gson.toJson(params)));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+
         type = EventBean.class;
         ServletHttpAsyncTask request = new ServletHttpAsyncTask();
         task = request;
         request.execute(post);
-
-//        HttpPost httppost = new HttpPost(SERVER_URL + SERVLET_EVENTS);
-//
-//        try {
-//            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-//            nameValuePairs.add(new BasicNameValuePair("user_id", userId));
-//            nameValuePairs.add(new BasicNameValuePair("group_id", groupId + ""));
-//            nameValuePairs.add(new BasicNameValuePair("event_name", eventName));
-//            nameValuePairs.add(new BasicNameValuePair("event_type", eventType));
-//            nameValuePairs.add(new BasicNameValuePair("event_date", eventDate+""));
-//
-//            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-//
-//            type = GroupBean.class;
-//            ServletHttpAsyncTask request = new ServletHttpAsyncTask();
-//            task = request;
-//            request.execute(httppost);
-//
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
     }
 
     /**
@@ -257,34 +228,27 @@ public class DatastoreAdapter {
      * @return returns the updated event data
      */
     public void joinEvent(long groupId, long eventId, String userId) {
-        HttpUriRequest post = new HttpPost(SERVER_URL + SERVLET_EVENTS
+        HttpPost post = new HttpPost(SERVER_URL + SERVLET_EVENTS
                                             + "?user_id=" + userId + "&"
                                             + "group_id=" + groupId + "&"
                                             + "event_id=" + eventId);
+
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("user_id", userId);
+        params.put("group_id", groupId+"");
+        params.put("event_id", eventId+"");
+        params.put("action", "join");
+        post.setHeader("Content-Type", "application/json");
+        try {
+            post.setEntity(new StringEntity(gson.toJson(params)));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
         type = EventBean.class;
         ServletHttpAsyncTask request = new ServletHttpAsyncTask();
         task = request;
         request.execute(post);
-
-
-//        HttpPost httppost = new HttpPost(SERVER_URL + SERVLET_EVENTS);
-//
-//        try {
-//            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-//            nameValuePairs.add(new BasicNameValuePair("user_id", userId));
-//            nameValuePairs.add(new BasicNameValuePair("group_id", groupId+""));
-//            nameValuePairs.add(new BasicNameValuePair("event_id", eventId+""));
-//
-//            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-//
-//            type = GroupBean.class;
-//            ServletHttpAsyncTask request = new ServletHttpAsyncTask();
-//            task = request;
-//            request.execute(httppost);
-//
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
     }
 
 
