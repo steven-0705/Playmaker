@@ -70,6 +70,8 @@ public class UserData extends DataObject{
         public String name;
         public long id;
 
+        public UserGroup() {};
+
         public UserGroup(String name, long id) {
             this.name = name;
             this.id = id;
@@ -80,6 +82,8 @@ public class UserData extends DataObject{
         public String inviter;
         public long groupId;
         public long date;
+
+        public Invite() {};
 
         public Invite(long groupId, String inviter, long date) {
             this.groupId = groupId;

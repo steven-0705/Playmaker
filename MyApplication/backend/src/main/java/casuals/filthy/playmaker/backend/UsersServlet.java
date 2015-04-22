@@ -12,6 +12,7 @@ import com.googlecode.objectify.annotation.Entity;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -28,11 +29,10 @@ public class UsersServlet extends HttpServlet {
     private static final Logger logger = Logger.getLogger(UsersServlet.class.getName());
     private static Gson gson = new Gson();
 
-    @Override
-    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String userName = req.getParameter("user_name");
-        String userEmail = req.getParameter("user_email");
-        String userId = req.getParameter("user_id");
+    public void login(HashMap<String, String> params, HttpServletResponse resp) throws IOException {
+        String userName = params.get("user_name");//req.getParameter("user_name");
+        String userEmail = params.get("user_email");//req.getParameter("user_email");
+        String userId = params.get("user_id");//req.getParameter("user_id");
 
         // lookup the user if the id was not specified
         if (userId == null && userEmail == null) {
@@ -86,46 +86,55 @@ public class UsersServlet extends HttpServlet {
 
      @Override
      public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String userId = req.getParameter("user_id");
-        if (userId == null) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing user_id field");
-            return;
-        }
-        UserData user = ofy().load().type(UserData.class).id(userId).now();
-        if (user == null) {
-            resp.sendError(HttpServletResponse.SC_NOT_FOUND, "user not found");
+        HashMap<String, String> params = ServletUtils.getParams(req.getInputStream());
+
+        String action = params.get("action");
+        String userId = params.get("user_id");//req.getParameter("user_id");
+        if (userId == null || action == null) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing user_id or action field");
             return;
         }
 
-        ArrayList<DataObject> saves = new ArrayList<DataObject>();
-        saves.add(user);
+        if (action.equals("login")) {
+            login(params, resp);
+            return;
+        } else if (action.equals("join")) {
 
-        String groupIdString = req.getParameter("group_id");
-        if (groupIdString != null) {
-            long groupId = Long.parseLong(groupIdString);
-            GroupData group = ofy().load().type(GroupData.class).id(groupId).now();
-            if (group == null) {
-                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "group not found");
+
+            UserData user = ofy().load().type(UserData.class).id(userId).now();
+            if (user == null) {
+                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "user not found");
                 return;
             }
 
-            //TODO add to the group side too
-            group.addUser(user);
-            user.addGroup(group);
-            saves.add(group);
+            ArrayList<DataObject> saves = new ArrayList<DataObject>();
+            saves.add(user);
+
+            String groupIdString = params.get("group_id");//req.getParameter("group_id");
+            if (groupIdString != null) {
+                long groupId = Long.parseLong(groupIdString);
+                GroupData group = ofy().load().type(GroupData.class).id(groupId).now();
+                if (group == null) {
+                    resp.sendError(HttpServletResponse.SC_NOT_FOUND, "group not found");
+                    return;
+                }
+
+                group.addUser(user);
+                user.addGroup(group);
+                saves.add(group);
+            }
+
+
+            // done with all requests, save and return
+            ofy().save().entities(saves).now();
+            // respond
+            String userJson = gson.toJson(user);
+            resp.setStatus(HttpServletResponse.SC_OK);
+            resp.setContentType("application/json");
+            resp.getWriter().write(userJson);
+            resp.getWriter().flush();
+            resp.getWriter().close();
         }
-
-
-
-        // done with all requests, save and return
-        ofy().save().entities(saves).now();
-        // respond
-        String userJson = gson.toJson(user);
-        resp.setStatus(HttpServletResponse.SC_OK);
-        resp.setContentType("application/json");
-        resp.getWriter().write(userJson);
-        resp.getWriter().flush();
-        resp.getWriter().close();
     }
 
     @Override

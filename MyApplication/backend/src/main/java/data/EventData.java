@@ -30,11 +30,12 @@ public class EventData extends DataObject {
 
     public EventData() {};
 
-    public EventData(long id, long date, String type, long groupId) {
+    public EventData(long id, long date, String type, long groupId, String name) {
         this.id = id;
         this.date = date;
         this.type = type;
         this.groupId = groupId;
+        this.name = name;
     }
 
     public void addAttendee(String id, String name) {

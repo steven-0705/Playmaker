@@ -133,7 +133,7 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
         {
             try{
 
-                mSignOut = (Button) findViewById(R.id.button);
+                mSignOut = (Button) findViewById(R.id.signOut);
                 mSignOut.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -166,6 +166,14 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
         TextView testing = (TextView) findViewById(R.id.user_otherText);
         testing.setText("it made it");
     }
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        BaseActivity.login=0;
+
+    }
+
+
     static public String getName(){
         return name;
     }

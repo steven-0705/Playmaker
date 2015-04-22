@@ -371,6 +371,7 @@ public class BaseActivity extends FragmentActivity implements
 
     @Override
     public void onResult(LoadPeopleResult peopleData) {
+        Log.i(TAG, "we made it here");
             if(mGoogleApiClient.isConnected() && login==1) {
                 Person currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
