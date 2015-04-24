@@ -23,8 +23,9 @@
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Popup Window: Show Admin?, Data, \nExtra Information about player?"
-                android:gravity="center"/>
+                android:text="Admin: Andrew Luck\nRank: 1\nWins: 16\nLosses: 0\nW/L Ratio: 1.00\nData"
+                android:gravity="center"
+                android:textSize="16dp"/>
             <ImageView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
