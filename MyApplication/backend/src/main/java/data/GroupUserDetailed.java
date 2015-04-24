@@ -83,6 +83,9 @@ public class GroupUserDetailed extends DataObject {
             this.player = player;
         }
 
+        public double computeScore() {
+            return totalUp * 100 * (0.1 * numPlayed);
+        }
 
         @Override
         public int compareTo(PlayerStats o) {

@@ -13,11 +13,11 @@ public class GroupData extends DataObject {
 
     @Id
     public long id;
-    public List<GroupUserData> users;
-    public List<GroupEventData> events;
-    public List<String> eventTypes;
-    public List<PollData> polls;
-    public List<Notification> notifications;
+    protected List<GroupUserData> users;
+    protected List<GroupEventData> events;
+    protected List<String> eventTypes;
+    protected List<PollData> polls;
+    protected List<Notification> notifications;
 
     public GroupData() {};
 

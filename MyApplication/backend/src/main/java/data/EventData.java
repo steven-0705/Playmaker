@@ -27,14 +27,16 @@ public class EventData extends DataObject {
     public long groupId;
     public int numTeams = 2;
     public List<ArrayList<String>> teams;
+    public String address;
 
     public EventData() {};
 
-    public EventData(long id, long date, String type, long groupId, String name) {
+    public EventData(long id, long date, String type, long groupId, String name, String address) {
         this.id = id;
         this.date = date;
         this.type = type;
         this.groupId = groupId;
+        this.address = address;
         this.name = name;
     }
 
@@ -115,5 +117,13 @@ public class EventData extends DataObject {
 
     public void setNumTeams(int numTeams) {
         this.numTeams = numTeams;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

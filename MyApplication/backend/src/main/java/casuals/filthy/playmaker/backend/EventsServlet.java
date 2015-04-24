@@ -34,8 +34,9 @@ public class EventsServlet extends HttpServlet {
         String userId = params.get("user_id");
         String groupIdString = params.get("group_id");
         String name = params.get("event_name");
-        String type = params.get("event_type");
+        String type = params.get("event_type").toLowerCase();
         String dateString = params.get("event_date");
+        String address = params.get("event_address");
 
         if (userId == null || groupIdString == null || name == null || type == null || dateString == null) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing required field: user_id, group_id, event_name, event_type, event_date");
@@ -59,7 +60,7 @@ public class EventsServlet extends HttpServlet {
 
         // create the event
         long id = DatastoreServiceFactory.getDatastoreService().allocateIds("event", 1).getStart().getId();
-        EventData event = new EventData(id, date, type, group.id, name);
+        EventData event = new EventData(id, date, type, group.id, name, address);
 
         group.addEvent(event);
 
@@ -128,8 +129,9 @@ public class EventsServlet extends HttpServlet {
         // optional stuff
         String userId = params.get("user_id");//req.getParameter("user_id");
         String name = params.get("event_name");//req.getParameter("event_name");
-        String type = params.get("event_type");//req.getParameter("event_type");
+        String type = params.get("event_type").toLowerCase();//req.getParameter("event_type");
         String dateString = params.get("event_date");//req.getParameter("event_date");
+        String address = params.get("event_address");
 
         if (groupIdString == null) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing required field: group_id");
@@ -182,6 +184,10 @@ public class EventsServlet extends HttpServlet {
 
             if (type != null) {
                 event.type = type;
+            }
+
+            if (address != null) {
+                event.setAddress(address);
             }
 
             if (dateString != null) {
