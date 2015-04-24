@@ -6,12 +6,12 @@
     <ImageView
         android:id="@+id/item_icon"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="55dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:adjustViewBounds="true"
         android:maxHeight="128dp"
-        android:maxWidth="128dp"
+        android:maxWidth="64dp"
         android:src="@drawable/leaderboard_icon"
          />
 

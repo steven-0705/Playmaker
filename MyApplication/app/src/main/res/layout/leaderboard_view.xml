@@ -2,27 +2,43 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="10dp"
+
+        android:background="@android:color/transparent"
+        android:id="@+id/buffer"
+        />
     <TextView
         android:id="@+id/textTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:text="Leaderboard"
+        android:layout_below="@id/buffer"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_alignBottom="@+id/spinner"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:textSize="28dp"
+        android:paddingLeft="5dp"/>
 
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/spinner"
-        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_toRightOf="@+id/textTitle"
         android:layout_toEndOf="@+id/textTitle"
         android:spinnerMode="dialog"
+        android:paddingRight="5dp"
+        android:layout_below="@id/buffer"
+        />
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="10dp"
+        android:layout_below="@id/spinner"
+        android:background="@android:color/transparent"
         />
 
 
