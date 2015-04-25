@@ -1,8 +1,9 @@
 package casuals.filthy.playmaker;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,8 +30,34 @@ public class EventCompletedFragment extends Fragment {
         participants.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 LayoutInflater inflater = (LayoutInflater) getActivity().getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View popupView = inflater.inflate(R.layout.leaderboard_popout, null);
+                View popupView = inflater.inflate(R.layout.participant_popout, null);
                 final PopupWindow popupWindow = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                Button dismissButton = (Button)popupView.findViewById(R.id.dismiss);
+                dismissButton.setOnClickListener(new Button.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        // TODO Auto-generated method stub
+                        popupWindow.dismiss();
+
+                    }});
+                popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
+            }
+        });
+        Button items = (Button) getView().findViewById(R.id.item_button);
+        items.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                LayoutInflater inflater = (LayoutInflater) getActivity().getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View popupView = inflater.inflate(R.layout.items_popout, null);
+                final PopupWindow popupWindow = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                Button dismissButton = (Button)popupView.findViewById(R.id.dismiss);
+                dismissButton.setOnClickListener(new Button.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        // TODO Auto-generated method stub
+                        popupWindow.dismiss();
+
+                    }});
+                popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
             }
         });
     }
