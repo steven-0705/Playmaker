@@ -26,6 +26,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -74,12 +75,15 @@ public class EventCreate extends Activity implements AsyncResponse{
         final EditText getOther = (EditText) findViewById(R.id.edittext1);
         final TextView getTime = (TextView) findViewById(R.id.EditTime);
         final TextView itemList = (TextView) findViewById(R.id.itemlist);
+        final TextView getTeam = (TextView) findViewById(R.id.event_team);
         final String[] time = new String[3];
         final String[] hourAndMin = new String[2];
         final Spinner getOption = (Spinner) findViewById(R.id.spinner1);
         getTime.setEnabled(false);
         itemList.setEnabled(false);
         getOther.setEnabled(false);
+        getTeam.setEnabled(false);
+        final Switch teamEnabled = (Switch) findViewById(R.id.switch2);
         for (int i=0; i<time.length; i++) {
             time[i] = "";
         }
