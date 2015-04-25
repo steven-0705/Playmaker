@@ -13,6 +13,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import data.EventData;
@@ -85,7 +86,7 @@ public class Utils {
         }
     }
 
-    public static String postReq(String urlString, Map<String, String> params) {
+    public static String postReq(String urlString, Map<String, Object> params) {
         try {
             URL url = new URL(urlString);// + makeParams(params));
             //System.out.println(url.toString());
@@ -109,14 +110,14 @@ public class Utils {
 
                 return sb.toString();
             } else {
-                /*BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
                 String line;
                 StringBuilder sb = new StringBuilder();
                 while ((line = reader.readLine()) != null) {
                     sb.append(line);
                 }
-                System.out.println(sb.toString());*/
-                return "" + connection.getResponseCode();
+                System.out.println(sb.toString());
+                return "" + connection.getResponseCode() + ": " + connection.getResponseMessage();
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -130,7 +131,7 @@ public class Utils {
     }
 
     public static UserData addUser(String id, String name, String email) {
-        HashMap<String, String> params = new HashMap<String, String>();
+        HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("user_id", id);
         params.put("user_name", name);
         params.put("user_email", email);
@@ -142,7 +143,7 @@ public class Utils {
     }
 
     public static GroupData addGroup(String userId, String groupName) {
-        HashMap<String, String> params = new HashMap<String, String>();
+        HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("user_id", userId);
         params.put("group_name", groupName);
 
@@ -161,7 +162,7 @@ public class Utils {
     }
 
     public static UserData joinGroup(String userId, long groupId) {
-        HashMap<String, String> params = new HashMap<String, String>();
+        HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("user_id", userId);
         params.put("group_id", groupId+"");
         params.put("action", "join");
@@ -171,13 +172,42 @@ public class Utils {
         return user;
     }
 
-    public static EventData addEvent(String userId, long groupId, String name, String type, long date) {
-        HashMap<String, String> params = new HashMap<String, String>();
+    public static EventData joinEvent(String userId, long eventId, long groupId) {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("user_id", userId);
+        params.put("group_id", groupId+"");
+        params.put("event_id", eventId+"");
+        params.put("action", "join");
+
+        String resp = Utils.postReq(Utils.EVENTS_URL, params);
+        //System.out.println(resp);
+        EventData event = gson.fromJson(resp, EventData.class);
+        return event;
+    }
+
+    public static EventData addEvent(String userId, long groupId, String name, String type, long date, int teams, boolean autoGen, long close) {
+        HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("user_id", userId);
         params.put("group_id", groupId+"");
         params.put("event_name", name);
         params.put("event_type", type);
         params.put("event_date", date+"");
+        params.put("event_teams", teams+"");
+        params.put("gen_teams", (autoGen ? "true" : "false"));
+        params.put("close", close+"");
+
+        String resp = Utils.postReq(Utils.EVENTS_URL, params);
+        //System.out.println(resp);
+        EventData event = gson.fromJson(resp, EventData.class);
+        return event;
+    }
+
+    public static EventData setTeams(String userId, long groupId, long eventId, List<List<String>> teams) {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("user_id", userId);
+        params.put("group_id", groupId+"");
+        params.put("event_id", eventId+"");
+        params.put("teams", teams);
 
         String resp = Utils.postReq(Utils.EVENTS_URL, params);
         //System.out.println(resp);

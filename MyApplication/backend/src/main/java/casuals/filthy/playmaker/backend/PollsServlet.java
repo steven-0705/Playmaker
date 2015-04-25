@@ -26,11 +26,11 @@ public class PollsServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        HashMap<String, String> params = ServletUtils.getParams(req.getInputStream());
+        HashMap<String, Object> params = ServletUtils.getParams(req.getInputStream());
 
-        String groupIdString = params.get("group_id");req.getParameter("group_id");
-        String userId = params.get("user_id");//req.getParameter("user_id");
-        String action = params.get("actions");//req.getParameter("action");
+        String groupIdString = (String) params.get("group_id");req.getParameter("group_id");
+        String userId = (String) params.get("user_id");//req.getParameter("user_id");
+        String action = (String) params.get("actions");//req.getParameter("action");
 
 
         if (groupIdString == null || userId == null || action == null) {
@@ -49,8 +49,8 @@ public class PollsServlet extends HttpServlet {
         PollData poll = null;
 
         if (action.equals("vote")) {
-            String pollIdString = params.get("poll_id");//req.getParameter("poll_id");
-            String voteString = params.get("vote");//req.getParameter("vote");
+            String pollIdString = (String) params.get("poll_id");//req.getParameter("poll_id");
+            String voteString = (String) params.get("vote");//req.getParameter("vote");
             if (pollIdString == null || voteString == null) {
                 resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing poll_id, or vote");
                 return;
@@ -70,7 +70,7 @@ public class PollsServlet extends HttpServlet {
             poll.addVote(userId, vote);
         }
         else if (action.equals("create")) {
-            String name = params.get("poll_name");//req.getParameter("poll_name");
+            String name = (String) params.get("poll_name");//req.getParameter("poll_name");
             if (name == null) {
                 resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing required poll_name parameter");
                 return;
@@ -79,7 +79,7 @@ public class PollsServlet extends HttpServlet {
             // get the options
             List<String> options = new ArrayList<String>();
             for (int i = 0; i <= 20; i++) {
-                String opt = params.get("option"+i);//req.getParameter("option"+i);
+                String opt = (String) params.get("option"+i);//req.getParameter("option"+i);
                 if (opt == null)
                     break;
                 else

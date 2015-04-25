@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import casuals.filthy.playmaker.backend.OfyService;
+
 import static casuals.filthy.playmaker.backend.OfyService.ofy;
 
 /**
@@ -26,18 +28,23 @@ public class EventData extends DataObject {
     protected Map<String, String> attending;
     protected long groupId;
     protected int numTeams = 2;
-    protected List<ArrayList<String>> teams;
+    protected List<EventTeam> teams;
+    protected boolean autoTeams = true;
     protected String address;
+    protected long closeDate;
+    protected List<String> items;
 
     public EventData() {};
 
-    public EventData(long id, long date, String type, long groupId, String name, String address) {
+    public EventData(long id, long date, String type, long groupId, String name, String address, boolean autogen, long closeDate) {
         this.id = id;
         this.date = date;
         this.type = type;
         this.groupId = groupId;
         this.address = address;
         this.name = name;
+        this.closeDate = closeDate;
+        autoTeams = autogen;
     }
 
     public void addAttendee(String id, String name) {
@@ -46,29 +53,54 @@ public class EventData extends DataObject {
         attending.put(id, name);
 
         // reform teams
-        updateTeams();
+        if (autoTeams && numTeams > 0)
+            updateTeams();
+    }
+
+    public void setTeams(List<List<String>> teamsList) {
+        numTeams = teamsList.size();
+        teams = new ArrayList<EventTeam>();
+        for (int i = 0; i < numTeams; i++) {
+            EventTeam team = new EventTeam();
+            for (String player: teamsList.get(i)) {
+                team.add(player);
+            }
+            teams.add(team);
+        }
     }
 
     private void updateTeams() {
 
-        teams = new ArrayList<ArrayList<String>>();
+        teams = new ArrayList<EventTeam>();
         for (int i = 0; i < numTeams; i++) {
-            teams.add(new ArrayList<String>());
+            teams.add(new EventTeam());
         }
 
         // get the data
-        Map<String, GroupUserDetailed> stats = ofy().load().type(GroupUserDetailed.class).ids(attending.keySet());
         List<GroupUserDetailed.PlayerStats> ranking = new ArrayList<GroupUserDetailed.PlayerStats>();
-        for (GroupUserDetailed player: stats.values()) {
-            ranking.add(player.getStats().get(type));
+        for (GroupUserDetailed player: ofy().load().type(GroupData.class).id(groupId).now().getUsers()) {
+            if (attending.containsKey(player.getId()))
+                ranking.add(player.getStat(type));
         }
 
         Collections.sort(ranking);
 
         for (int i = 0; i < ranking.size(); i++) {
-            teams.get(i%numTeams).add(ranking.get(i).player);
+            teams.get(i % numTeams).add(ranking.get(i).getPlayer());
         }
 
+    }
+
+    public List<String> getItems() {
+        if (items == null)
+            items = new ArrayList<String>();
+        return items ;
+    }
+
+    public void addItems(List<String> items) {
+        if (this.items == null)
+            this.items = new ArrayList<String>();
+        this.items.addAll(items);
     }
 
     public long getId() {
@@ -126,4 +158,33 @@ public class EventData extends DataObject {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    public Map<String, String> getAttending() {
+        return attending;
+    }
+
+    public List<EventTeam> getTeams() {
+        return teams;
+    }
+
+    public static class EventTeam {
+        List<String> members;
+
+        public EventTeam() {
+            members = new ArrayList<String>();
+        }
+
+        public void add(String member) {
+            if (members == null)
+                members = new ArrayList<String>();
+            members.add(member);
+        }
+
+        public int size() {
+            return members.size();
+        }
+
+
+    }
+
 }

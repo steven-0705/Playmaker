@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -30,20 +31,30 @@ public class EventsServlet extends HttpServlet {
      * @param resp
      * @throws IOException
      */
-    private void createEvent(HashMap<String, String> params, HttpServletResponse resp) throws IOException {
-        String userId = params.get("user_id");
-        String groupIdString = params.get("group_id");
-        String name = params.get("event_name");
-        String type = params.get("event_type").toLowerCase();
-        String dateString = params.get("event_date");
-        String address = params.get("event_address");
+    private void createEvent(HashMap<String, Object> params, HttpServletResponse resp) throws IOException {
+        String userId = (String) params.get("user_id");
+        String groupIdString = (String) params.get("group_id");
+        String name = (String) params.get("event_name");
+        String type = (String) params.get("event_type");
+        String dateString = (String) params.get("event_date");
+        String address = (String) params.get("event_address");
+        String eventTeamsString = (String) params.get("event_teams");
+        String autoGenString = (String) params.get("gen_teams");
+        String closeString = (String) params.get("close");
+        List<String> items = (List<String>) params.get("items");
 
-        if (userId == null || groupIdString == null || name == null || type == null || dateString == null) {
+        if (userId == null || groupIdString == null || closeString == null
+                || name == null || autoGenString == null || type == null || dateString == null) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing required field: user_id, group_id, event_name, event_type, event_date");
             return;
         }
+
+        type = type.toLowerCase();
+
         long groupId = Long.parseLong(groupIdString);
         long date = Long.parseLong(dateString);
+        boolean autoGen = autoGenString.equals("true");
+        long close = Long.parseLong(closeString);
 
         // get the group
         GroupData group = ofy().load().type(GroupData.class).id(groupId).now();
@@ -60,9 +71,18 @@ public class EventsServlet extends HttpServlet {
 
         // create the event
         long id = DatastoreServiceFactory.getDatastoreService().allocateIds("event", 1).getStart().getId();
-        EventData event = new EventData(id, date, type, group.getId(), name, address);
+        EventData event = new EventData(id, date, type, group.getId(), name, address, autoGen, close);
 
         group.addEvent(event);
+
+        if (eventTeamsString != null) {
+            int numTeams = Integer.parseInt(eventTeamsString);
+            event.setNumTeams(numTeams);
+        }
+
+        if (items != null) {
+            event.addItems(items);
+        }
 
         // put the data back
         ofy().save().entities(event, group).now();
@@ -122,16 +142,18 @@ public class EventsServlet extends HttpServlet {
      * @throws IOException
      */
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        HashMap<String, String> params = ServletUtils.getParams(req.getInputStream());
-        String groupIdString = params.get("group_id");//req.getParameter("group_id");
-        String eventIdString = params.get("event_id");//req.getParameter("event_id");
+        HashMap<String, Object> params = ServletUtils.getParams(req.getInputStream());
+        String groupIdString = (String) params.get("group_id");//req.getParameter("group_id");
+        String eventIdString = (String) params.get("event_id");//req.getParameter("event_id");
 
         // optional stuff
-        String userId = params.get("user_id");//req.getParameter("user_id");
-        String name = params.get("event_name");//req.getParameter("event_name");
-        String type = params.get("event_type").toLowerCase();//req.getParameter("event_type");
-        String dateString = params.get("event_date");//req.getParameter("event_date");
-        String address = params.get("event_address");
+        String userId = (String) params.get("user_id");//req.getParameter("user_id");
+        String name = (String) params.get("event_name");//req.getParameter("event_name");
+        String type = (String) params.get("event_type");//req.getParameter("event_type");
+        String dateString = (String) params.get("event_date");//req.getParameter("event_date");
+        String address = (String) params.get("event_address");
+        String action = (String) params.get("action");
+        List<List<String>> teams = (List<List<String>>) params.get("teams");
 
         if (groupIdString == null) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing required field: group_id");
@@ -170,16 +192,22 @@ public class EventsServlet extends HttpServlet {
         }
 
         // admin abilities
-        if (name != null || type != null || dateString != null) {
+        if (name != null || type != null || dateString != null || (action != null && action.equals("teams"))) {
             // check to make sure admin
             if (!group.isUserAdmin(userId)) {
                 resp.sendError(HttpServletResponse.SC_FORBIDDEN, "user is not admin");
                 return;
             }
 
+            type = type.toLowerCase();
+
             if (name != null) {
                 group.getEvent(eventId).setName(name);
                 event.setName(name);
+            }
+
+            if (teams != null) {
+                event.setTeams(teams);
             }
 
             if (type != null) {
