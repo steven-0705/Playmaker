@@ -8,13 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 /**
  * Created by Steven on 4/25/2015.
  */
-public class EventCompletedFragment extends Fragment {
+public class EventFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -26,6 +28,23 @@ public class EventCompletedFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        TextView pollMessage = (TextView) getView().findViewById(R.id.poll_message);
+        TextView date = (TextView) getView().findViewById(R.id.event_date);
+        TextView time = (TextView) getView().findViewById(R.id.event_time);
+        CheckBox option1 = (CheckBox) getView().findViewById(R.id.poll_option1);
+        CheckBox option2 = (CheckBox) getView().findViewById(R.id.poll_option2);
+        CheckBox option3 = (CheckBox) getView().findViewById(R.id.poll_option3);
+        boolean eventPending = true;
+        if(eventPending) {
+            date.setVisibility(View.GONE);
+            time.setVisibility(View.GONE);
+        }
+        else {
+            pollMessage.setVisibility(View.GONE);
+            option1.setVisibility(View.GONE);
+            option2.setVisibility(View.GONE);
+            option3.setVisibility(View.GONE);
+        }
         Button participants = (Button) getView().findViewById(R.id.user_button);
         participants.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

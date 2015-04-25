@@ -138,7 +138,6 @@ private CheckBox checkBox1, checkBox2, checkBox3, checkBox4;
                return;
            }
            UserBean user = (UserBean) o;
-           Log.i("Email:", user.getEmail());
-       }
 
+       }
 }
