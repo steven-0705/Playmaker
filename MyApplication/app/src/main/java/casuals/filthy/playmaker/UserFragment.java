@@ -29,6 +29,8 @@ import casuals.filthy.playmaker.data.DatastoreAdapter;
 import casuals.filthy.playmaker.data.beans.GroupBean;
 import casuals.filthy.playmaker.data.beans.UserBean;
 
+import java.util.List;
+
 /**
  * Created by Shane on 3/27/2015.
  */
@@ -71,11 +73,9 @@ private CheckBox checkBox1, checkBox2, checkBox3, checkBox4;
                        public void onClick(DialogInterface dialog, int which) {
                            if (input.getText().toString().matches("")) {
                                Toast.makeText(getActivity().getApplicationContext(), "You did not enter anything", Toast.LENGTH_SHORT).show();
-                           }
-                           else if(input.getText().toString().length() < 3) {
+                           } else if (input.getText().toString().length() < 3) {
                                Toast.makeText(getActivity().getApplicationContext(), "Group name must be at least 3 letters long", Toast.LENGTH_SHORT).show();
-                           }
-                           else {
+                           } else {
                                String temp = input.getText().toString();
                                DatastoreAdapter adapter = new DatastoreAdapter(UserFragment.this);
                                adapter.createGroup(temp, MainActivity.getId());
@@ -140,6 +140,9 @@ private CheckBox checkBox1, checkBox2, checkBox3, checkBox4;
                return;
            }
            UserBean user = (UserBean) o;
-
+           List<UserBean.UserGroupBean> groupList = user.getGroups();
+           for(UserBean.UserGroupBean group: groupList) {
+               Log.i("Name:",group.name);
+           }
        }
 }
