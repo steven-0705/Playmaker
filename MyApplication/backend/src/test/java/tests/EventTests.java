@@ -29,7 +29,7 @@ public class EventTests {
         Random rand = new Random();
         user1 = Utils.addUser("events1" + rand.nextInt(1000000), "billy", "billy@bills.com");
         user2 = Utils.addUser("events2" + rand.nextInt(1000000), "bobby", "bobby@bills.com");
-        user3 = Utils.addUser("events3" + rand.nextInt(1000000), "wil", "tom@bills.com");
+        user3 = Utils.addUser("events3" + rand.nextInt(1000000), "will", "tom@bills.com");
         user4 = Utils.addUser("events4" + rand.nextInt(1000000), "tim", "tam@bills.com");
 
         group1 = Utils.addGroup(user1.getId(), "group1");
@@ -63,8 +63,8 @@ public class EventTests {
     @Test
     public void eventsGetEvent() {
         EventData event = Utils.addEvent(user1.getId(), group1.getId(), "YAY", "flamingos", 1010000);
+        assertNotNull(Utils.getGroup(group1.getId()).getEvent(event.getId()));
     }
-
 
 
 

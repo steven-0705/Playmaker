@@ -13,10 +13,10 @@ import java.util.Map;
 @Entity
 public class UserData extends DataObject{
 
-    @Id public String id;
-    public String email;
-    public List<UserGroup> groups;
-    public List<Invite> invites;
+    @Id protected String id;
+    protected String email;
+    protected List<UserGroup> groups;
+    protected List<Invite> invites;
 
     private UserData() {};
 

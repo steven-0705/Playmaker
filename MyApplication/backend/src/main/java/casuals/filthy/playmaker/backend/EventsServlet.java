@@ -60,7 +60,7 @@ public class EventsServlet extends HttpServlet {
 
         // create the event
         long id = DatastoreServiceFactory.getDatastoreService().allocateIds("event", 1).getStart().getId();
-        EventData event = new EventData(id, date, type, group.id, name, address);
+        EventData event = new EventData(id, date, type, group.getId(), name, address);
 
         group.addEvent(event);
 
@@ -101,7 +101,7 @@ public class EventsServlet extends HttpServlet {
             return;
         }
 
-        if (event.groupId != groupId) {
+        if (event.getGroupId() != groupId) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "incorrect group id");
             return;
         }
@@ -154,7 +154,7 @@ public class EventsServlet extends HttpServlet {
         }
         GroupData group = ofy().load().type(GroupData.class).id(groupId).now();
 
-        if (event.groupId != groupId) {
+        if (event.getGroupId() != groupId) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "incorrect group id");
             return;
         }
@@ -179,11 +179,11 @@ public class EventsServlet extends HttpServlet {
 
             if (name != null) {
                 group.getEvent(eventId).setName(name);
-                event.name = name;
+                event.setName(name);
             }
 
             if (type != null) {
-                event.type = type;
+                event.setType(type);
             }
 
             if (address != null) {
@@ -192,7 +192,7 @@ public class EventsServlet extends HttpServlet {
 
             if (dateString != null) {
                 long date = Long.parseLong(dateString);
-                event.date = date;
+                event.setDate(date);
                 group.getEvent(eventId).date = date;
             }
 
