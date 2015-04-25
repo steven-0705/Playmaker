@@ -66,7 +66,7 @@ public class UserData extends DataObject{
         return invites;
     }
 
-    protected static class UserGroup {
+    public static class UserGroup {
         public String name;
         public long id;
 
@@ -76,9 +76,13 @@ public class UserData extends DataObject{
             this.name = name;
             this.id = id;
         }
+
+        public long getId() {
+            return id;
+        }
     }
 
-    protected static class Invite {
+    public static class Invite {
         public String inviter;
         public long groupId;
         public long date;

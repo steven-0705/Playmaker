@@ -7,25 +7,12 @@ import java.util.Map;
 
 public class PollBean extends DataBean {
 
-    public long id;
-    public long groupId;
-    public List<String> options;
-    public Map<String, Integer> votes;
-    public List<String> voterIds;
+    protected long id;
+    protected long groupId;
+    protected List<String> options;
+    protected Map<String, Integer> votes;
 
     public PollBean() {};
-
-    public PollBean(List<String> options, long id, long groupId) {
-        this.options = new ArrayList<String>();
-        this.options.addAll(options);
-        this.groupId = groupId;
-        this.id = id;
-
-        votes = new HashMap<String, Integer>();
-        for (String opt : this.options) {
-            votes.put(opt, 0);
-        }
-    }
 
     public long getId() {
         return id;
@@ -33,5 +20,14 @@ public class PollBean extends DataBean {
 
     public long getGroupId() {
         return groupId;
+    }
+
+    public int[] compile() {
+        int[] results = new int[options.size()];
+        for (Integer vote: votes.values()) {
+            results[vote]++;
+        }
+
+        return results;
     }
 }

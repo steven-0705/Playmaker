@@ -83,18 +83,6 @@ public class GroupBean extends DataBean {
 
         public GroupUserData() {};
 
-        public GroupUserData(String userId, String name) {
-            id = userId;
-            this.name = name;
-            admin = false;
-        }
-
-        public GroupUserData(String userId, String name, boolean admin) {
-            id = userId;
-            this.name = name;
-            this.admin = admin;
-        }
-
         public String getName() {
             return name;
         }
@@ -119,12 +107,6 @@ public class GroupBean extends DataBean {
 
         public GroupEventData() {};
 
-        public GroupEventData(String name, long date, long id) {
-            this.name = name;
-            this.date = date;
-            this.eventId = id;
-        }
-
         public String getName() {
             return name;
         }
@@ -142,12 +124,6 @@ public class GroupBean extends DataBean {
         public String name;
         public String body;
         public long date;
-
-        public Notification(String name, long date, String body) {
-            this.name = name;
-            this.date = date;
-            this.body = body;
-        }
 
         public String getName() {
             return name;

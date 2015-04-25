@@ -47,7 +47,7 @@ import com.google.android.gms.plus.model.people.Person;
 
 public class MainActivity extends BaseActivity implements ActionBar.TabListener, AsyncResponse{
     ActionBar actionbar;
-    static ViewPager viewpager;
+    static CustomViewPager viewpager;
     FragmentPageAdapter ft;
     static String id;
     static String email;
@@ -67,12 +67,12 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
             name = extras.getString("DISPLAY_NAME");
             if(id != null && email != null && name != null)
             {
-               test.getUser(id,name, email);
+               //test.getUser(id,name, email);
             }
         }
 
         setContentView(R.layout.activity_main);
-        viewpager = (ViewPager) findViewById(R.id.pager);
+        viewpager = (CustomViewPager) findViewById(R.id.custompager);
         ft = new FragmentPageAdapter(getSupportFragmentManager());
         actionbar = getActionBar();
         actionbar.setDisplayShowTitleEnabled(false);
@@ -84,7 +84,7 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 
         actionbar.addTab(actionbar.newTab().setText("My Profile").setTabListener(this));
         actionbar.addTab(actionbar.newTab().setIcon(R.drawable.group_icon).setText("Group").setTabListener(this));
-       // actionbar.addTab(actionbar.newTab().setIcon(R.drawable.event_icon).setText("Events").setTabListener(this));
+        actionbar.addTab(actionbar.newTab().setIcon(R.drawable.event_icon).setText("Events").setTabListener(this));
         actionbar.addTab(actionbar.newTab().setIcon(R.drawable.leaderboard_icon).setText("Leader Board").setTabListener(this));
         viewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

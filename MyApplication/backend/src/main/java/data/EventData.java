@@ -5,6 +5,7 @@ import com.googlecode.objectify.annotation.Id;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,8 @@ public class EventData extends DataObject {
     @Id
     protected long id;
     protected long date;
+    protected PollData datePoll;
+    protected List<Long> pollMeaning;
     protected String type;
     protected String description = "No description available";
     protected Map<String, String> attending;
@@ -30,21 +33,53 @@ public class EventData extends DataObject {
     protected int numTeams = 2;
     protected List<EventTeam> teams;
     protected boolean autoTeams = true;
+    protected boolean closed;
     protected String address;
     protected long closeDate;
     protected List<String> items;
 
     public EventData() {};
 
-    public EventData(long id, long date, String type, long groupId, String name, String address, boolean autogen, long closeDate) {
+    public EventData(long id, List<Double> dates, String type, long groupId, String name, String address, boolean autogen, long closeDate) {
         this.id = id;
-        this.date = date;
+        if (dates.size() == 1) {
+            date = Math.round(dates.get(0));
+            closed = true;
+        }
+        else {
+            closed = false;
+            List<String> options = new ArrayList<String>();
+            pollMeaning = new ArrayList<Long>();
+            for (Double date: dates) {
+                options.add(new Date(Math.round(date)).toString());
+                pollMeaning.add(Math.round(date));
+            }
+            PollData poll = new PollData(options, 0, groupId);
+        }
+
         this.type = type;
         this.groupId = groupId;
         this.address = address;
         this.name = name;
         this.closeDate = closeDate;
         autoTeams = autogen;
+    }
+
+    public void checkPoll() {
+        if (closeDate > System.currentTimeMillis()) {
+            int[] results = datePoll.compile();
+
+            int max = 0;
+            for (int i = 1; i < results.length; i++) {
+                if (results[i] > results[max])
+                    max = i;
+            }
+
+            date = pollMeaning.get(max);
+            pollMeaning = null;
+            datePoll = null;
+            closed = true;
+        }
     }
 
     public void addAttendee(String id, String name) {
@@ -133,6 +168,10 @@ public class EventData extends DataObject {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isClosed() {
+        return closed;
     }
 
     public long getGroupId() {

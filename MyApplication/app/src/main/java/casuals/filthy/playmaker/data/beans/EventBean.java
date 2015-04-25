@@ -6,24 +6,27 @@ import java.util.Map;
 
 public class EventBean extends DataBean {
 
-    public long id;
-    public long date;
-    public String type;
-    public String description = "No description available";
-    public Map<String, String> attending;
-    public long groupId;
-    public int numTeams = 2;
-    public List<ArrayList<String>> teams;
-    public String Address;
+    protected long id;
+    protected long date;
+    protected PollBean datePoll;
+    protected List<Long> pollMeaning;
+    protected String type;
+    protected String description = "No description available";
+    protected Map<String, String> attending;
+    protected long groupId;
+    protected int numTeams = 2;
+    protected List<EventTeam> teams;
+    protected boolean autoTeams = true;
+    protected boolean closed;
+    protected String address;
+    protected long closeDate;
+    protected List<String> items;
+
+    public boolean isClosed() {
+        return closed;
+    }
 
     public EventBean() {};
-
-    public EventBean(long id, long date, String type, long groupId) {
-        this.id = id;
-        this.date = date;
-        this.type = type;
-        this.groupId = groupId;
-    }
 
     public long getId() {
         return id;
@@ -31,6 +34,14 @@ public class EventBean extends DataBean {
 
     public long getDate() {
         return date;
+    }
+
+    public PollBean getDatePoll() {
+        return datePoll;
+    }
+
+    public List<Long> getPollMeaning() {
+        return pollMeaning;
     }
 
     public String getType() {
@@ -41,6 +52,10 @@ public class EventBean extends DataBean {
         return description;
     }
 
+    public Map<String, String> getAttending() {
+        return attending;
+    }
+
     public long getGroupId() {
         return groupId;
     }
@@ -49,7 +64,43 @@ public class EventBean extends DataBean {
         return numTeams;
     }
 
+    public List<EventTeam> getTeams() {
+        return teams;
+    }
+
+    public boolean isAutoTeams() {
+        return autoTeams;
+    }
+
     public String getAddress() {
-        return Address;
+        return address;
+    }
+
+    public long getCloseDate() {
+        return closeDate;
+    }
+
+    public List<String> getItems() {
+        return items;
+    }
+
+    public static class EventTeam {
+        List<String> members;
+
+        public EventTeam() {
+            members = new ArrayList<String>();
+        }
+
+        public void add(String member) {
+            if (members == null)
+                members = new ArrayList<String>();
+            members.add(member);
+        }
+
+        public int size() {
+            return members.size();
+        }
+
+
     }
 }
