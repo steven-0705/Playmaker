@@ -14,6 +14,7 @@ public class EventBean extends DataBean {
     public long groupId;
     public int numTeams = 2;
     public List<ArrayList<String>> teams;
+    public String Address;
 
     public EventBean() {};
 
@@ -48,4 +49,7 @@ public class EventBean extends DataBean {
         return numTeams;
     }
 
+    public String getAddress() {
+        return Address;
+    }
 }

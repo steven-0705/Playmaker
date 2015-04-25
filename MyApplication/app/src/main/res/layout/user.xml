@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="First Name"
+        android:text="Andrew Luck"
         android:id="@+id/user_display"
         android:layout_alignTop="@id/user_image"
         android:layout_alignParentRight="true"
@@ -35,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="UserName"
+        android:text="andrew.luck@gmail.com"
         android:id="@+id/user_user"
         android:layout_below="@id/user_display"
         android:layout_toRightOf="@id/user_image"
@@ -49,12 +49,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Stats &amp; More"
+        android:text="Groups"
         android:id="@+id/user_stats"
         android:layout_below="@id/user_image"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="30dp" />
+        android:layout_marginTop="75dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -93,7 +93,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Small Text"
+        android:text="None"
         android:id="@+id/user_groupText"
         android:layout_alignTop="@id/user_groups"
         android:layout_alignLeft="@+id/user_favoriteText"
@@ -103,7 +103,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Small Text"
+        android:text="Football"
         android:id="@+id/user_favoriteText"
         android:layout_alignTop="@+id/user_favorite"
         android:layout_toRightOf="@id/user_image"
@@ -113,32 +113,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Small Text"
+        android:text="1"
         android:id="@+id/user_rankText"
         android:layout_alignTop="@id/user_rank"
         android:layout_alignLeft="@id/user_favoriteText"
         android:layout_alignStart="@id/user_favoriteText" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Other Stat:"
-        android:id="@+id/user_other"
-        android:layout_below="@id/user_rank"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="10dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Small Text"
-        android:id="@+id/user_otherText"
-        android:layout_alignTop="@id/user_other"
-        android:layout_alignLeft="@id/user_rankText"
-        android:layout_alignStart="@id/user_rankText" />
 
     <Button
         android:layout_width="wrap_content"
@@ -156,7 +135,26 @@
         android:layout_height="wrap_content"
         android:text="Create Event"
         android:id="@+id/eventCreate"
-        android:layout_below="@+id/user_favoriteText"
+        android:layout_above="@+id/statsButton"
+        android:layout_alignLeft="@+id/button"
+        android:layout_alignStart="@+id/button" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stats"
+        android:id="@+id/statsButton"
+        android:layout_above="@+id/signOut"
+        android:layout_alignRight="@+id/eventCreate"
+        android:layout_alignEnd="@+id/eventCreate"
+        android:visibility="invisible"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Group"
+        android:id="@+id/button"
+        android:layout_below="@+id/user_image"
         android:layout_alignRight="@+id/user_user"
         android:layout_alignEnd="@+id/user_user" />
 

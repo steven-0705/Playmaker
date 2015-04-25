@@ -10,9 +10,9 @@ import java.util.Date;
 
 public abstract class DataObject {
 
-    public String name;
-    public long dateCreated = System.currentTimeMillis();
-    public long createdByUser;
+    protected String name;
+    protected long dateCreated = System.currentTimeMillis();
+    protected long createdByUser;
 
     public String getName() {
         return name;

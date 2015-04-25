@@ -16,11 +16,11 @@ public class PollData extends DataObject {
 
 
     @Id
-    public long id;
-    public long groupId;
-    public List<String> options;
-    public Map<String, Integer> votes;
-    public List<String> voterIds;
+    protected long id;
+    protected long groupId;
+    protected List<String> options;
+    protected Map<String, Integer> votes;
+    protected List<String> voterIds;
 
     /**
      * Adds a user's vote to the poll

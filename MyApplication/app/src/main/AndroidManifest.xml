@@ -3,28 +3,38 @@
     package="casuals.filthy.playmaker" >
 
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-
     <uses-permission android:name="android.permission.NETWORK" />
-
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
-
-
-
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <application
         android:allowBackup="true"
         android:icon="@drawable/logo"
-        android:label="@string/app_name" >
+        android:label="@string/app_name">
+        <uses-library android:name="com.google.android.maps"/>
+        <uses-feature
+            android:glEsVersion="0x00020000"
+            android:required="true" />
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+            android:value="@integer/google_play_services_version"/>
         <meta-data
-            android:name="com.google.android.gms.plus"
-            android:value="AIzaSyCJvBpTEYWtYokwnD7hVBKBWPzn81VKGvo"
+            android:name="com.google.android.gms.maps.v2.API_KEY"
+            android:value="AIzaSyBTbz61xu7nTdOmYjrzoWQ8kxKXvfDnfns"
             />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBTbz61xu7nTdOmYjrzoWQ8kxKXvfDnfns"/>
+        <!--  Api keys
+                Shane: AIzaSyBTbz61xu7nTdOmYjrzoWQ8kxKXvfDnfns
+                Chris: AIzaSyAsKcAHv3PmJy9_v_5u6RUYTR_3AA2OQOY
+                Nick:  AIzaSyDE0T8YQTr_aqPHnkxyA9XkPnvX7nkJCDw
+                Isaac: AIzaSyBl4uViuBzOPHxra3_V63kMR8Tta9guDgY
+                Steven:AIzaSyBOZ66odBe_57gANhGzClq_nubneOsxV8A
+                replace current key with your key listed-->
 
 
         <activity
@@ -43,8 +53,12 @@
             android:theme="@android:style/Theme.Holo.Light.DarkActionBar"
             android:label="PlayMaker"></activity>
         <activity android:name=".EventCreate"
+        android:theme="@android:style/Theme.Holo.Light.DarkActionBar"
+        android:label="PlayMaker"></activity>
+        <activity android:name=".StatsActivity"
             android:theme="@android:style/Theme.Holo.Light.DarkActionBar"
             android:label="PlayMaker"></activity>
+
 
     </application>
 

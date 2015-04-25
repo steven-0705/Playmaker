@@ -57,8 +57,8 @@ public class EventsFragment extends Fragment {
         final Button button3 = (Button) view.findViewById(R.id.additem);
         final EditText getLoc = (EditText) view.findViewById(R.id.edittext2);
         final EditText getOther = (EditText) view.findViewById(R.id.edittext1);
-        final EditText getTime = (EditText) view.findViewById(R.id.EditTime);
-        final EditText itemList = (EditText) view.findViewById(R.id.itemlist);
+        final TextView getTime = (TextView) view.findViewById(R.id.EditTime);
+        final TextView itemList = (TextView) view.findViewById(R.id.itemlist);
         final String[] time = new String[3];
         final Spinner getOption = (Spinner) view.findViewById(R.id.spinner1);
         getTime.setEnabled(false);

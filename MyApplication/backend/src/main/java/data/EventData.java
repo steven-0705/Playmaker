@@ -19,22 +19,24 @@ import static casuals.filthy.playmaker.backend.OfyService.ofy;
 public class EventData extends DataObject {
 
     @Id
-    public long id;
-    public long date;
-    public String type;
-    public String description = "No description available";
-    public Map<String, String> attending;
-    public long groupId;
-    public int numTeams = 2;
-    public List<ArrayList<String>> teams;
+    protected long id;
+    protected long date;
+    protected String type;
+    protected String description = "No description available";
+    protected Map<String, String> attending;
+    protected long groupId;
+    protected int numTeams = 2;
+    protected List<ArrayList<String>> teams;
+    protected String address;
 
     public EventData() {};
 
-    public EventData(long id, long date, String type, long groupId, String name) {
+    public EventData(long id, long date, String type, long groupId, String name, String address) {
         this.id = id;
         this.date = date;
         this.type = type;
         this.groupId = groupId;
+        this.address = address;
         this.name = name;
     }
 
@@ -115,5 +117,13 @@ public class EventData extends DataObject {
 
     public void setNumTeams(int numTeams) {
         this.numTeams = numTeams;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

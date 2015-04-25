@@ -3,6 +3,7 @@ package data;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 
+import java.security.acl.Group;
 import java.util.Map;
 
 /**
@@ -11,14 +12,22 @@ import java.util.Map;
 @Entity
 public class GroupUserDetailed extends DataObject {
 
-    @Id public String id;
-    public String type;
-    public boolean admin;
-    public long groupId;
+    @Id protected String id;
+    protected boolean admin = false;
 
-    public Map<String, PlayerStats> stats;
+    protected Map<String, PlayerStats> stats;
 
-    public Map<String, PlayerStats> getStats() {
+    public GroupUserDetailed(UserData user) {
+        id = user.getId();
+        name = user.getName();
+    }
+
+    public GroupUserDetailed(UserData user, boolean admin) {
+        this(user);
+        this.admin = admin;
+    }
+
+    protected Map<String, PlayerStats> getStats() {
         return stats;
     }
 
@@ -30,7 +39,7 @@ public class GroupUserDetailed extends DataObject {
     public void addEventStats(String type, int up, int down) {
         PlayerStats stat = stats.get(type);
         if (stat == null)
-            stat = new PlayerStats(id);
+            stat = new PlayerStats();
 
         stat.numPlayed++;
         stat.totalUp += up;
@@ -46,14 +55,6 @@ public class GroupUserDetailed extends DataObject {
         this.id = id;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public boolean isAdmin() {
         return admin;
     }
@@ -62,32 +63,14 @@ public class GroupUserDetailed extends DataObject {
         this.admin = admin;
     }
 
-    public long getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(long groupId) {
-        this.groupId = groupId;
-    }
-
-    public static class PlayerStats implements Comparable<PlayerStats> {
+    public static class PlayerStats {
 
         public int numPlayed = 0;
         public int totalUp = 0;
         public int totalDown = 0;
-        public String player;
 
         public PlayerStats() {};
 
-        public PlayerStats(String player) {
-            this.player = player;
-        }
-
-
-        @Override
-        public int compareTo(PlayerStats o) {
-            return (((double) totalUp/totalDown / ((0.85)*numPlayed)) < ((double) o.totalUp/o.totalDown / ((0.85)*o.numPlayed))) ? -1 : 1;
-        }
     }
 
 

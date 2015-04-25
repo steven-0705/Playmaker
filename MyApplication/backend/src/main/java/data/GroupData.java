@@ -12,19 +12,19 @@ import java.util.List;
 public class GroupData extends DataObject {
 
     @Id
-    public long id;
-    public List<GroupUserData> users;
-    public List<GroupEventData> events;
-    public List<String> eventTypes;
-    public List<PollData> polls;
-    public List<Notification> notifications;
+    protected long id;
+    protected List<GroupUserDetailed> users;
+    protected List<GroupEventData> events;
+    protected List<String> eventTypes;
+    protected List<PollData> polls;
+    protected List<Notification> notifications;
 
     public GroupData() {};
 
     public GroupData(long id, String name) {
         this.id = id;
         this.name = name;
-        users = new ArrayList<GroupUserData>();
+        users = new ArrayList<GroupUserDetailed>();
         events = new ArrayList<GroupEventData>();
         eventTypes = new ArrayList<String>();
         polls = new ArrayList<PollData>();
@@ -37,23 +37,23 @@ public class GroupData extends DataObject {
             if (users.get(i).getId().equals(user.getId()))
                 return;
         }
-        users.add(new GroupUserData(user.id, user.name));
+        users.add(new GroupUserDetailed(user));
     }
 
     public void addAdmin(UserData user) {
-        users.add(new GroupUserData(user.id, user.name, true));
+        users.add(new GroupUserDetailed(user, true));
     }
 
     public void addEvent(EventData event) {
         if (events == null)
             events = new ArrayList<GroupEventData>();
-        events.add(new GroupEventData(event.getName(), event.getDate(), event.getId()));
+        events.add(new GroupEventData(event.getName(), event.getDate(), event.getId(), event.getType()));
         addEventType(event.getType());
     }
 
     public boolean isUserAdmin(String userId) {
-        for (GroupUserData user: users) {
-            if (user.id.equals(userId))
+        for (GroupUserDetailed user: users) {
+            if (user.getId().equals(userId))
                 return true;
         }
 
@@ -104,7 +104,7 @@ public class GroupData extends DataObject {
         this.id = id;
     }
 
-    public List<GroupUserData> getUsers() {
+    public List<GroupUserDetailed> getUsers() {
         return users;
     }
 
@@ -124,11 +124,10 @@ public class GroupData extends DataObject {
         return notifications;
     }
 
-    public static class GroupUserData {
+    /*public static class GroupUserData {
 
         public String name;
         public String id;
-        public String type;
         public boolean admin;
 
         public GroupUserData() {};
@@ -153,23 +152,20 @@ public class GroupData extends DataObject {
             return id;
         }
 
-        public String getType() {
-            return type;
-        }
-
         public boolean isAdmin() {
             return admin;
         }
-    }
+    }*/
 
     public static class GroupEventData {
         public String name;
         public long date;
         public long eventId;
+        public String type;
 
         public GroupEventData() {};
 
-        public GroupEventData(String name, long date, long id) {
+        public GroupEventData(String name, long date, long id, String type) {
             this.name = name;
             this.date = date;
             this.eventId = id;
@@ -189,6 +185,22 @@ public class GroupData extends DataObject {
 
         public long getEventId() {
             return eventId;
+        }
+
+        public void setDate(long date) {
+            this.date = date;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public void setEventId(long eventId) {
+            this.eventId = eventId;
         }
     }
 

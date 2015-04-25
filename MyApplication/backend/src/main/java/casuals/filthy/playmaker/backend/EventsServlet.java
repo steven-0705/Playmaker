@@ -34,8 +34,9 @@ public class EventsServlet extends HttpServlet {
         String userId = params.get("user_id");
         String groupIdString = params.get("group_id");
         String name = params.get("event_name");
-        String type = params.get("event_type");
+        String type = params.get("event_type").toLowerCase();
         String dateString = params.get("event_date");
+        String address = params.get("event_address");
 
         if (userId == null || groupIdString == null || name == null || type == null || dateString == null) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing required field: user_id, group_id, event_name, event_type, event_date");
@@ -59,7 +60,7 @@ public class EventsServlet extends HttpServlet {
 
         // create the event
         long id = DatastoreServiceFactory.getDatastoreService().allocateIds("event", 1).getStart().getId();
-        EventData event = new EventData(id, date, type, group.id, name);
+        EventData event = new EventData(id, date, type, group.getId(), name, address);
 
         group.addEvent(event);
 
@@ -100,7 +101,7 @@ public class EventsServlet extends HttpServlet {
             return;
         }
 
-        if (event.groupId != groupId) {
+        if (event.getGroupId() != groupId) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "incorrect group id");
             return;
         }
@@ -128,8 +129,9 @@ public class EventsServlet extends HttpServlet {
         // optional stuff
         String userId = params.get("user_id");//req.getParameter("user_id");
         String name = params.get("event_name");//req.getParameter("event_name");
-        String type = params.get("event_type");//req.getParameter("event_type");
+        String type = params.get("event_type").toLowerCase();//req.getParameter("event_type");
         String dateString = params.get("event_date");//req.getParameter("event_date");
+        String address = params.get("event_address");
 
         if (groupIdString == null) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing required field: group_id");
@@ -152,7 +154,7 @@ public class EventsServlet extends HttpServlet {
         }
         GroupData group = ofy().load().type(GroupData.class).id(groupId).now();
 
-        if (event.groupId != groupId) {
+        if (event.getGroupId() != groupId) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "incorrect group id");
             return;
         }
@@ -177,16 +179,20 @@ public class EventsServlet extends HttpServlet {
 
             if (name != null) {
                 group.getEvent(eventId).setName(name);
-                event.name = name;
+                event.setName(name);
             }
 
             if (type != null) {
-                event.type = type;
+                event.setType(type);
+            }
+
+            if (address != null) {
+                event.setAddress(address);
             }
 
             if (dateString != null) {
                 long date = Long.parseLong(dateString);
-                event.date = date;
+                event.setDate(date);
                 group.getEvent(eventId).date = date;
             }
 

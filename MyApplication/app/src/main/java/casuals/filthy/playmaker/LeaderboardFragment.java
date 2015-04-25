@@ -33,25 +33,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
-
 public class LeaderboardFragment extends ListFragment {
 
     List<HashMap<String,String>>  Entries = LeaderboardEntries.ITEMS;
-    String[] from = {LeaderboardEntries.KEY_ICON, LeaderboardEntries.KEY_NAME, LeaderboardEntries.KEY_PLACE};
-    int[] to = {R.id.item_icon, R.id.item_textName, R.id.item_textPlace};
-
+    String[] from = {LeaderboardEntries.KEY_ICON, LeaderboardEntries.KEY_NAME, LeaderboardEntries.KEY_PLACE, LeaderboardEntries.KEY_POINTS};
+    int[] to = {R.id.item_icon, R.id.item_textName, R.id.item_textPlace, R.id.item_textDate};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         View leaderboardView =  super.onCreateView(inflater, container, savedInstanceState);
-
         SimpleAdapter adapter = new SimpleAdapter(getActivity().getBaseContext(), Entries , R.layout.leaderboard_item_view, from, to);
-
         setListAdapter(adapter);
-
         return leaderboardView;
 
     }
@@ -77,10 +71,10 @@ public class LeaderboardFragment extends ListFragment {
             }
         });
         List<String> categories = new ArrayList<String>();
-        categories.add("soccer");
-        categories.add("baseball");
-        categories.add("football");
-        categories.add("Basketball");
+        categories.add("Football");
+        categories.add("Baseball");
+        categories.add("Soccer");
+        categories.add("Basektball");
         categories.add("LAN PARTY");
         categories.add("Quidditch");
         ArrayAdapter<String> dataAdapater = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item,categories);
@@ -106,10 +100,10 @@ public class LeaderboardFragment extends ListFragment {
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 popupWindow.dismiss();
+
             }});
         popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
 
     }
-
 
 }
