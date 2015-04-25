@@ -26,6 +26,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -38,7 +39,10 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import casuals.filthy.playmaker.data.AsyncResponse;
@@ -74,162 +78,171 @@ public class EventCreate extends Activity implements AsyncResponse{
         final EditText getOther = (EditText) findViewById(R.id.edittext1);
         final TextView getTime = (TextView) findViewById(R.id.EditTime);
         final TextView itemList = (TextView) findViewById(R.id.itemlist);
+
+        final String[] date = new String[3];
+        final TextView getTeam = (TextView) findViewById(R.id.event_team);
         final String[] time = new String[3];
+        final String[] miltime = new String[3];
         final String[] hourAndMin = new String[2];
         final Spinner getOption = (Spinner) findViewById(R.id.spinner1);
         getTime.setEnabled(false);
         itemList.setEnabled(false);
         getOther.setEnabled(false);
-        for (int i=0; i<time.length; i++) {
-            time[i] = "";
-        }
+        for (int i=0; i<date.length; i++) {
+            date[i] = "";
+            getTeam.setEnabled(false);
+            final Switch teamEnabled = (Switch) findViewById(R.id.switch2);
+            for (int j = 0; j < time.length; j++) {
+                time[j] = "";
+                miltime[j] = "";
+            }
 
-        getOption.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            getOption.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
-            @Override
-            public void onItemSelected(AdapterView av, View v, int pos, long id) {
-                if (getOption.getSelectedItem().toString().matches("Other")) {
-                    getOther.setEnabled(true);
-                } else {
-                    getOther.setEnabled(false);
+                @Override
+                public void onItemSelected(AdapterView av, View v, int pos, long id) {
+                    if (getOption.getSelectedItem().toString().matches("Other")) {
+                        getOther.setEnabled(true);
+                    } else {
+                        getOther.setEnabled(false);
+                    }
                 }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView av) {
-            }
-        });
+                @Override
+                public void onNothingSelected(AdapterView av) {
+                }
+            });
 
-        button1.setOnClickListener(new View.OnClickListener() {
+            button1.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                Calendar currentDate = Calendar.getInstance();
-                int mYear = currentDate.get(Calendar.YEAR);
-                int mMonth = currentDate.get(Calendar.MONTH);
-                int mDay = currentDate.get(Calendar.DAY_OF_MONTH);
-                final int mHour = currentDate.get(Calendar.HOUR);
-                final int mMin = currentDate.get(Calendar.MINUTE);
-                int i = 0;
-                boolean timeReady = false;
-                DatePickerDialog DatePicker;
-                final TimePickerDialog TimePicker;
-                TimePicker = new TimePickerDialog(v.getContext(), new TimePickerDialog.OnTimeSetListener(){
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        // Do something with the time chosen by the user
+                @Override
+                public void onClick(View v) {
+                    Calendar currentDate = Calendar.getInstance();
+                    int mYear = currentDate.get(Calendar.YEAR);
+                    int mMonth = currentDate.get(Calendar.MONTH);
+                    int mDay = currentDate.get(Calendar.DAY_OF_MONTH);
+                    final int mHour = currentDate.get(Calendar.HOUR);
+                    final int mMin = currentDate.get(Calendar.MINUTE);
+                    int i = 0;
+                    boolean timeReady = false;
+                    DatePickerDialog DatePicker;
+                    final TimePickerDialog TimePicker;
+                    TimePicker = new TimePickerDialog(v.getContext(), new TimePickerDialog.OnTimeSetListener() {
+                        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                            // Do something with the time chosen by the user
+                            String temp = "";
+                            if (minute / 10 == 0) {
+                                if (hourOfDay == 12) {
+                                    temp = "" + "12" + ":0" + minute + " PM";
+                                }
 
-
-                    }
-                }, mHour, mMin, false);
-                TimePicker.setTitle("Select Time");
-                DatePicker = new DatePickerDialog(v.getContext(), new DatePickerDialog.OnDateSetListener() {
-                    public void onDateSet(android.widget.DatePicker datepicker, int year, int month, int day) {
-                        // TODO Auto-generated method stub
-                        month = month + 1;
-                        String temp = "" + month + "/" + day + "/" + year;
-                        for (int i=0; i<time.length; i++){ // This loop and these checks are necessary because Android is dumb and detects a single Click twice
-                            if (time[i].matches("")) {
-                                time[i] = (temp);
-                                break;
+                                if (hourOfDay > 12) {
+                                    temp = "" + (hourOfDay - 12) + ":0" + minute + " PM";
+                                }
+                                if (hourOfDay < 12) {
+                                    temp = "" + hourOfDay + ":0" + minute + " AM";
+                                }
+                            } else {
+                                if (hourOfDay == 12) {
+                                    temp = "" + "12" + ":" + minute + " PM";
+                                }
+                                if (hourOfDay > 12) {
+                                    temp = "" + (hourOfDay - 12) + ":" + minute + " PM";
+                                }
+                                if (hourOfDay < 12) {
+                                    temp = "" + hourOfDay + ":" + minute + " AM";
+                                }
                             }
-                            if (time[i].matches(temp)) {
-                                break;
+                            for (int i = 0; i < time.length; i++) { // This loop and these checks are necessary because Android is dumb and detects a single Click twice
+                                if (!date[i].matches("") && time[i].matches("")) {
+                                    time[i] = (temp);
+                                    miltime[i] = hourOfDay + ":" + minute;
+                                    break;
+                                }
+                            }
+                            temp = date[0] + " " + time[0] + "\n" + date[1] + " " + time[1] + "\n" + date[2] + " " + time[2] + "\n";
+                            getTime.setText(temp); // sets the Text field to a max of 3 dates
+                        }
+                    }, mHour, mMin, false);
+                    TimePicker.setTitle("Select Time");
+                    DatePicker = new DatePickerDialog(v.getContext(), new DatePickerDialog.OnDateSetListener() {
+                        public void onDateSet(android.widget.DatePicker datepicker, int year, int month, int day) {
+                            // TODO Auto-generated method stub
+                            month = month + 1;
+                            String temp = "" + month + "/" + day + "/" + year;
+                            for (int i = 0; i < date.length; i++) { // This loop and these checks are necessary because Android is dumb and detects a single Click twice
+                                if (date[i].matches("")) {
+                                    date[i] = (temp);
+                                    TimePicker.show();
+                                    break;
+                                }
+                                if (date[i].matches(temp)) {
+                                    break;
+                                }
                             }
                         }
-                        temp = time[0] + "\n" + time[1] + "\n" + time[2] + "\n";
-                        getTime.setText(temp); // sets the Text field to a max of 3 dates
-                        TimePicker.show();
-                    }
-                }, mYear, mMonth, mDay);
-                DatePicker.setTitle("Select Date");
-                DatePicker.show();
+                    }, mYear, mMonth, mDay);
+                    DatePicker.setTitle("Select Date");
+                    DatePicker.show();
+                }
+            });
 
+            button2.setOnClickListener(new View.OnClickListener() {
 
+                @Override
+                public void onClick(View v) {
+                    List<Date> EventDates = new ArrayList<Date>();
+                    int Year;
+                    int Month;
+                    int Date;
+                    int Hrs;
+                    int Min;
+                    int numdates = 0;
 
-
-
-
-
-
-
-
-            }
-        });
-
-        button2.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                  /*String loc = getLoc.getText().toString();
-                    String other = getOther.getText().toString();
-                    String option = getOption.getSelectedItem().toString();
-                    if (loc.isEmpty()) {
-                        Context context = v.getContext();
-                        CharSequence text = "Please provide an address";
-                        int duration = Toast.LENGTH_SHORT;
-                        Toast toast = Toast.makeText(context, text, duration);
-                        toast.show();
-                        return;
-                    }
-                    if (option=="Other" && other == "") {
-                        Context context = v.getContext();
-                        CharSequence text = "Please provide an event name";
-                        int duration = Toast.LENGTH_SHORT;
-                        Toast toast = Toast.makeText(context, text, duration);
-                        toast.show();
-                        return;
-                    }
-                    Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + loc);
-                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                    mapIntent.setPackage("com.google.android.apps.maps");
-                    startActivity(mapIntent);*/
-
-                    /*EditTextPreference Input;
-                    Input = new EditTextPreference(v.getContext(), new EditTextPreference.OnPreferenceClickListener() {
-                        public void onPreferenceClick(EditTextPreference Input) {
-                            Log.w("Tag:", Input.getText());
-                        }
-
-                    });*/
-                //
-                Log.w("Date 1:", time[0]);
-                Log.w("Date 2:", time[1]);
-                Log.w("Date 3:", time[2]);
-                finish();
-            }
-        });
-
-        button3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
-                final EditText input= new EditText(v.getContext());
-                input.setImeOptions(EditorInfo.IME_ACTION_DONE);
-                input.setSingleLine();
-                alert.setTitle("Add an item!");
-                alert.setView(input);
-                alert.setPositiveButton("Done", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (input.getText().toString().matches("")) {
-                            Toast.makeText(getApplicationContext(), "You did not enter anything", Toast.LENGTH_SHORT).show();
-
-                        }
-                        else {
-                            String temp = input.getText().toString();
-                            itemList.append(temp + ", ");
+                    for (int j = 0; j < date.length; j++) {
+                        if (!date[j].matches("")) {
+                            numdates++;
                         }
                     }
-                });
 
-                alert.show();
-            }
-        });
+                    for (int i = 0; i < numdates; i++) {
+                        String[] tempdate = date[i].split("/");
+                        String[] temptime = miltime[i].split(":");
+                        Date eventdate = new Date(Integer.parseInt(tempdate[2]), Integer.parseInt(tempdate[0]), Integer.parseInt(tempdate[1]), Integer.parseInt(temptime[0]), Integer.parseInt(temptime[1]));
+                        EventDates.add(eventdate);
+                    }
+                    Log.w("ListLen: ", Integer.toString(EventDates.size()));
+                    DatastoreAdapter dsa = new DatastoreAdapter(EventCreate.this);
+                    finish();
+                }
+            });
 
+            button3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
+                    final EditText input = new EditText(v.getContext());
+                    input.setImeOptions(EditorInfo.IME_ACTION_DONE);
+                    input.setSingleLine();
+                    alert.setTitle("Add an item!");
+                    alert.setView(input);
+                    alert.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (input.getText().toString().matches("")) {
+                                Toast.makeText(getApplicationContext(), "You did not enter anything", Toast.LENGTH_SHORT).show();
 
+                            } else {
+                                String temp = input.getText().toString();
+                                itemList.append(temp + ", ");
+                            }
+                        }
+                    });
 
-
+                    alert.show();
+                }
+            });
+        }
     }
     public void setTimeHourAndMin(){
         Calendar currentDate = Calendar.getInstance();
