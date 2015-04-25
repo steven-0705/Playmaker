@@ -14,13 +14,13 @@ public class GroupUsersServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        HashMap<String, String> params = ServletUtils.getParams(req.getInputStream());
+        HashMap<String, Object> params = ServletUtils.getParams(req.getInputStream());
 
-        String userId = params.get("user_id");
-        String eventIdString = params.get("event_id");
-        String groupIdString = params.get("group_id");
-        String upString = params.get("score_up");
-        String downString = params.get("score_down");
+        String userId = (String) params.get("user_id");
+        String eventIdString = (String) params.get("event_id");
+        String groupIdString = (String) params.get("group_id");
+        String upString = (String) params.get("score_up");
+        String downString = (String) params.get("score_down");
 
         if (userId == null || eventIdString == null || groupIdString == null) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing user_id, event_id, or group_id fields");

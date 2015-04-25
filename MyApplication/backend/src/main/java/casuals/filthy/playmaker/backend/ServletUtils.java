@@ -16,7 +16,7 @@ public class ServletUtils {
 
     public static Gson gson = new Gson();
 
-    public static HashMap<String, String> getParams(ServletInputStream input) {
+    public static HashMap<String, Object> getParams(ServletInputStream input) {
         BufferedReader read = new BufferedReader(new InputStreamReader(input));
         StringBuilder sb = new StringBuilder();
 
@@ -30,7 +30,7 @@ public class ServletUtils {
             return null;
         }
 
-        HashMap<String, String> params = gson.fromJson(sb.toString(), HashMap.class);
+        HashMap<String, Object> params = gson.fromJson(sb.toString(), HashMap.class);
         return params;
     }
 }

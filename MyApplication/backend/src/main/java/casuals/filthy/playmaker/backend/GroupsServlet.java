@@ -31,11 +31,11 @@ public class GroupsServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        HashMap<String, String> params = ServletUtils.getParams(req.getInputStream());
+        HashMap<String, Object> params = ServletUtils.getParams(req.getInputStream());
 
         // get the parameters
-        String userId = params.get("user_id");//req.getParameter("user_id");
-        String groupName = params.get("group_name");//req.getParameter("group_name");
+        String userId = (String) params.get("user_id");//req.getParameter("user_id");
+        String groupName = (String) params.get("group_name");//req.getParameter("group_name");
 
         if (userId == null || groupName == null) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing user_id or group_name");
