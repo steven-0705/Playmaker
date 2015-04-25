@@ -47,7 +47,7 @@ import com.google.android.gms.plus.model.people.Person;
 
 public class MainActivity extends BaseActivity implements ActionBar.TabListener, AsyncResponse{
     ActionBar actionbar;
-    static ViewPager viewpager;
+    static CustomViewPager viewpager;
     FragmentPageAdapter ft;
     static String id;
     static String email;
@@ -72,7 +72,7 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
         }
 
         setContentView(R.layout.activity_main);
-        viewpager = (ViewPager) findViewById(R.id.pager);
+        viewpager = (CustomViewPager) findViewById(R.id.custompager);
         ft = new FragmentPageAdapter(getSupportFragmentManager());
         actionbar = getActionBar();
         actionbar.setDisplayShowTitleEnabled(false);
