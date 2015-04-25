@@ -78,9 +78,11 @@ private CheckBox checkBox1, checkBox2, checkBox3, checkBox4;
                            else {
                                String temp = input.getText().toString();
                                DatastoreAdapter adapter = new DatastoreAdapter(UserFragment.this);
+                               adapter.createGroup(temp, MainActivity.getId());
                            }
                        }
                    });
+                   alert.show();
                }
            });
            Button eventCreate = (Button) getView().findViewById(R.id.eventCreate);
