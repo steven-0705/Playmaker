@@ -46,6 +46,14 @@ public class UserBean extends DataBean{
             this.id = id;
         }
 
+        public String getName() {
+            return name;
+        }
+
+        public long getId() {
+            return id;
+        }
+
         @Override
         public String toString() {
             return "UserGroupBean{" +
@@ -56,9 +64,9 @@ public class UserBean extends DataBean{
     }
 
     public static class Invite {
-        public String inviter;
-        public long groupId;
-        public long date;
+        protected String inviter;
+        protected long groupId;
+        protected long date;
 
         public Invite(long groupId, String inviter, long date) {
             this.groupId = groupId;

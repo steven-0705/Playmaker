@@ -17,9 +17,14 @@ public class EventBean extends DataBean {
     protected int numTeams = 2;
     protected List<EventTeam> teams;
     protected boolean autoTeams = true;
+    protected boolean closed;
     protected String address;
     protected long closeDate;
     protected List<String> items;
+
+    public boolean isClosed() {
+        return closed;
+    }
 
     public EventBean() {};
 
