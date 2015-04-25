@@ -67,7 +67,7 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
             name = extras.getString("DISPLAY_NAME");
             if(id != null && email != null && name != null)
             {
-               test.getUser(id,name, email);
+               //test.getUser(id,name, email);
             }
         }
 

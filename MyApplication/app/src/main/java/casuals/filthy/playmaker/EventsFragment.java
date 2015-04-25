@@ -37,10 +37,10 @@ public class EventsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View eventView = inflater.inflate(R.layout.events, container, false);
         // TODO Auto-generated method stub
-        Spinner dropdown = (Spinner) eventView.findViewById(R.id.spinner1);
-        String[] items = new String[]{"Basketball", "Baseball", "LAN Party", "Other"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, items);
-        dropdown.setAdapter(adapter);
+        //Spinner dropdown = (Spinner) eventView.findViewById(R.id.spinner1);
+        //String[] items = new String[]{"Basketball", "Baseball", "LAN Party", "Other"};
+        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, items);
+        //dropdown.setAdapter(adapter);
 
         return eventView;
     }
