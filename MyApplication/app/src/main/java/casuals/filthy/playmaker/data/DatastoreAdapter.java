@@ -33,6 +33,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import casuals.filthy.playmaker.data.beans.EventBean;
 import casuals.filthy.playmaker.data.beans.GroupBean;
+import casuals.filthy.playmaker.data.beans.PollBean;
 import casuals.filthy.playmaker.data.beans.UserBean;
 
 /**
@@ -165,6 +166,75 @@ public class DatastoreAdapter {
         task = request;
         request.execute(post);
     }
+
+
+    /**
+     *
+     * @param groupId       group_id, user_id, action (=create), poll_name, at least two options*
+     * @param userId
+     * @param pollName
+     *
+     * @return Returns json object of the poll
+     */
+    public void createPoll(String userId, long groupId, String pollName, ArrayList<String> pollElements) {
+        HttpPost post = new HttpPost(SERVER_URL + SERVLET_EVENTS);
+
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("user_id", userId);
+        params.put("group_id", groupId+"");
+        params.put("event_name", pollName);
+
+        for(int i = 0; i < pollElements.size(); i++) {
+            params.put("option" + i, pollElements.get(i));
+        }
+
+        params.put("action", "create");
+        post.setHeader("Content-Type", "application/json");
+        try {
+            post.setEntity(new StringEntity(gson.toJson(params)));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+
+        type = PollBean.class;
+        ServletHttpAsyncTask request = new ServletHttpAsyncTask();
+        task = request;
+        request.execute(post);
+    }
+
+
+    /**
+     *
+     * @param groupId
+     * @param groupId
+     * @return Returns json event of the event
+     */
+    public void voteOnPoll(String userId, long groupId, int voteIndex) {
+        HttpPost post = new HttpPost(SERVER_URL + SERVLET_EVENTS);
+
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("user_id", userId);
+        params.put("group_id", groupId+"");
+        params.put("vote", voteIndex + "");
+
+        params.put("action", "vote");
+        post.setHeader("Content-Type", "application/json");
+        try {
+            post.setEntity(new StringEntity(gson.toJson(params)));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+
+        type = PollBean.class;
+        ServletHttpAsyncTask request = new ServletHttpAsyncTask();
+        task = request;
+        request.execute(post);
+    }
+
+
+
 
     /**
      *

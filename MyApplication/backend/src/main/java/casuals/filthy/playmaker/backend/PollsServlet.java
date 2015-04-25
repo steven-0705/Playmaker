@@ -78,7 +78,7 @@ public class PollsServlet extends HttpServlet {
 
             // get the options
             List<String> options = new ArrayList<String>();
-            for (int i = 1; i <= 10; i++) {
+            for (int i = 0; i <= 20; i++) {
                 String opt = params.get("option"+i);//req.getParameter("option"+i);
                 if (opt == null)
                     break;
