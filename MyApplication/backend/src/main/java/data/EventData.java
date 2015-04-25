@@ -33,6 +33,7 @@ public class EventData extends DataObject {
     protected int numTeams = 2;
     protected List<EventTeam> teams;
     protected boolean autoTeams = true;
+    protected boolean closed;
     protected String address;
     protected long closeDate;
     protected List<String> items;
@@ -43,8 +44,10 @@ public class EventData extends DataObject {
         this.id = id;
         if (dates.size() == 1) {
             date = Math.round(dates.get(0));
+            closed = true;
         }
         else {
+            closed = false;
             List<String> options = new ArrayList<String>();
             pollMeaning = new ArrayList<Long>();
             for (Double date: dates) {
@@ -75,6 +78,7 @@ public class EventData extends DataObject {
             date = pollMeaning.get(max);
             pollMeaning = null;
             datePoll = null;
+            closed = true;
         }
     }
 
@@ -164,6 +168,10 @@ public class EventData extends DataObject {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isClosed() {
+        return closed;
     }
 
     public long getGroupId() {
