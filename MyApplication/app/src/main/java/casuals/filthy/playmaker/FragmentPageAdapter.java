@@ -19,7 +19,7 @@ public class FragmentPageAdapter extends FragmentPagerAdapter {
             case 1:
                 return new GroupFragment();
             case 2:
-                return new EventCompletedFragment();
+                return new EventFragment();
             case 3:
                 return  new LeaderboardFragment();
             default:

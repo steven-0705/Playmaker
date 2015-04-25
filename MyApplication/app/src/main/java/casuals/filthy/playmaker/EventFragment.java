@@ -36,14 +36,15 @@ public class EventFragment extends Fragment {
         CheckBox option3 = (CheckBox) getView().findViewById(R.id.poll_option3);
         boolean eventPending = true;
         if(eventPending) {
-            date.setVisibility(View.GONE);
-            time.setVisibility(View.GONE);
+            date.setVisibility(View.INVISIBLE);
+            time.setVisibility(View.INVISIBLE);
+
         }
         else {
-            pollMessage.setVisibility(View.GONE);
-            option1.setVisibility(View.GONE);
-            option2.setVisibility(View.GONE);
-            option3.setVisibility(View.GONE);
+            pollMessage.setVisibility(View.INVISIBLE);
+            option1.setVisibility(View.INVISIBLE);
+            option2.setVisibility(View.INVISIBLE);
+            option3.setVisibility(View.INVISIBLE);
         }
         Button participants = (Button) getView().findViewById(R.id.user_button);
         participants.setOnClickListener(new View.OnClickListener() {
