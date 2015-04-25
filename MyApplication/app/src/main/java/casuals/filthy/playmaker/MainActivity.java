@@ -84,7 +84,7 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 
         actionbar.addTab(actionbar.newTab().setText("My Profile").setTabListener(this));
         actionbar.addTab(actionbar.newTab().setIcon(R.drawable.group_icon).setText("Group").setTabListener(this));
-       // actionbar.addTab(actionbar.newTab().setIcon(R.drawable.event_icon).setText("Events").setTabListener(this));
+        actionbar.addTab(actionbar.newTab().setIcon(R.drawable.event_icon).setText("Events").setTabListener(this));
         actionbar.addTab(actionbar.newTab().setIcon(R.drawable.leaderboard_icon).setText("Leader Board").setTabListener(this));
         viewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
