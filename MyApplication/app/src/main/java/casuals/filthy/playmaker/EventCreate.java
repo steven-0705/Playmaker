@@ -272,5 +272,5 @@ public class EventCreate extends Activity implements AsyncResponse{
     }
 }
 
-
+//user id , group id, type of String (group contains this), name event of string, String of address, boolean for teams,int # teams, list of date;
 

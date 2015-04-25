@@ -136,8 +136,8 @@
         android:text="Create Event"
         android:id="@+id/eventCreate"
         android:layout_above="@+id/statsButton"
-        android:layout_alignLeft="@+id/button"
-        android:layout_alignStart="@+id/button" />
+        android:layout_alignLeft="@+id/groupCreate"
+        android:layout_alignStart="@+id/groupCreate" />
 
     <Button
         android:layout_width="wrap_content"
@@ -153,7 +153,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Create Group"
-        android:id="@+id/button"
+        android:id="@+id/groupCreate"
         android:layout_below="@+id/user_image"
         android:layout_alignRight="@+id/user_user"
         android:layout_alignEnd="@+id/user_user" />
