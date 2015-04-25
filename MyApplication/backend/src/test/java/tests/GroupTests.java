@@ -44,7 +44,7 @@ public class GroupTests {
         GroupData group = Utils.addGroup(user1.getId(), "group1");
         assertNotNull(group);
         assertEquals("group1", group.getName());
-        assertTrue(group.users.size() == 1);
+        assertTrue(group.getUsers().size() == 1);
         assertEquals(group.getUsers().get(0).getName(), user1.getName());
         assertTrue(group.getUsers().get(0).isAdmin());
     }

@@ -3,6 +3,8 @@ package data;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 
+import java.security.acl.Group;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -11,15 +13,21 @@ import java.util.Map;
 @Entity
 public class GroupUserDetailed extends DataObject {
 
-    @Id public String id;
-    public String type;
-    public boolean admin;
-    public long groupId;
+    @Id protected String id;
+    protected boolean admin = false;
 
-    public Map<String, PlayerStats> stats;
+    protected Map<String, PlayerStats> stats;
 
-    public Map<String, PlayerStats> getStats() {
-        return stats;
+    protected GroupUserDetailed() {};
+
+    public GroupUserDetailed(UserData user) {
+        id = user.getId();
+        name = user.getName();
+    }
+
+    public GroupUserDetailed(UserData user, boolean admin) {
+        this(user);
+        this.admin = admin;
     }
 
     /**
@@ -28,6 +36,9 @@ public class GroupUserDetailed extends DataObject {
      * @param down
      */
     public void addEventStats(String type, int up, int down) {
+        if (stats == null)
+            stats = new HashMap<String, PlayerStats>();
+
         PlayerStats stat = stats.get(type);
         if (stat == null)
             stat = new PlayerStats(id);
@@ -38,20 +49,22 @@ public class GroupUserDetailed extends DataObject {
         stats.put(type, stat);
     }
 
+    public PlayerStats getStat(String type) {
+        if (stats == null)
+            stats = new HashMap<String, PlayerStats>();
+
+        if (stats.get(type) == null)
+           stats.put(type, new PlayerStats(id));
+
+        return stats.get(type);
+    }
+
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public boolean isAdmin() {
@@ -62,20 +75,12 @@ public class GroupUserDetailed extends DataObject {
         this.admin = admin;
     }
 
-    public long getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(long groupId) {
-        this.groupId = groupId;
-    }
-
     public static class PlayerStats implements Comparable<PlayerStats> {
 
-        public int numPlayed = 0;
-        public int totalUp = 0;
-        public int totalDown = 0;
-        public String player;
+        protected int numPlayed = 0;
+        protected int totalUp = 0;
+        protected int totalDown = 0;
+        protected String player;
 
         public PlayerStats() {};
 
@@ -83,10 +88,18 @@ public class GroupUserDetailed extends DataObject {
             this.player = player;
         }
 
+        public long computeScore() {
+            return Math.round(totalUp * 100 + (totalUp * numPlayed) +
+                    (totalDown != 0 ? ((double) totalUp / totalDown) : 0));
+        }
 
         @Override
         public int compareTo(PlayerStats o) {
-            return (((double) totalUp/totalDown / ((0.85)*numPlayed)) < ((double) o.totalUp/o.totalDown / ((0.85)*o.numPlayed))) ? -1 : 1;
+            return (int) (this.computeScore() - o.computeScore());
+        }
+
+        public String getPlayer() {
+            return player;
         }
     }
 

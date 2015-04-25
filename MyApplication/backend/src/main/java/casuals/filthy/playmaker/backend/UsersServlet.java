@@ -29,10 +29,10 @@ public class UsersServlet extends HttpServlet {
     private static final Logger logger = Logger.getLogger(UsersServlet.class.getName());
     private static Gson gson = new Gson();
 
-    public void login(HashMap<String, String> params, HttpServletResponse resp) throws IOException {
-        String userName = params.get("user_name");//req.getParameter("user_name");
-        String userEmail = params.get("user_email");//req.getParameter("user_email");
-        String userId = params.get("user_id");//req.getParameter("user_id");
+    public void login(HashMap<String, Object> params, HttpServletResponse resp) throws IOException {
+        String userName = (String) params.get("user_name");//req.getParameter("user_name");
+        String userEmail = (String) params.get("user_email");//req.getParameter("user_email");
+        String userId = (String) params.get("user_id");//req.getParameter("user_id");
 
         // lookup the user if the id was not specified
         if (userId == null && userEmail == null) {
@@ -86,10 +86,10 @@ public class UsersServlet extends HttpServlet {
 
      @Override
      public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        HashMap<String, String> params = ServletUtils.getParams(req.getInputStream());
+        HashMap<String, Object> params = ServletUtils.getParams(req.getInputStream());
 
-        String action = params.get("action");
-        String userId = params.get("user_id");//req.getParameter("user_id");
+        String action = (String) params.get("action");
+        String userId = (String) params.get("user_id");//req.getParameter("user_id");
         if (userId == null || action == null) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing user_id or action field");
             return;
@@ -110,7 +110,7 @@ public class UsersServlet extends HttpServlet {
             ArrayList<DataObject> saves = new ArrayList<DataObject>();
             saves.add(user);
 
-            String groupIdString = params.get("group_id");//req.getParameter("group_id");
+            String groupIdString = (String) params.get("group_id");//req.getParameter("group_id");
             if (groupIdString != null) {
                 long groupId = Long.parseLong(groupIdString);
                 GroupData group = ofy().load().type(GroupData.class).id(groupId).now();

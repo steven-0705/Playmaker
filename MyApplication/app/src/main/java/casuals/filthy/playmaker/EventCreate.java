@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.location.Address;
@@ -26,6 +27,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.common.SignInButton;
@@ -39,10 +41,14 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
+import casuals.filthy.playmaker.data.AsyncResponse;
+import casuals.filthy.playmaker.data.DatastoreAdapter;
+
 /**
  * Created by Shane on 4/20/2015.
  */
-public class EventCreate extends Activity {
+public class EventCreate extends Activity implements AsyncResponse{
+    DatastoreAdapter test = new DatastoreAdapter(this);
     double latitude;
     double longitude;
     List<Address> geocodeMatches = null;
@@ -69,6 +75,7 @@ public class EventCreate extends Activity {
         final TextView getTime = (TextView) findViewById(R.id.EditTime);
         final TextView itemList = (TextView) findViewById(R.id.itemlist);
         final String[] time = new String[3];
+        final String[] hourAndMin = new String[2];
         final Spinner getOption = (Spinner) findViewById(R.id.spinner1);
         getTime.setEnabled(false);
         itemList.setEnabled(false);
@@ -101,9 +108,20 @@ public class EventCreate extends Activity {
                 int mYear = currentDate.get(Calendar.YEAR);
                 int mMonth = currentDate.get(Calendar.MONTH);
                 int mDay = currentDate.get(Calendar.DAY_OF_MONTH);
+                final int mHour = currentDate.get(Calendar.HOUR);
+                final int mMin = currentDate.get(Calendar.MINUTE);
                 int i = 0;
-
+                boolean timeReady = false;
                 DatePickerDialog DatePicker;
+                final TimePickerDialog TimePicker;
+                TimePicker = new TimePickerDialog(v.getContext(), new TimePickerDialog.OnTimeSetListener(){
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        // Do something with the time chosen by the user
+
+
+                    }
+                }, mHour, mMin, false);
+                TimePicker.setTitle("Select Time");
                 DatePicker = new DatePickerDialog(v.getContext(), new DatePickerDialog.OnDateSetListener() {
                     public void onDateSet(android.widget.DatePicker datepicker, int year, int month, int day) {
                         // TODO Auto-generated method stub
@@ -120,10 +138,21 @@ public class EventCreate extends Activity {
                         }
                         temp = time[0] + "\n" + time[1] + "\n" + time[2] + "\n";
                         getTime.setText(temp); // sets the Text field to a max of 3 dates
+                        TimePicker.show();
                     }
                 }, mYear, mMonth, mDay);
                 DatePicker.setTitle("Select Date");
                 DatePicker.show();
+
+
+
+
+
+
+
+
+
+
             }
         });
 
@@ -163,7 +192,7 @@ public class EventCreate extends Activity {
                         }
 
                     });*/
-
+                //
                 Log.w("Date 1:", time[0]);
                 Log.w("Date 2:", time[1]);
                 Log.w("Date 3:", time[2]);
@@ -197,8 +226,19 @@ public class EventCreate extends Activity {
                 alert.show();
             }
         });
-    }
 
+
+
+
+    }
+    public void setTimeHourAndMin(){
+        Calendar currentDate = Calendar.getInstance();
+        final int mHour = currentDate.get(Calendar.HOUR);
+        final int mMin = currentDate.get(Calendar.MINUTE);
+
+
+
+    }
     public void getLocation(View view) {
         EditText edittext = (EditText) findViewById(R.id.edittext2);
         String place = edittext.getText().toString();
@@ -225,7 +265,12 @@ public class EventCreate extends Activity {
 
     }
 
+
+    @Override
+    public void response(Object o) {
+
     }
+}
 
 
 
