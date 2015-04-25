@@ -145,7 +145,7 @@ public class DatastoreAdapter {
      *
      * @param groupName
      * @param userId
-     * @return returns a json object of type group
+     * @return returns a json object of type user
      */
     public void createGroup(String groupName, String userId) {
         HttpPost post = new HttpPost(SERVER_URL + SERVLET_GROUPS);
@@ -161,7 +161,7 @@ public class DatastoreAdapter {
             e.printStackTrace();
         }
 
-        type = GroupBean.class;
+        type = UserBean.class;
         ServletHttpAsyncTask request = new ServletHttpAsyncTask();
         task = request;
         request.execute(post);
@@ -257,19 +257,21 @@ public class DatastoreAdapter {
      * @param groupId
      * @param eventName
      * @param eventType
-     * @param eventDate
      * @param userId
      * @return Returns json event of the event
      */
-    public void createEvent(String userId, long groupId, String eventName, String eventType, long eventDate) {
+    public void createEvent(String userId, long groupId, String eventName, String eventType, String address, boolean autogen, int numTeams, List<Long> eventDates) {
         HttpPost post = new HttpPost(SERVER_URL + SERVLET_EVENTS);
 
-        HashMap<String, String> params = new HashMap<String, String>();
+        HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("user_id", userId);
         params.put("group_id", groupId+"");
         params.put("event_name", eventName);
         params.put("event_type", eventType);
-        params.put("event_date", eventDate+"");
+        params.put("event_dates", eventDates);
+        params.put("gen_teams", (autogen ? "true" : "false"));
+        params.put("address", address);
+        params.put("event_teams", numTeams+"");
         params.put("action", "create");
         post.setHeader("Content-Type", "application/json");
         try {

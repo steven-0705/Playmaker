@@ -36,15 +36,15 @@ public class EventsServlet extends HttpServlet {
         String groupIdString = (String) params.get("group_id");
         String name = (String) params.get("event_name");
         String type = (String) params.get("event_type");
-        String dateString = (String) params.get("event_date");
+        List<Double> eventDates = (List<Double>) params.get("event_dates");
         String address = (String) params.get("event_address");
         String eventTeamsString = (String) params.get("event_teams");
         String autoGenString = (String) params.get("gen_teams");
         String closeString = (String) params.get("close");
         List<String> items = (List<String>) params.get("items");
 
-        if (userId == null || groupIdString == null || closeString == null
-                || name == null || autoGenString == null || type == null || dateString == null) {
+        if (userId == null || groupIdString == null || closeString == null || eventTeamsString == null
+                || name == null || autoGenString == null || type == null || eventDates == null) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing required field: user_id, group_id, event_name, event_type, event_date");
             return;
         }
@@ -52,7 +52,6 @@ public class EventsServlet extends HttpServlet {
         type = type.toLowerCase();
 
         long groupId = Long.parseLong(groupIdString);
-        long date = Long.parseLong(dateString);
         boolean autoGen = autoGenString.equals("true");
         long close = Long.parseLong(closeString);
 
@@ -71,7 +70,7 @@ public class EventsServlet extends HttpServlet {
 
         // create the event
         long id = DatastoreServiceFactory.getDatastoreService().allocateIds("event", 1).getStart().getId();
-        EventData event = new EventData(id, date, type, group.getId(), name, address, autoGen, close);
+        EventData event = new EventData(id, eventDates, type, group.getId(), name, address, autoGen, close);
 
         group.addEvent(event);
 
@@ -125,6 +124,8 @@ public class EventsServlet extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "incorrect group id");
             return;
         }
+
+        event.checkPoll();
 
         // respond
         String groupJson = gson.toJson(event);
@@ -199,8 +200,6 @@ public class EventsServlet extends HttpServlet {
                 return;
             }
 
-            type = type.toLowerCase();
-
             if (name != null) {
                 group.getEvent(eventId).setName(name);
                 event.setName(name);
@@ -211,7 +210,7 @@ public class EventsServlet extends HttpServlet {
             }
 
             if (type != null) {
-                event.setType(type);
+                event.setType(type.toLowerCase());
             }
 
             if (address != null) {
@@ -228,6 +227,7 @@ public class EventsServlet extends HttpServlet {
         }
 
         // put the data back
+        event.checkPoll();
         ofy().save().entity(event).now();
 
         // respond

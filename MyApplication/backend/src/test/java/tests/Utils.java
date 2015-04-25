@@ -12,6 +12,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -148,7 +149,9 @@ public class Utils {
         params.put("group_name", groupName);
 
         String resp = Utils.postReq(Utils.GROUPS_URL, params);
-        GroupData group = gson.fromJson(resp, GroupData.class);
+        UserData user = gson.fromJson(resp, UserData.class);
+
+        GroupData group = getGroup(user.getGroups().get(user.getGroups().size() - 1).getId());
         return group;
     }
 
@@ -158,6 +161,7 @@ public class Utils {
 
         String resp = Utils.getReq(Utils.GROUPS_URL, params);
         GroupData group = gson.fromJson(resp, GroupData.class);
+
         return group;
     }
 
@@ -191,7 +195,9 @@ public class Utils {
         params.put("group_id", groupId+"");
         params.put("event_name", name);
         params.put("event_type", type);
-        params.put("event_date", date+"");
+        List<Long> dates = new ArrayList<Long>();
+        dates.add(date);
+        params.put("event_dates", dates);
         params.put("event_teams", teams+"");
         params.put("gen_teams", (autoGen ? "true" : "false"));
         params.put("close", close+"");
@@ -208,6 +214,7 @@ public class Utils {
         params.put("group_id", groupId+"");
         params.put("event_id", eventId+"");
         params.put("teams", teams);
+        params.put("action", "teams");
 
         String resp = Utils.postReq(Utils.EVENTS_URL, params);
         //System.out.println(resp);

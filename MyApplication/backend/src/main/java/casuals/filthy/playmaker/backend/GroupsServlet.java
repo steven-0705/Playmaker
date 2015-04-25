@@ -59,10 +59,10 @@ public class GroupsServlet extends HttpServlet {
         ofy().save().entities(user, group).now();
 
         // respond
-        String groupJson = gson.toJson(group);
+        String userJson = gson.toJson(user);
         resp.setStatus(HttpServletResponse.SC_OK);
         resp.setContentType("application/json");
-        resp.getWriter().write(groupJson);
+        resp.getWriter().write(userJson);
         resp.getWriter().flush();
         resp.getWriter().close();
     }

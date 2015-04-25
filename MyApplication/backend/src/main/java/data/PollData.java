@@ -20,7 +20,6 @@ public class PollData extends DataObject {
     protected long groupId;
     protected List<String> options;
     protected Map<String, Integer> votes;
-    protected List<String> voterIds;
 
     /**
      * Adds a user's vote to the poll
@@ -29,18 +28,12 @@ public class PollData extends DataObject {
      * @return true if successful, false if the user has already voted or vote is bad
      */
     public boolean addVote(String userId, int choice) {
-        if (voterIds == null)
-            voterIds = new ArrayList<String>();
-        else {
-            if (voterIds.indexOf(userId) != -1)
-                return false;
-        }
-
+        if (votes == null)
+            votes = new HashMap<String, Integer>();
         if (choice >= options.size())
             return false;
 
-        votes.put(options.get(choice), votes.get(options.get(choice)) + 1);
-        voterIds.add(userId);
+        votes.put(userId, choice);
 
         return true;
     }
@@ -57,6 +50,15 @@ public class PollData extends DataObject {
         for (String opt : this.options) {
             votes.put(opt, 0);
         }
+    }
+
+    public int[] compile() {
+        int[] results = new int[options.size()];
+        for (Integer vote: votes.values()) {
+            results[vote]++;
+        }
+
+        return results;
     }
 
     public long getId() {
