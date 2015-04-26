@@ -154,6 +154,7 @@ public class EventsServlet extends HttpServlet {
         String dateString = (String) params.get("event_date");//req.getParameter("event_date");
         String address = (String) params.get("event_address");
         String action = (String) params.get("action");
+        Double vote = (Double) params.get("vote");
         List<List<String>> teams = (List<List<String>>) params.get("teams");
 
         if (groupIdString == null) {
@@ -180,6 +181,13 @@ public class EventsServlet extends HttpServlet {
         if (event.getGroupId() != groupId) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "incorrect group id");
             return;
+        }
+
+
+        //vote on date
+        if (action != null && action.equals("vote")) {
+            int voteInt = (int) Math.round(vote);
+            event.dateVote(userId, voteInt);
         }
 
         // add user

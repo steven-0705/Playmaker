@@ -1,6 +1,7 @@
 package casuals.filthy.playmaker.data.beans;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class GroupBean extends DataBean {
@@ -48,6 +49,18 @@ public class GroupBean extends DataBean {
                 return poll;
         }
         return null;
+    }
+
+    public List<GroupEventData> getEventsUpcoming() {
+        Collections.sort(events);
+        List<GroupEventData> result = new ArrayList<GroupEventData>();
+        for (int i = 0; i < events.size(); i++) {
+            if (System.currentTimeMillis() < events.get(i).date + 1000 * 60 * 60 * 12) {
+                result.add(events.get(i));
+            }
+        }
+
+        return result;
     }
 
     public long getId() {
@@ -100,7 +113,7 @@ public class GroupBean extends DataBean {
         }
     }
 
-    public static class GroupEventData {
+    public static class GroupEventData implements Comparable<GroupEventData>{
         public String name;
         public long date;
         public long eventId;
@@ -117,6 +130,11 @@ public class GroupBean extends DataBean {
 
         public long getEventId() {
             return eventId;
+        }
+
+        @Override
+        public int compareTo(GroupEventData another) {
+            return (int) (this.date - another.date);
         }
     }
 

@@ -114,5 +114,17 @@ public class EventTests {
         assertEquals(0, event.getTeams().get(1).size());
     }
 
+    @Test
+    public void eventsDateVoting() {
+        List<Long> dates = new ArrayList<Long>();
+        dates.add((long) 100000000);
+        dates.add((long) 110000000);
+        EventData event = Utils.addEvent(user1.getId(), group1.getId(), "things", "soccer", dates, 2, true, System.currentTimeMillis() + 100000);
+
+        event = Utils.voteDate(user1.getId(), group1.getId(), event.getId(), 0);
+
+
+    }
+
 
 }

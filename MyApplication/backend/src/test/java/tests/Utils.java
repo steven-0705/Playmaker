@@ -190,13 +190,17 @@ public class Utils {
     }
 
     public static EventData addEvent(String userId, long groupId, String name, String type, long date, int teams, boolean autoGen, long close) {
+        List<Long> dates = new ArrayList<Long>();
+        dates.add(date);
+        return addEvent(userId, groupId, name, type, dates, teams, autoGen, close);
+    }
+
+    public static EventData addEvent(String userId, long groupId, String name, String type, List<Long> dates, int teams, boolean autoGen, long close) {
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("user_id", userId);
         params.put("group_id", groupId+"");
         params.put("event_name", name);
         params.put("event_type", type);
-        List<Long> dates = new ArrayList<Long>();
-        dates.add(date);
         params.put("event_dates", dates);
         params.put("event_teams", teams+"");
         params.put("gen_teams", (autoGen ? "true" : "false"));
@@ -218,6 +222,20 @@ public class Utils {
 
         String resp = Utils.postReq(Utils.EVENTS_URL, params);
         //System.out.println(resp);
+        EventData event = gson.fromJson(resp, EventData.class);
+        return event;
+    }
+
+    public static EventData voteDate(String userId, long groupId, long eventId, int index) {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("user_id", userId);
+        params.put("group_id", groupId+"");
+        params.put("event_id", eventId+"");
+        params.put("action", "vote");
+        params.put("vote", index);
+
+        String resp = Utils.postReq(Utils.EVENTS_URL, params);
+        System.out.println(resp);
         EventData event = gson.fromJson(resp, EventData.class);
         return event;
     }
