@@ -2,6 +2,7 @@ package casuals.filthy.playmaker;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -47,6 +48,7 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
     private String userName;
     private String userEmail;
     private List<Long> groupIds;
+    private ProgressDialog progress;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,10 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
             userEmail = extras.getString("EMAIL");
             userName = extras.getString("DISPLAY_NAME");
         }
+        progress = new ProgressDialog(this);
+        progress.setTitle("Loading");
+        progress.setMessage("Retrieving your data...");
+        progress.show();
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.user);
         final TextView user_name = (TextView) findViewById(R.id.user_display);
@@ -136,9 +142,11 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
                    Intent i = new Intent(getApplicationContext(), GroupActivity.class);
                    i.putExtra("USER_ID", getId());
                    i.putExtra("GROUP_ID",groupId);
+                   i.putExtra("USER_NAME", userName);
                    startActivity(i);
                }
            });
+           progress.dismiss();
        }
 
 

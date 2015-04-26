@@ -2,17 +2,24 @@ package casuals.filthy.playmaker;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
+import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.Notification;
+import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.MotionEvent;
+import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,8 +60,11 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
     FragmentPageAdapter ft;
     private static long groupId;
     private static String gUserId;
+    private static String userName;
     private static List<Long> eventIds;
     private static CheckBox checkBox1, checkBox2, checkBox3, checkBox4;
+    private ProgressDialog progress;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,8 +72,17 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
         if(extras !=null) {
            gUserId = extras.getString("USER_ID");
             groupId = extras.getLong("GROUP_ID");
+            userName = extras.getString("USER_NAME");
         }
         setContentView(R.layout.activity_main);
+        progress = new ProgressDialog(this);
+        progress.setTitle("Loading");
+        progress.setMessage("Retrieving your data...");
+        progress.show();
+
+        DatastoreAdapter adapter = new DatastoreAdapter(this);
+        adapter.getGroup(GroupActivity.getGroupId());
+
         viewpager = (CustomViewPager) findViewById(R.id.custompager);
         ft = new FragmentPageAdapter(getSupportFragmentManager());
         actionbar = getActionBar();
@@ -98,6 +117,13 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
 
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        DatastoreAdapter adapter = new DatastoreAdapter(this);
+        adapter.getGroup(GroupActivity.getGroupId());
+    }
 
 
     @Override
@@ -152,6 +178,16 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
 
     @Override
     public void response(Object o) {
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        List<android.support.v4.app.Fragment> frags = fm.getFragments();
+
+        for (android.support.v4.app.Fragment frag: frags) {
+            if (frag instanceof AsyncResponse && frag.getActivity() instanceof GroupActivity) {
+                ((AsyncResponse) frag).response(o);
+            }
+        }
+
+        progress.dismiss();
 
     }
     @Override
@@ -178,6 +214,31 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
 
     public static void setEventIds(List<Long> list) {
         eventIds = list;
+    }
+
+    public void inviteMember(View v) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
+        final EditText input= new EditText(v.getContext());
+        input.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        input.setSingleLine();
+        alert.setTitle("Enter your friend's email address.");
+        alert.setView(input);
+        alert.setPositiveButton("Invite", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (input.getText().toString().matches("")) {
+                    Toast.makeText(getApplicationContext(), "Invalid Email", Toast.LENGTH_SHORT).show();
+                } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(input.getText().toString()).matches()) {
+                    Toast.makeText(getApplicationContext(), "Invalid Email", Toast.LENGTH_SHORT).show();
+                } else {
+                    String temp = input.getText().toString();
+                    DatastoreAdapter adapter = new DatastoreAdapter(null);
+                    adapter.inviteUser(groupId, input.getText().toString(), userName);
+                    Toast.makeText(getApplicationContext(), "Invitation Sent", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        alert.show();
     }
 
 }

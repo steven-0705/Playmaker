@@ -29,6 +29,8 @@ import casuals.filthy.playmaker.data.beans.GroupBean;
  */
 public class EventFragment extends Fragment implements AsyncResponse{
 
+    private GroupBean group;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -47,15 +49,14 @@ public class EventFragment extends Fragment implements AsyncResponse{
                 startActivity(i);
             }
         });
-        DatastoreAdapter adapter = new DatastoreAdapter(this);
-        adapter.getGroup(GroupActivity.getGroupId());
+        //DatastoreAdapter adapter = new DatastoreAdapter(this);
+        //adapter.getGroup(GroupActivity.getGroupId());
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        DatastoreAdapter adapter = new DatastoreAdapter(this);
-        adapter.getGroup(GroupActivity.getGroupId());
+        refreshView();
     }
 
     @Override
@@ -63,7 +64,13 @@ public class EventFragment extends Fragment implements AsyncResponse{
         if(!(o instanceof GroupBean)) {
             return;
         }
-        GroupBean group = (GroupBean) o;
+        group = (GroupBean) o;
+        refreshView();
+    }
+
+    private void refreshView() {
+        if (group == null)
+            return;
         List<GroupBean.GroupEventData> eventList = group.getEventsUpcoming();
         ListView listView = (ListView) getView().findViewById(R.id.group_event_list);
         List<String> list = new ArrayList<String>();

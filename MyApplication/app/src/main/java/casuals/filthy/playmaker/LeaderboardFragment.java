@@ -33,7 +33,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class LeaderboardFragment extends ListFragment {
+import casuals.filthy.playmaker.data.AsyncResponse;
+
+public class LeaderboardFragment extends ListFragment implements AsyncResponse {
 
     List<HashMap<String,String>>  Entries = LeaderboardEntries.ITEMS;
     String[] from = {LeaderboardEntries.KEY_ICON, LeaderboardEntries.KEY_NAME, LeaderboardEntries.KEY_PLACE, LeaderboardEntries.KEY_POINTS};
@@ -108,4 +110,8 @@ public class LeaderboardFragment extends ListFragment {
 
     }
 
+    @Override
+    public void response(Object o) {
+
+    }
 }

@@ -61,8 +61,10 @@ public class DatastoreAdapter {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 200:
-                    Object response = gson.fromJson(task.getResponse(), type);
-                    caller.response(response);
+                    if (caller != null) {
+                        Object response = gson.fromJson(task.getResponse(), type);
+                        caller.response(response);
+                    }
                     break;
                 case 400:
                     System.out.print(task.getResponse());
@@ -328,6 +330,27 @@ public class DatastoreAdapter {
         params.put("event_id", eventId+"");
         params.put("results_up", ups);
         params.put("results_down", downs);
+        post.setHeader("Content-Type", "application/json");
+        try {
+            post.setEntity(new StringEntity(gson.toJson(params)));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        type = GroupBean.class;
+        ServletHttpAsyncTask request = new ServletHttpAsyncTask();
+        task = request;
+        request.execute(post);
+    }
+
+    public void inviteUser(long groupId, String email, String userName) {
+        HttpPost post = new HttpPost(SERVER_URL + SERVLET_USERS);
+
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("user_email", email);
+        params.put("group_id", groupId+"");
+        params.put("action", "invite");
+        params.put("user_name", userName);
         post.setHeader("Content-Type", "application/json");
         try {
             post.setEntity(new StringEntity(gson.toJson(params)));
