@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import javax.servlet.http.HttpServletResponse;
 
+import data.GroupData;
 import data.UserData;
 
 import static org.junit.Assert.assertEquals;
@@ -39,7 +40,32 @@ public class UserTests {
 
     @Test
     public void usersInviteUser() {
+        UserData u1 = Utils.addUser("testestests" + Math.random(), "dsjsadf;lj", "emailsssssss");
+        UserData u2 = Utils.addUser("testestests" + Math.random(), "dsjsadf;lj", "email2inv@gmail.com");
+        GroupData group = Utils.addGroup(u1.getId(), "GROUPZZZ");
 
+        Utils.inviteUser(u2.getEmail(), group.getId(), u1.getName());
+
+        u2 = Utils.getUser(u2.getId());
+
+        assertEquals(1, u2.getInvites().size());
+
+    }
+
+    @Test
+    public void usersInviteUserAccept() {
+        UserData u1 = Utils.addUser("testestes123ts" + Math.random(), "dsj123sadf;lj", "email123sssssss");
+        UserData u2 = Utils.addUser("teswerwrtestests" + Math.random(), "dsjs123adf;lj", "email2123inv@gmail.com");
+        GroupData group = Utils.addGroup(u1.getId(), "GROUPZZZ");
+
+        Utils.inviteUser(u2.getEmail(), group.getId(), u1.getName());
+
+        u2 = Utils.getUser(u2.getId());
+
+        assertEquals(1, u2.getInvites().size());
+        u2 = Utils.joinGroup(u2.getId(), group.getId());
+
+        assertEquals(0, u2.getInvites().size());
     }
 
 }

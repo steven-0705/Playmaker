@@ -4,6 +4,7 @@ import com.googlecode.objectify.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -35,12 +36,33 @@ public class UserData extends DataObject{
             groups = new ArrayList<UserGroup>();
         }
         groups.add(new UserGroup(group.getName(), group.getId()));
+
+        removeInvite(group.getId());
+    }
+
+    public void removeInvite(long groupId) {
+        if (invites == null)
+            return;
+
+        List<Invite> invs = new ArrayList<Invite>();
+        for (int i = 0; i < invites.size(); i++) {
+            if (invites.get(i).groupId != groupId)
+                invs.add(invites.get(i));
+        }
+
+        invites = invs;
     }
 
     public void invite(String inviter, long groupId) {
         if (invites == null)
             invites = new ArrayList<Invite>();
 
+        for (UserGroup group: groups) {
+            if (group.getId() == groupId)
+                return;
+        }
+
+        removeInvite(groupId);
         invites.add(new Invite(groupId, inviter, System.currentTimeMillis()));
     }
 
@@ -66,6 +88,13 @@ public class UserData extends DataObject{
 
     public List<Invite> getInvites() {
         return invites;
+    }
+
+    public void addInvite(String userName, long groupId) {
+        if (invites == null) {
+            invites = new ArrayList<Invite>();
+        }
+        invites.add(new Invite(groupId, userName, System.currentTimeMillis()));
     }
 
     public static class UserGroup {
