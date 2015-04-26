@@ -65,9 +65,6 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
         final TextView user_group = (TextView) findViewById(R.id.user_groups);
         final Button createGroup = (Button) findViewById(R.id.groupCreate);
         final ListView groupList = (ListView) findViewById(R.id.user_group_list);
-        user_name.setEnabled(false);
-        user_email.setEnabled(false);
-        user_group.setEnabled(false);
         user_name.setText(userName);
         user_email.setText(userEmail);
         createGroup.setOnClickListener(new View.OnClickListener() {
@@ -89,7 +86,7 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
                         } else {
                             String temp = input.getText().toString();
                             DatastoreAdapter adapter = new DatastoreAdapter(UserActivity.this);
-                            adapter.createGroup(temp, MainActivity.getId());
+                            adapter.createGroup(temp, userId);
 
                         }
                     }
@@ -247,13 +244,15 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
                list.add(group.getName());
                idList.add(group.getId());
            }
-           MainActivity.setGroupIds(idList);
+           setGroupIds(idList);
            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, list);
            listView.setAdapter(arrayAdapter);
            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                @Override
                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                   Long groupId = MainActivity.getGroupIds().get(position);
+                   Long groupId = getGroupIds().get(position);
+                   Intent i = new Intent(getApplicationContext(), GroupActivity.class);
+                   startActivity(i);
                }
            });
        }

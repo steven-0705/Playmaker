@@ -49,7 +49,7 @@ public class EventFragment extends Fragment {
         Button participants = (Button) getView().findViewById(R.id.user_button);
         participants.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                MainActivity.viewpager.setPagingEnabled(false);
+                GroupActivity.viewpager.setPagingEnabled(false);
                 LayoutInflater inflater = (LayoutInflater) getActivity().getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View popupView = inflater.inflate(R.layout.participant_popout, null);
                 final PopupWindow popupWindow = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -59,7 +59,7 @@ public class EventFragment extends Fragment {
                     public void onClick(View v) {
                         // TODO Auto-generated method stub
                         popupWindow.dismiss();
-                        MainActivity.viewpager.setPagingEnabled(true);
+                        GroupActivity.viewpager.setPagingEnabled(true);
                     }});
                 popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
             }
@@ -67,7 +67,7 @@ public class EventFragment extends Fragment {
         Button items = (Button) getView().findViewById(R.id.item_button);
         items.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                MainActivity.viewpager.setPagingEnabled(false);
+                GroupActivity.viewpager.setPagingEnabled(false);
                 LayoutInflater inflater = (LayoutInflater) getActivity().getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View popupView = inflater.inflate(R.layout.items_popout, null);
                 final PopupWindow popupWindow = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -77,7 +77,7 @@ public class EventFragment extends Fragment {
                     public void onClick(View v) {
                         // TODO Auto-generated method stub
                         popupWindow.dismiss();
-                        MainActivity.viewpager.setPagingEnabled(true);
+                        GroupActivity.viewpager.setPagingEnabled(true);
                     }});
                 popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
             }

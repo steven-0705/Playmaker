@@ -50,14 +50,5 @@ public class GroupFragment extends Fragment implements AsyncResponse{
         if (!(o instanceof GroupBean)) {
             return;
         }
-        GroupBean group = (GroupBean) o;
-        List<GroupBean.GroupEventData> eventList = group.getEvents();
-        ListView listView = (ListView) getView().findViewById(R.id.user_event_list);
-        List<String> list = new ArrayList<String>();
-        for(GroupBean.GroupEventData event: eventList) {
-            list.add(event.getName());
-        }
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1, list);
-        listView.setAdapter(arrayAdapter);
     }
 }

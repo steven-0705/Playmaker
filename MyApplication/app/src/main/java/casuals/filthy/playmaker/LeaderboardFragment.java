@@ -90,7 +90,7 @@ public class LeaderboardFragment extends ListFragment {
         {
             return;
         }
-        MainActivity.viewpager.setPagingEnabled(false);
+        GroupActivity.viewpager.setPagingEnabled(false);
         LayoutInflater inflater = (LayoutInflater) getActivity().getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.leaderboard_popout, null);
         final PopupWindow popupWindow = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -101,7 +101,7 @@ public class LeaderboardFragment extends ListFragment {
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 popupWindow.dismiss();
-                MainActivity.viewpager.setPagingEnabled(true);
+                GroupActivity.viewpager.setPagingEnabled(true);
 
             }});
         popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
