@@ -27,6 +27,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 
+import java.util.List;
+
 import com.google.android.gms.common.ConnectionResult;
 
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -52,6 +54,7 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
     static String id;
     static String email;
     static String name;
+    static List<Long> groupIds;
     DatastoreAdapter test = new DatastoreAdapter(this);
     //call getUser
 
@@ -186,7 +189,13 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
     static public String getId(){
         return id;
     }
+    static public List<Long> getGroupIds() {
+        return groupIds;
+    }
 
+    static public void setGroupIds(List<Long> list) {
+        groupIds = list;
+    }
 
 }
 

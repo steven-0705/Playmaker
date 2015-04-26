@@ -374,7 +374,7 @@ public class BaseActivity extends FragmentActivity implements
         Log.i(TAG, "we made it here");
             if(mGoogleApiClient.isConnected() && login==1) {
                 Person currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
-                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                Intent i = new Intent(getApplicationContext(), UserActivity.class);
                i.putExtra("ID",currentUser.getId());
                 i.putExtra("DISPLAY_NAME",currentUser.getDisplayName());
                i.putExtra("EMAIL",Plus.AccountApi.getAccountName(mGoogleApiClient));
