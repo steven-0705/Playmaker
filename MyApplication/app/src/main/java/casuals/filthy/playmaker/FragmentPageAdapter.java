@@ -15,7 +15,7 @@ public class FragmentPageAdapter extends FragmentPagerAdapter {
         // TODO Auto-generated method stub
         switch (arg0) {
             case 0:
-                return new UserFragment();
+                //return new UserFragment();
             case 1:
                 return new GroupFragment();
             case 2:
