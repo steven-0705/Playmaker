@@ -199,13 +199,13 @@ public class Utils {
         return event;
     }
 
-    public static EventData addEvent(String userId, long groupId, String name, String type, long date, int teams, boolean autoGen, long close) {
+    public static GroupData addEvent(String userId, long groupId, String name, String type, long date, int teams, boolean autoGen, long close) {
         List<Long> dates = new ArrayList<Long>();
         dates.add(date);
         return addEvent(userId, groupId, name, type, dates, teams, autoGen, close);
     }
 
-    public static EventData addEvent(String userId, long groupId, String name, String type, List<Long> dates, int teams, boolean autoGen, long close) {
+    public static GroupData addEvent(String userId, long groupId, String name, String type, List<Long> dates, int teams, boolean autoGen, long close) {
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("user_id", userId);
         params.put("group_id", groupId+"");
@@ -218,8 +218,8 @@ public class Utils {
 
         String resp = Utils.postReq(Utils.EVENTS_URL, params);
         //System.out.println(resp);
-        EventData event = gson.fromJson(resp, EventData.class);
-        return event;
+        GroupData group = gson.fromJson(resp, GroupData.class);
+        return group;
     }
 
     public static EventData setTeams(String userId, long groupId, long eventId, List<List<String>> teams) {

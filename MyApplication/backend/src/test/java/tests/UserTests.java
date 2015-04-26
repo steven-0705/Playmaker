@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,6 +18,8 @@ import static org.junit.Assert.assertEquals;
  * Created by Chris on 4/17/2015.
  */
 public class UserTests {
+
+    Random rand = new Random();
 
     @Test
      public void usersCreateUser() {
@@ -40,8 +43,8 @@ public class UserTests {
 
     @Test
     public void usersInviteUser() {
-        UserData u1 = Utils.addUser("testestests" + Math.random(), "dsjsadf;lj", "emailsssssss");
-        UserData u2 = Utils.addUser("testestests" + Math.random(), "dsjsadf;lj", "email2inv@gmail.com");
+        UserData u1 = Utils.addUser("testestests" + rand.nextInt(10000), "dsjsadf;lj", "emailsssssss");
+        UserData u2 = Utils.addUser("testestests" + rand.nextInt(10000), "dsjsadf;lj", "email2inv@gmail.com");
         GroupData group = Utils.addGroup(u1.getId(), "GROUPZZZ");
 
         Utils.inviteUser(u2.getEmail(), group.getId(), u1.getName());
@@ -54,8 +57,8 @@ public class UserTests {
 
     @Test
     public void usersInviteUserAccept() {
-        UserData u1 = Utils.addUser("testestes123ts" + Math.random(), "dsj123sadf;lj", "email123sssssss");
-        UserData u2 = Utils.addUser("teswerwrtestests" + Math.random(), "dsjs123adf;lj", "email2123inv@gmail.com");
+        UserData u1 = Utils.addUser("testestes123ts" + rand.nextInt(10000), "dsj123sadf;lj", "email123sssssss");
+        UserData u2 = Utils.addUser("teswerwrtestests" + rand.nextInt(10000), "dsjs123adf;lj", "email2123inv@gmail.com");
         GroupData group = Utils.addGroup(u1.getId(), "GROUPZZZ");
 
         Utils.inviteUser(u2.getEmail(), group.getId(), u1.getName());

@@ -87,7 +87,7 @@ public class EventsServlet extends HttpServlet {
         ofy().save().entities(event, group).now();
 
         // respond
-        String groupJson = gson.toJson(event);
+        String groupJson = gson.toJson(group);
         resp.setStatus(HttpServletResponse.SC_OK);
         resp.setContentType("application/json");
         resp.getWriter().write(groupJson);

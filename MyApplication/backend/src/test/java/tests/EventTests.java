@@ -53,7 +53,8 @@ public class EventTests {
 
     @Test
     public void eventsCreateEvent() {
-        EventData event = Utils.addEvent(user1.getId(), group1.getId(), "FUN TIME", "flamingos", 100000, 2, true, 0);
+        group1 = Utils.addEvent(user1.getId(), group1.getId(), "FUN TIME", "flamingos", 100000, 2, true, 0);
+        EventData event = Utils.getEvent(user1.getId(), group1.getId(), group1.getEvents().get(group1.getEvents().size() - 1).getEventId());
         assertNotNull(event);
         assertEquals(event.getName(), "FUN TIME");
         assertEquals(event.getType(), "flamingos");
@@ -64,7 +65,8 @@ public class EventTests {
 
     @Test
     public void eventsGetEvent() {
-        EventData event = Utils.addEvent(user1.getId(), group1.getId(), "YAY", "flamingos", 1010000, 2, true, 0);
+        group1 = Utils.addEvent(user1.getId(), group1.getId(), "YAY", "flamingos", 1010000, 2, true, 0);
+        EventData event = Utils.getEvent(user1.getId(), group1.getId(), group1.getEvents().get(group1.getEvents().size() - 1).getEventId());
         assertNotNull(Utils.getGroup(group1.getId()).getEvent(event.getId()));
 
         long id = event.getId();
@@ -77,7 +79,8 @@ public class EventTests {
 
     @Test
     public void eventsJoinEvent() {
-        EventData event = Utils.addEvent(user2.getId(), group2.getId(), "EVENTS YAY", "soccer", 10100100, 2, true, 0);
+        group2 = Utils.addEvent(user2.getId(), group2.getId(), "EVENTS YAY", "soccer", 10100100, 2, true, 0);
+        EventData event = Utils.getEvent(user1.getId(), group2.getId(), group2.getEvents().get(group2.getEvents().size() - 1).getEventId());
         event = Utils.joinEvent(user1.getId(), event.getId(), group2.getId());
         assertEquals(event.getAttending().size(), 1);
         event = Utils.joinEvent(user3.getId(), event.getId(), group2.getId());
@@ -96,7 +99,8 @@ public class EventTests {
 
     @Test
     public void eventsTeamsForceEvent() {
-        EventData event = Utils.addEvent(user2.getId(), group2.getId(), "EVENTS YAY", "soccer", 10100100, 2, false, 0);
+        group2 = Utils.addEvent(user2.getId(), group2.getId(), "EVENTS YAY", "soccer", 10100100, 2, false, 0);
+        EventData event = Utils.getEvent(user1.getId(), group2.getId(), group2.getEvents().get(group2.getEvents().size() - 1).getEventId());
         event = Utils.joinEvent(user1.getId(), event.getId(), group2.getId());
         assertEquals(event.getAttending().size(), 1);
         event = Utils.joinEvent(user3.getId(), event.getId(), group2.getId());
@@ -126,7 +130,8 @@ public class EventTests {
         List<Long> dates = new ArrayList<Long>();
         dates.add((long) 100000000);
         dates.add((long) 110000000);
-        EventData event = Utils.addEvent(user1.getId(), group1.getId(), "things", "soccer", dates, 2, true, System.currentTimeMillis() + 100000);
+        group1 = Utils.addEvent(user1.getId(), group1.getId(), "things", "soccer", dates, 2, true, System.currentTimeMillis() + 100000);
+        EventData event = Utils.getEvent(user1.getId(), group1.getId(), group1.getEvents().get(group1.getEvents().size() - 1).getEventId());
 
         event = Utils.voteDate(user1.getId(), group1.getId(), event.getId(), 0);
     }
@@ -136,7 +141,8 @@ public class EventTests {
         List<Long> dates = new ArrayList<Long>();
         dates.add((long) 100000000);
         dates.add((long) 110000000);
-        EventData event = Utils.addEvent(user1.getId(), group1.getId(), "things", "soccer", dates, 2, true, System.currentTimeMillis() + 1000);
+        group1 = Utils.addEvent(user1.getId(), group1.getId(), "things", "soccer", dates, 2, true, System.currentTimeMillis() + 1000);
+        EventData event = Utils.getEvent(user1.getId(), group1.getId(), group1.getEvents().get(group1.getEvents().size() - 1).getEventId());
 
         event = Utils.voteDate(user1.getId(), group1.getId(), event.getId(), 1);
 

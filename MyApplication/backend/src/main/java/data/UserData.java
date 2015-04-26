@@ -56,13 +56,15 @@ public class UserData extends DataObject{
     public void invite(String inviter, long groupId) {
         if (invites == null)
             invites = new ArrayList<Invite>();
+        else
+            removeInvite(groupId);
+
 
         for (UserGroup group: groups) {
             if (group.getId() == groupId)
                 return;
         }
 
-        removeInvite(groupId);
         invites.add(new Invite(groupId, inviter, System.currentTimeMillis()));
     }
 
