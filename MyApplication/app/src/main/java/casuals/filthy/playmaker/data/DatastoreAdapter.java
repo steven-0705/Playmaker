@@ -272,7 +272,7 @@ public class DatastoreAdapter {
         params.put("event_type", eventType);
         params.put("event_dates", eventDates);
         params.put("gen_teams", (autogen ? "true" : "false"));
-        params.put("address", address);
+        params.put("event_address", address);
         params.put("close", closeDate+"");
         params.put("items", items);
         params.put("event_teams", numTeams+"");
@@ -285,7 +285,7 @@ public class DatastoreAdapter {
         }
 
 
-        type = EventBean.class;
+        type = GroupBean.class;
         ServletHttpAsyncTask request = new ServletHttpAsyncTask();
         task = request;
         request.execute(post);

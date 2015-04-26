@@ -50,11 +50,13 @@ public class EventData extends DataObject {
         else {
             closed = false;
             List<String> options = new ArrayList<String>();
+
             pollMeaning = new ArrayList<Long>();
             for (Double date: dates) {
                 options.add(new Date(Math.round(date)).toString());
                 pollMeaning.add(Math.round(date));
             }
+            date = Collections.min(pollMeaning);
             datePoll = new PollData(options, 0, groupId);
         }
 
@@ -72,7 +74,7 @@ public class EventData extends DataObject {
     }
 
     public void checkPoll() {
-        if (closeDate > System.currentTimeMillis()) {
+        if (!closed && closeDate > System.currentTimeMillis()) {
             int[] results = datePoll.compile();
 
             int max = 0;
