@@ -94,29 +94,6 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
                 alert.show();
             }
         });
-        Button eventCreate = (Button) findViewById(R.id.eventCreate);
-        eventCreate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                   LayoutInflater inflater = (LayoutInflater) getActivity().getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//                   View popupView = inflater.inflate(R.layout.events, null);
-//                   final PopupWindow popupWindow = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
-//
-//                   Button btnDismiss = (Button)popupView.findViewById(R.id.button2);
-//                   btnDismiss.setOnClickListener(new Button.OnClickListener(){
-//                       @Override
-//                       public void onClick(View v) {
-//                           // TODO Auto-generated method stub
-//                           popupWindow.dismiss();
-//                       }});
-//                   popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
-
-                Intent i = new Intent(getApplicationContext(), EventCreate.class);
-
-                startActivity(i);
-                //finish();
-            }
-        });
         DatastoreAdapter adapter = new DatastoreAdapter(this);
         adapter.getUser(userId, userName, userEmail);
     }

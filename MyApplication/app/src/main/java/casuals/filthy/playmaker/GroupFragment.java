@@ -40,7 +40,6 @@ public class GroupFragment extends Fragment implements AsyncResponse{
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState)
     {
-
         super.onViewCreated(view, savedInstanceState);
         
     }

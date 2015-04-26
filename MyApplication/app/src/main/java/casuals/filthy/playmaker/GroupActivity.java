@@ -51,6 +51,7 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
     ActionBar actionbar;
     static CustomViewPager viewpager;
     FragmentPageAdapter ft;
+    private static List<Long> eventIds;
 
     private static CheckBox checkBox1, checkBox2, checkBox3, checkBox4;
     @Override
@@ -67,8 +68,8 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
         viewpager.setAdapter(ft);
         actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        actionbar.addTab(actionbar.newTab().setIcon(R.drawable.group_icon).setText("Group").setTabListener(this));
         actionbar.addTab(actionbar.newTab().setIcon(R.drawable.event_icon).setText("Events").setTabListener(this));
+        actionbar.addTab(actionbar.newTab().setIcon(R.drawable.group_icon).setText("Group").setTabListener(this));
         actionbar.addTab(actionbar.newTab().setIcon(R.drawable.leaderboard_icon).setText("Leader Board").setTabListener(this));
         viewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -153,6 +154,13 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
         finish();
     }
 
+    public static List<Long> getEventIds() {
+        return eventIds;
+    }
+
+    public static void setEventIds(List<Long> list) {
+        eventIds = list;
+    }
 }
 
 
