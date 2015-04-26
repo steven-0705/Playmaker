@@ -39,6 +39,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
+import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -47,6 +48,7 @@ import java.util.List;
 
 import casuals.filthy.playmaker.data.AsyncResponse;
 import casuals.filthy.playmaker.data.DatastoreAdapter;
+import casuals.filthy.playmaker.data.beans.GroupBean;
 
 /**
  * Created by Shane on 4/20/2015.
@@ -55,6 +57,7 @@ public class EventCreate extends Activity implements AsyncResponse{
     DatastoreAdapter test = new DatastoreAdapter(this);
     double latitude;
     double longitude;
+    GroupBean gb = new GroupBean();
     List<Address> geocodeMatches = null;
     private MapView mapView;
     private GoogleMap gMap;
@@ -62,6 +65,7 @@ public class EventCreate extends Activity implements AsyncResponse{
         super.onCreate(savedInstanceState);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.events);
+        List<String> eventHist = gb.getEventTypes(); // this requests a history of event types from group bean
         Spinner dropdown = (Spinner) findViewById(R.id.spinner1);
         String[] items = new String[]{"Basketball", "Baseball", "LAN Party", "Other"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, items);
@@ -192,11 +196,8 @@ public class EventCreate extends Activity implements AsyncResponse{
                 @Override
                 public void onClick(View v) {
                     List<Date> EventDates = new ArrayList<Date>();
-                    int Year;
-                    int Month;
-                    int Date;
-                    int Hrs;
-                    int Min;
+                    EditText edittext = (EditText) findViewById(R.id.edittext2);
+                    String location = edittext.getText().toString();
                     int numdates = 0;
 
                     for (int j = 0; j < date.length; j++) {
