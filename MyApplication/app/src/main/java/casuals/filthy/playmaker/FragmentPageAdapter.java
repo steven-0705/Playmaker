@@ -15,13 +15,11 @@ public class FragmentPageAdapter extends FragmentPagerAdapter {
         // TODO Auto-generated method stub
         switch (arg0) {
             case 0:
-                //return new UserFragment();
+                return new EventFragment();
             case 1:
                 return new GroupFragment();
             case 2:
-                return new EventFragment();
-            case 3:
-                return  new LeaderboardFragment();
+                return new LeaderboardFragment();
             default:
                 break;
         }
@@ -30,6 +28,6 @@ public class FragmentPageAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         // TODO Auto-generated method stub
-        return 4;
+        return 3;
     }
 }

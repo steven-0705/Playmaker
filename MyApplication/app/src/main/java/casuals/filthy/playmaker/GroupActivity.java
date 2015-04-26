@@ -47,33 +47,16 @@ import com.google.android.gms.plus.model.people.Person;
 
 
 
-public class MainActivity extends BaseActivity implements ActionBar.TabListener, AsyncResponse{
+public class GroupActivity extends BaseActivity implements ActionBar.TabListener, AsyncResponse{
     ActionBar actionbar;
     static CustomViewPager viewpager;
     FragmentPageAdapter ft;
-    static String id;
-    static String email;
-    static String name;
-    static List<Long> groupIds;
-    DatastoreAdapter test = new DatastoreAdapter(this);
-    //call getUser
+    private static List<Long> eventIds;
 
     private static CheckBox checkBox1, checkBox2, checkBox3, checkBox4;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle extras = getIntent().getExtras();
-        if(extras !=null)
-        {
-            id = extras.getString("ID");
-            email = extras.getString("EMAIL");
-            name = extras.getString("DISPLAY_NAME");
-            if(id != null && email != null && name != null)
-            {
-               //test.getUser(id,name, email);
-            }
-        }
-
         setContentView(R.layout.activity_main);
         viewpager = (CustomViewPager) findViewById(R.id.custompager);
         ft = new FragmentPageAdapter(getSupportFragmentManager());
@@ -85,19 +68,14 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
         viewpager.setAdapter(ft);
         actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        actionbar.addTab(actionbar.newTab().setText("My Profile").setTabListener(this));
-        actionbar.addTab(actionbar.newTab().setIcon(R.drawable.group_icon).setText("Group").setTabListener(this));
         actionbar.addTab(actionbar.newTab().setIcon(R.drawable.event_icon).setText("Events").setTabListener(this));
+        actionbar.addTab(actionbar.newTab().setIcon(R.drawable.group_icon).setText("Group").setTabListener(this));
         actionbar.addTab(actionbar.newTab().setIcon(R.drawable.leaderboard_icon).setText("Leader Board").setTabListener(this));
         viewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int arg0) {
                 actionbar.setSelectedNavigationItem(arg0);
                 checkforSignOut();
-                if(arg0 == 0)
-                {
-                    test.getUser(id,name, email);
-                }
             }
             @Override
             public void onPageScrolled(int arg0, float arg1, int arg2) {
@@ -168,35 +146,21 @@ public class MainActivity extends BaseActivity implements ActionBar.TabListener,
 
     @Override
     public void response(Object o) {
-        //where we call getUser
-        UserBean obj = (UserBean) o;
 
     }
     @Override
     public void onBackPressed(){
         super.onBackPressed();
-        BaseActivity.login=0;
-
+        finish();
     }
 
-
-    static public String getName(){
-        return name;
-    }
-    static public String getEmail(){
-        return email;
-    }
-    static public String getId(){
-        return id;
-    }
-    static public List<Long> getGroupIds() {
-        return groupIds;
+    public static List<Long> getEventIds() {
+        return eventIds;
     }
 
-    static public void setGroupIds(List<Long> list) {
-        groupIds = list;
+    public static void setEventIds(List<Long> list) {
+        eventIds = list;
     }
-
 }
 
 
