@@ -143,6 +143,7 @@ private CheckBox checkBox1, checkBox2, checkBox3, checkBox4;
            UserBean user = (UserBean) o;
            List<UserBean.UserGroupBean> groupList = user.getGroups();
            for(UserBean.UserGroupBean group: groupList) {
+
                Log.i("Name:",group.name);
            }
        }

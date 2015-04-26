@@ -1,5 +1,6 @@
 package casuals.filthy.playmaker;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -14,6 +15,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +25,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.NumberPicker;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -52,6 +59,7 @@ public class EventCreate extends Activity implements AsyncResponse{
     DatastoreAdapter test = new DatastoreAdapter(this);
     double latitude;
     double longitude;
+    static int numTeam = 0;
     List<Address> geocodeMatches = null;
     private MapView mapView;
     private GoogleMap gMap;
@@ -83,7 +91,9 @@ public class EventCreate extends Activity implements AsyncResponse{
         itemList.setEnabled(false);
         getOther.setEnabled(false);
         getTeam.setEnabled(false);
+
         final Switch teamEnabled = (Switch) findViewById(R.id.switch2);
+
         for (int i=0; i<time.length; i++) {
             time[i] = "";
         }
@@ -208,7 +218,7 @@ public class EventCreate extends Activity implements AsyncResponse{
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
-                final EditText input= new EditText(v.getContext());
+                final EditText input = new EditText(v.getContext());
                 input.setImeOptions(EditorInfo.IME_ACTION_DONE);
                 input.setSingleLine();
                 alert.setTitle("Add an item!");
@@ -219,8 +229,7 @@ public class EventCreate extends Activity implements AsyncResponse{
                         if (input.getText().toString().matches("")) {
                             Toast.makeText(getApplicationContext(), "You did not enter anything", Toast.LENGTH_SHORT).show();
 
-                        }
-                        else {
+                        } else {
                             String temp = input.getText().toString();
                             itemList.append(temp + ", ");
                         }
@@ -230,8 +239,53 @@ public class EventCreate extends Activity implements AsyncResponse{
                 alert.show();
             }
         });
+    teamEnabled.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            if(isChecked)
+            {
+
+                LayoutInflater inflater = (LayoutInflater) getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View popupView = inflater.inflate(R.layout.team_select, null);
+                NumberPicker np = (NumberPicker) popupView.findViewById(R.id.numberPicker1);
+                np.setMinValue(2);
+                np.setMaxValue(10);
+                np.setEnabled(true);
+                np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                    @Override
+                    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                        numTeam=newVal;
+                    }
+                });
+                final PopupWindow popupWindow = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                popupWindow.setOutsideTouchable(false);
+                Button btnCancel = (Button) popupView.findViewById(R.id.back);
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        numTeam=0;
+                        teamEnabled.setChecked(false);
+                        popupWindow.dismiss();
+                    }
+                });
+                Button btnDismiss = (Button)popupView.findViewById(R.id.confirm);
+                btnDismiss.setOnClickListener(new Button.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        // TODO Auto-generated method stub
+                        popupWindow.dismiss();
 
 
+                    }});
+                popupWindow.showAtLocation(buttonView.getRootView(), Gravity.CENTER, 0, 0);
+            }
+
+            else
+            {
+                numTeam=0;
+            }
+        }
+    });
 
 
     }
