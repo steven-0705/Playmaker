@@ -13,10 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +31,7 @@ import casuals.filthy.playmaker.data.DatastoreAdapter;
 import casuals.filthy.playmaker.data.beans.GroupBean;
 import casuals.filthy.playmaker.data.beans.UserBean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -142,8 +145,12 @@ private CheckBox checkBox1, checkBox2, checkBox3, checkBox4;
            }
            UserBean user = (UserBean) o;
            List<UserBean.UserGroupBean> groupList = user.getGroups();
+           ListView listView = (ListView) getView().findViewById(R.id.user_group_list);
+           List<String> list = new ArrayList<String>();
            for(UserBean.UserGroupBean group: groupList) {
-               Log.i("Name:",group.name);
+               list.add(group.getName());
            }
+           ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1, list);
+           listView.setAdapter(arrayAdapter);
        }
 }
