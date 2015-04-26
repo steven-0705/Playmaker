@@ -18,7 +18,9 @@ public class UserData extends DataObject{
     protected List<UserGroup> groups;
     protected List<Invite> invites;
 
-    private UserData() {};
+    private UserData() {
+        groups = new ArrayList<UserGroup>();
+    };
 
     public UserData(String email, String name, String user_id) {
         this.id = user_id;
