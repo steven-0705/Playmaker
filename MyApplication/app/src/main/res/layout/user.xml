@@ -72,9 +72,9 @@
         android:layout_height="wrap_content"
         android:text="Create Event"
         android:id="@+id/eventCreate"
-        android:layout_above="@+id/statsButton"
-        android:layout_alignLeft="@+id/groupCreate"
-        android:layout_alignStart="@+id/groupCreate" />
+        android:layout_below="@+id/user_image"
+        android:layout_toLeftOf="@+id/groupCreate"
+        android:layout_toStartOf="@+id/groupCreate" />
 
     <Button
         android:layout_width="wrap_content"

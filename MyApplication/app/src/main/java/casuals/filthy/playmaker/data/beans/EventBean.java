@@ -21,6 +21,7 @@ public class EventBean extends DataBean {
     protected String address;
     protected long closeDate;
     protected List<String> items;
+    protected boolean reported;
 
     public boolean isClosed() {
         return closed;
@@ -82,6 +83,10 @@ public class EventBean extends DataBean {
 
     public List<String> getItems() {
         return items;
+    }
+
+    public boolean isReported() {
+        return reported;
     }
 
     public static class EventTeam {

@@ -37,4 +37,9 @@ public class UserTests {
         assertEquals(date, user.getDateCreated());
     }
 
+    @Test
+    public void usersInviteUser() {
+
+    }
+
 }
