@@ -69,9 +69,12 @@ public class EventFragment extends Fragment implements AsyncResponse{
     }
 
     private void refreshView() {
+
         if (group == null)
             return;
         List<GroupBean.GroupEventData> eventList = group.getEventsUpcoming();
+        if (getView() == null)
+            return;
         ListView listView = (ListView) getView().findViewById(R.id.group_event_list);
         List<String> list = new ArrayList<String>();
         List<Long> idList = new ArrayList<Long>();

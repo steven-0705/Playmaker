@@ -114,4 +114,9 @@ public class LeaderboardFragment extends ListFragment implements AsyncResponse {
     public void response(Object o) {
 
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 }

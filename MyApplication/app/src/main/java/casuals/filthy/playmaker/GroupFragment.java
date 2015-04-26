@@ -50,4 +50,9 @@ public class GroupFragment extends Fragment implements AsyncResponse{
             return;
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 }
