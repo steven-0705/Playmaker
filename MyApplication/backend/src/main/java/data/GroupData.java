@@ -49,6 +49,9 @@ public class GroupData extends DataObject {
             events = new ArrayList<GroupEventData>();
         events.add(new GroupEventData(event.getName(), event.getDate(), event.getId(), event.getType()));
         addEventType(event.getType());
+
+        // make a notification
+        addNotification("Group" ,"Event '" + event.getName()+ "' of type '" + event.getType() + "' was created.");
     }
 
     public boolean isUserAdmin(String userId) {

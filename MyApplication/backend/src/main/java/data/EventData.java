@@ -33,7 +33,7 @@ public class EventData extends DataObject {
     protected int numTeams = 2;
     protected List<EventTeam> teams;
     protected boolean autoTeams = true;
-    protected boolean closed;
+    protected boolean closed = false;
     protected String address;
     protected long closeDate;
     protected boolean reported = false;
@@ -69,12 +69,13 @@ public class EventData extends DataObject {
     }
 
     public void dateVote(String user, int choice) {
+        checkPoll();
         if (!closed)
             datePoll.addVote(user, choice);
     }
 
     public void checkPoll() {
-        if (!closed && closeDate > System.currentTimeMillis()) {
+        if (!closed && closeDate < System.currentTimeMillis()) {
             int[] results = datePoll.compile();
 
             int max = 0;

@@ -42,11 +42,6 @@ public class PollData extends DataObject {
         this.options.addAll(options);
         this.groupId = groupId;
         this.id = id;
-
-        votes = new HashMap<String, Integer>();
-        for (String opt : this.options) {
-            votes.put(opt, 0);
-        }
     }
 
     public int[] compile() {

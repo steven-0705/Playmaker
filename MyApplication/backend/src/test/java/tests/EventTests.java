@@ -11,7 +11,9 @@ import data.GroupData;
 import data.UserData;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -141,16 +143,19 @@ public class EventTests {
         List<Long> dates = new ArrayList<Long>();
         dates.add((long) 100000000);
         dates.add((long) 110000000);
-        group1 = Utils.addEvent(user1.getId(), group1.getId(), "things", "soccer", dates, 2, true, System.currentTimeMillis() + 1000);
+        group1 = Utils.addEvent(user1.getId(), group1.getId(), "things", "soccer", dates, 2, true, System.currentTimeMillis() + 2000);
         EventData event = Utils.getEvent(user1.getId(), group1.getId(), group1.getEvents().get(group1.getEvents().size() - 1).getEventId());
 
         event = Utils.voteDate(user1.getId(), group1.getId(), event.getId(), 1);
+        assertFalse(event.isClosed());
 
         synchronized (this) {
-            this.wait(2000);
+            this.wait(2500);
         }
 
         event = Utils.getEvent(user1.getId(), group1.getId(), event.getId());
+        assertTrue(event.isClosed());
+        assertEquals((long) 110000000, event.getDate());
     }
 
 }
