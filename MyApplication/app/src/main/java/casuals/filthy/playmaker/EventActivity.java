@@ -82,6 +82,12 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
     }
 
     @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        finish();
+    }
+
+    @Override
     public void response(Object o) {
 
     }
