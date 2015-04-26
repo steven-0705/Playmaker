@@ -50,6 +50,5 @@ public class GroupFragment extends Fragment implements AsyncResponse{
         if (!(o instanceof GroupBean)) {
             return;
         }
-
     }
 }

@@ -13,17 +13,64 @@
     android:background="@android:color/white">
 
     <TextView
-        android:id="@+id/eventTextView"
+        android:id="@+id/eventTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="What type of event do you want to create?"
+        android:text="Event Creation"
+        android:textSize="32sp"
+        android:textStyle="bold|italic"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:textColor="@android:color/holo_green_dark"
+        />
+
+    <TextView
+        android:id="@+id/eventTitleName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="What is the name of your event"
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
+        android:layout_below="@id/eventTitle"
         />
+
+    <EditText
+        android:id="@+id/TitleNameofEvent"
+        android:hint="Insert Name of Event"
+        android:layout_width="match_parent"
+        android:layout_below="@id/eventTitleName"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:imeOptions="actionDone"
+        />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+
+        android:layout_below="@id/TitleNameofEvent"
+        android:background="@android:color/background_dark"
+        android:id="@+id/bufferTopEvent" />
+
+    <TextView
+        android:id="@+id/eventTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="What type of event do you want to create?"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@id/bufferTopEvent"
+        />
+
+
 
     <Spinner
         android:id="@+id/spinner1"
@@ -31,7 +78,7 @@
         android:layout_height="wrap_content"
         android:background="@android:drawable/btn_dropdown"
         android:spinnerMode="dropdown"
-        android:layout_marginTop="40dp"
+        android:layout_below="@id/eventTextView"
         />
 
     <EditText

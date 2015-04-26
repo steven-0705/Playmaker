@@ -49,6 +49,7 @@ import java.io.IOException;
 import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -88,9 +89,9 @@ public class EventCreate extends Activity implements AsyncResponse{
         final Button button3 = (Button) findViewById(R.id.additem);
         final EditText getLoc = (EditText) findViewById(R.id.edittext2);
         final EditText getOther = (EditText) findViewById(R.id.edittext1);
+        final EditText nameOfEvent = (EditText) findViewById(R.id.TitleNameofEvent);
         final TextView getTime = (TextView) findViewById(R.id.EditTime);
         final TextView itemList = (TextView) findViewById(R.id.itemlist);
-
         final String[] date = new String[3];
         final TextView getTeam = (TextView) findViewById(R.id.event_team);
         final String[] time = new String[3];
@@ -207,6 +208,7 @@ public class EventCreate extends Activity implements AsyncResponse{
                 @Override
                 public void onClick(View v) {
                     List<Date> EventDates = new ArrayList<Date>();
+                    List<Long> EventTimes = new ArrayList<Long>();
                     EditText edittext = (EditText) findViewById(R.id.edittext2);
                     String location = edittext.getText().toString();
                     int numdates = 0;
@@ -218,14 +220,22 @@ public class EventCreate extends Activity implements AsyncResponse{
                     }
 
 
+
                     for (int i = 0; i < numdates; i++) {
                         String[] tempdate = date[i].split("/");
                         String[] temptime = miltime[i].split(":");
                         Date eventdate = new Date(Integer.parseInt(tempdate[2]), Integer.parseInt(tempdate[0]), Integer.parseInt(tempdate[1]), Integer.parseInt(temptime[0]), Integer.parseInt(temptime[1]));
                         EventDates.add(eventdate);
                     }
+                    Collections.sort(EventDates);
+                    for(int i = 0; i<EventDates.size(); i++)
+                    {
+                        EventTimes.add(i, EventDates.get(i).getTime());
+                    }
                     Log.w("ListLen: ", Integer.toString(EventDates.size()));
                     DatastoreAdapter dsa = new DatastoreAdapter(EventCreate.this);
+
+                    dsa.createEvent(GroupActivity.getUserId(), GroupActivity.getGroupId(), nameOfEvent.getText().toString(),  getOption.getSelectedItem().toString(), location,false,0,EventTimes);
                     finish();
                 }
 
@@ -265,7 +275,6 @@ public class EventCreate extends Activity implements AsyncResponse{
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             if(isChecked)
             {
-
                 LayoutInflater inflater = (LayoutInflater) getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View popupView = inflater.inflate(R.layout.team_select, null);
                 NumberPicker np = (NumberPicker) popupView.findViewById(R.id.numberPicker1);
