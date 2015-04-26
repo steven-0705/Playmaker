@@ -53,6 +53,7 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
     FragmentPageAdapter ft;
     private static long groupId;
     private static String gUserId;
+    private static List<Long> eventIds;
     private static CheckBox checkBox1, checkBox2, checkBox3, checkBox4;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,8 +74,8 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
         viewpager.setAdapter(ft);
         actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        actionbar.addTab(actionbar.newTab().setIcon(R.drawable.group_icon).setText("Group").setTabListener(this));
         actionbar.addTab(actionbar.newTab().setIcon(R.drawable.event_icon).setText("Events").setTabListener(this));
+        actionbar.addTab(actionbar.newTab().setIcon(R.drawable.group_icon).setText("Group").setTabListener(this));
         actionbar.addTab(actionbar.newTab().setIcon(R.drawable.leaderboard_icon).setText("Leader Board").setTabListener(this));
         viewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -159,6 +160,7 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
         finish();
     }
 
+
     public static long getGroupId()
     {
         return groupId;
@@ -167,6 +169,15 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
     public static String getUserId()
     {
         return gUserId;
+    }
+
+
+    public static List<Long> getEventIds() {
+        return eventIds;
+    }
+
+    public static void setEventIds(List<Long> list) {
+        eventIds = list;
     }
 
 }

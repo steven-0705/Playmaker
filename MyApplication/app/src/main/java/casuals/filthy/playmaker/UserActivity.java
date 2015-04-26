@@ -110,6 +110,7 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
         super.signOut();
     }
 
+
        @Override
        public void response(Object o) {
            if(!(o instanceof UserBean)) {
@@ -139,6 +140,7 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
                }
            });
        }
+
 
     public String getName(){
         return userName;

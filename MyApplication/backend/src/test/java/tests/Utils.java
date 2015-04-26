@@ -143,6 +143,16 @@ public class Utils {
         return user;
     }
 
+    public static UserData getUser(String id) {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("user_id", id);
+        params.put("action", "login");
+
+        String resp = Utils.postReq(Utils.USERS_URL, params);
+        UserData user = gson.fromJson(resp, UserData.class);
+        return user;
+    }
+
     public static GroupData addGroup(String userId, String groupName) {
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("user_id", userId);
@@ -252,5 +262,13 @@ public class Utils {
         return event;
     }
 
-    public static void inviteUser(String userEmail, )
+    public static void inviteUser(String userEmail, long groupId, String userName) {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("user_name", userName);
+        params.put("group_id", groupId+"");
+        params.put("user_email", userEmail);
+        params.put("action", "invite");
+
+        String resp = Utils.postReq(Utils.USERS_URL, params);
+    }
 }

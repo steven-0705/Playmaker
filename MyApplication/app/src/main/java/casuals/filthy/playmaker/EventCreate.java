@@ -209,8 +209,12 @@ public class EventCreate extends Activity implements AsyncResponse{
                 public void onClick(View v) {
                     List<Date> EventDates = new ArrayList<Date>();
                     List<Long> EventTimes = new ArrayList<Long>();
+                    List<String> itemList = new ArrayList<String>();
+                    itemList.add(0,"s***");
+                    itemList.add(1,"poop");
                     EditText edittext = (EditText) findViewById(R.id.edittext2);
                     String location = edittext.getText().toString();
+                    Log.w("location address", location);
                     int numdates = 0;
 
                     for (int j = 0; j < date.length; j++) {
@@ -235,10 +239,11 @@ public class EventCreate extends Activity implements AsyncResponse{
                     Log.w("ListLen: ", Integer.toString(EventDates.size()));
                     DatastoreAdapter dsa = new DatastoreAdapter(EventCreate.this);
 
-                    dsa.createEvent(GroupActivity.getUserId(), GroupActivity.getGroupId(), nameOfEvent.getText().toString(),  getOption.getSelectedItem().toString(), location,false,0,EventTimes);
-                    finish();
+                    dsa.createEvent(GroupActivity.getUserId(), GroupActivity.getGroupId(), nameOfEvent.getText().toString(),  getOption.getSelectedItem().toString(), (EventTimes.get(0)-(24*60*60*1000)), location,false,0,EventTimes, itemList);
+                   finish();
                 }
-
+//tring userId, long groupId, String eventName, String eventType, long closeDate,
+//String address, boolean autogen, int numTeams, List<Long> eventDates, List<String> items)
                 //user id , long group id, name event of string, event Type (group contains this),  String of address, boolean for teams,int # teams, list of date;
 
             });

@@ -261,7 +261,8 @@ public class DatastoreAdapter {
      * @param userId
      * @return Returns json event of the event
      */
-    public void createEvent(String userId, long groupId, String eventName, String eventType, String address, boolean autogen, int numTeams, List<Long> eventDates) {
+    public void createEvent(String userId, long groupId, String eventName, String eventType, long closeDate,
+                            String address, boolean autogen, int numTeams, List<Long> eventDates, List<String> items) {
         HttpPost post = new HttpPost(SERVER_URL + SERVLET_EVENTS);
 
         HashMap<String, Object> params = new HashMap<String, Object>();
@@ -272,6 +273,8 @@ public class DatastoreAdapter {
         params.put("event_dates", eventDates);
         params.put("gen_teams", (autogen ? "true" : "false"));
         params.put("address", address);
+        params.put("close", closeDate+"");
+        params.put("items", items);
         params.put("event_teams", numTeams+"");
         params.put("action", "create");
         post.setHeader("Content-Type", "application/json");

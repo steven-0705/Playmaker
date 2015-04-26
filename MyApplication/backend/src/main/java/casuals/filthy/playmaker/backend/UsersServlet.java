@@ -90,6 +90,35 @@ public class UsersServlet extends HttpServlet {
 
         String action = (String) params.get("action");
         String userId = (String) params.get("user_id");//req.getParameter("user_id");
+        String userName = (String) params.get("user_name");
+        String userEmail = (String) params.get("user_email");
+        String groupIdString = (String) params.get("group_id");
+
+        if (action != null && action.equals("invite") && userEmail != null && groupIdString != null) {
+            UserData user = null;
+            List<UserData> users = ofy().load().type(UserData.class).list();
+            for (UserData u: users) {
+                if (userEmail.equals(u.getEmail())) {
+                    user = u;
+                    break;
+                }
+            }
+            if (user == null) {
+                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "user not found");
+                return;
+            }
+            long groupId = Long.parseLong(groupIdString);
+            GroupData group = ofy().load().type(GroupData.class).id(groupId).now();
+
+            user.addInvite(userName, groupId);
+
+            // done with all requests, save and return
+            ofy().save().entities(users).now();
+            // respond
+            resp.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
+
         if (userId == null || action == null) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing user_id or action field");
             return;
@@ -110,7 +139,6 @@ public class UsersServlet extends HttpServlet {
             ArrayList<DataObject> saves = new ArrayList<DataObject>();
             saves.add(user);
 
-            String groupIdString = (String) params.get("group_id");//req.getParameter("group_id");
             if (groupIdString != null) {
                 long groupId = Long.parseLong(groupIdString);
                 GroupData group = ofy().load().type(GroupData.class).id(groupId).now();

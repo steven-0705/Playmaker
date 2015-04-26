@@ -8,89 +8,80 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import casuals.filthy.playmaker.data.AsyncResponse;
+import casuals.filthy.playmaker.data.DatastoreAdapter;
+import casuals.filthy.playmaker.data.beans.GroupBean;
 
 /**
  * Created by Steven on 4/25/2015.
  */
-public class EventFragment extends Fragment {
+public class EventFragment extends Fragment implements AsyncResponse{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View eventView = inflater.inflate(R.layout.events_page, container,false);
+        View eventView = inflater.inflate(R.layout.events_tab, container,false);
         return eventView;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        TextView pollMessage = (TextView) getView().findViewById(R.id.poll_message);
-        TextView date = (TextView) getView().findViewById(R.id.event_date);
-        TextView time = (TextView) getView().findViewById(R.id.event_time);
-        CheckBox option1 = (CheckBox) getView().findViewById(R.id.poll_option1);
-        CheckBox option2 = (CheckBox) getView().findViewById(R.id.poll_option2);
-        CheckBox option3 = (CheckBox) getView().findViewById(R.id.poll_option3);
-        boolean eventPending = true;
-        if(eventPending) {
-            date.setVisibility(View.INVISIBLE);
-            time.setVisibility(View.INVISIBLE);
-
-        }
-        else {
-            pollMessage.setVisibility(View.INVISIBLE);
-            option1.setVisibility(View.INVISIBLE);
-            option2.setVisibility(View.INVISIBLE);
-            option3.setVisibility(View.INVISIBLE);
-        }
-        Button participants = (Button) getView().findViewById(R.id.user_button);
-        participants.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                GroupActivity.viewpager.setPagingEnabled(false);
-                LayoutInflater inflater = (LayoutInflater) getActivity().getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View popupView = inflater.inflate(R.layout.participant_popout, null);
-                final PopupWindow popupWindow = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                Button dismissButton = (Button)popupView.findViewById(R.id.dismiss);
-                dismissButton.setOnClickListener(new Button.OnClickListener(){
-                    @Override
-                    public void onClick(View v) {
-                        // TODO Auto-generated method stub
-                        popupWindow.dismiss();
-                        GroupActivity.viewpager.setPagingEnabled(true);
-                    }});
-                popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
-            }
-        });
-        Button items = (Button) getView().findViewById(R.id.item_button);
-        items.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                GroupActivity.viewpager.setPagingEnabled(false);
-                LayoutInflater inflater = (LayoutInflater) getActivity().getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View popupView = inflater.inflate(R.layout.items_popout, null);
-                final PopupWindow popupWindow = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                Button dismissButton = (Button)popupView.findViewById(R.id.dismiss);
-                dismissButton.setOnClickListener(new Button.OnClickListener(){
-                    @Override
-                    public void onClick(View v) {
-                        // TODO Auto-generated method stub
-                        popupWindow.dismiss();
-                        GroupActivity.viewpager.setPagingEnabled(true);
-                    }});
-                popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
-            }
-        });
-
         Button eventCreate = (Button) getView().findViewById(R.id.eventCreate);
         eventCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity().getApplicationContext(), EventCreate.class);
                 startActivity(i);
-                //finish();
+            }
+        });
+        DatastoreAdapter adapter = new DatastoreAdapter(this);
+        adapter.getGroup(GroupActivity.getGroupId());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        DatastoreAdapter adapter = new DatastoreAdapter(this);
+        adapter.getGroup(GroupActivity.getGroupId());
+    }
+
+    @Override
+    public void response(Object o) {
+        if(!(o instanceof GroupBean)) {
+            return;
+        }
+        GroupBean group = (GroupBean) o;
+        List<GroupBean.GroupEventData> eventList = group.getEventsUpcoming();
+        ListView listView = (ListView) getView().findViewById(R.id.group_event_list);
+        List<String> list = new ArrayList<String>();
+        List<Long> idList = new ArrayList<Long>();
+        for(GroupBean.GroupEventData event: eventList) {
+            list.add(event.getName());
+            idList.add(event.getEventId());
+        }
+        GroupActivity.setEventIds(idList);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1, list);
+        listView.setAdapter(arrayAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Long eventId = GroupActivity.getEventIds().get(position);
+                Intent i = new Intent(getActivity().getApplicationContext(), EventActivity.class);
+                i.putExtra("EVENT_ID", eventId);
+                startActivity(i);
             }
         });
     }
