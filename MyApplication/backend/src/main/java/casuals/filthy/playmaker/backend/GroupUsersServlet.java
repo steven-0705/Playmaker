@@ -37,10 +37,6 @@ public class GroupUsersServlet extends HttpServlet {
         int up = Integer.parseInt(upString);
         int down = Integer.parseInt(downString);
 
-
-
-
-
     }
 
 

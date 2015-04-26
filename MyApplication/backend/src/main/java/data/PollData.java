@@ -11,11 +11,8 @@ import java.util.Map;
 /**
  * Created by Chris on 4/14/2015.
  */
-@Entity
 public class PollData extends DataObject {
 
-
-    @Id
     protected long id;
     protected long groupId;
     protected List<String> options;
