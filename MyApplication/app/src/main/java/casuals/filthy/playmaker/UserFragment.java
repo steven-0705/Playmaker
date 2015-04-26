@@ -13,10 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +30,9 @@ import casuals.filthy.playmaker.data.AsyncResponse;
 import casuals.filthy.playmaker.data.DatastoreAdapter;
 import casuals.filthy.playmaker.data.beans.GroupBean;
 import casuals.filthy.playmaker.data.beans.UserBean;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Shane on 3/27/2015.
@@ -71,14 +76,13 @@ private CheckBox checkBox1, checkBox2, checkBox3, checkBox4;
                        public void onClick(DialogInterface dialog, int which) {
                            if (input.getText().toString().matches("")) {
                                Toast.makeText(getActivity().getApplicationContext(), "You did not enter anything", Toast.LENGTH_SHORT).show();
-                           }
-                           else if(input.getText().toString().length() < 3) {
+                           } else if (input.getText().toString().length() < 3) {
                                Toast.makeText(getActivity().getApplicationContext(), "Group name must be at least 3 letters long", Toast.LENGTH_SHORT).show();
-                           }
-                           else {
+                           } else {
                                String temp = input.getText().toString();
                                DatastoreAdapter adapter = new DatastoreAdapter(UserFragment.this);
                                adapter.createGroup(temp, MainActivity.getId());
+
                            }
                        }
                    });
@@ -140,6 +144,13 @@ private CheckBox checkBox1, checkBox2, checkBox3, checkBox4;
                return;
            }
            UserBean user = (UserBean) o;
-
+           List<UserBean.UserGroupBean> groupList = user.getGroups();
+           ListView listView = (ListView) getView().findViewById(R.id.user_group_list);
+           List<String> list = new ArrayList<String>();
+           for(UserBean.UserGroupBean group: groupList) {
+               list.add(group.getName());
+           }
+           ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1, list);
+           listView.setAdapter(arrayAdapter);
        }
 }
