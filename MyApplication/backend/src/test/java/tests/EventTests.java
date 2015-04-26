@@ -66,6 +66,13 @@ public class EventTests {
     public void eventsGetEvent() {
         EventData event = Utils.addEvent(user1.getId(), group1.getId(), "YAY", "flamingos", 1010000, 2, true, 0);
         assertNotNull(Utils.getGroup(group1.getId()).getEvent(event.getId()));
+
+        long id = event.getId();
+        event = Utils.getEvent(user1.getId(), group1.getId(), event.getId());
+
+        assertNotNull(event);
+        assertEquals(id, event.getId());
+        assertEquals(group1.getId(), event.getGroupId());
     }
 
     @Test
@@ -115,16 +122,29 @@ public class EventTests {
     }
 
     @Test
-    public void eventsDateVoting() {
+    public void eventsDateVoting1() {
         List<Long> dates = new ArrayList<Long>();
         dates.add((long) 100000000);
         dates.add((long) 110000000);
         EventData event = Utils.addEvent(user1.getId(), group1.getId(), "things", "soccer", dates, 2, true, System.currentTimeMillis() + 100000);
 
         event = Utils.voteDate(user1.getId(), group1.getId(), event.getId(), 0);
-
-
     }
 
+    @Test
+    public void eventsDateVoting2() throws InterruptedException {
+        List<Long> dates = new ArrayList<Long>();
+        dates.add((long) 100000000);
+        dates.add((long) 110000000);
+        EventData event = Utils.addEvent(user1.getId(), group1.getId(), "things", "soccer", dates, 2, true, System.currentTimeMillis() + 1000);
+
+        event = Utils.voteDate(user1.getId(), group1.getId(), event.getId(), 1);
+
+        synchronized (this) {
+            this.wait(2000);
+        }
+
+        event = Utils.getEvent(user1.getId(), group1.getId(), event.getId());
+    }
 
 }

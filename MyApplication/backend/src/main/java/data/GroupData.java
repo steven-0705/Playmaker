@@ -124,6 +124,15 @@ public class GroupData extends DataObject {
         return notifications;
     }
 
+    public GroupUserDetailed getUserById(String userId) {
+        for (GroupUserDetailed user: users) {
+            if (user.getId().equals(userId))
+                return user;
+        }
+
+        return null;
+    }
+
     /*public static class GroupUserData {
 
         public String name;

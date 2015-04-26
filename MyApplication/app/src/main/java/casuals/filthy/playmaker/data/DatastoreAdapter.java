@@ -45,6 +45,7 @@ public class DatastoreAdapter {
     public static final String SERVLET_USERS = "/users";
     public static final String SERVLET_GROUPS = "/groups";
     public static final String SERVLET_EVENTS = "/groups/events";
+    private static final String SERVLET_GROUP_USERS = "/groups/users";
 
     public Gson gson = new Gson();
     public AsyncResponse caller;
@@ -315,7 +316,27 @@ public class DatastoreAdapter {
         request.execute(post);
     }
 
+    public void reportEventStats(String userId, long groupId, long eventId, List<Integer> ups, List<Integer> downs) {
+        HttpPost post = new HttpPost(SERVER_URL + SERVLET_GROUP_USERS);
 
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("user_id", userId);
+        params.put("group_id", groupId+"");
+        params.put("event_id", eventId+"");
+        params.put("results_up", ups);
+        params.put("results_down", downs);
+        post.setHeader("Content-Type", "application/json");
+        try {
+            post.setEntity(new StringEntity(gson.toJson(params)));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        type = GroupBean.class;
+        ServletHttpAsyncTask request = new ServletHttpAsyncTask();
+        task = request;
+        request.execute(post);
+    }
 
 
     class ServletHttpAsyncTask extends AsyncTask<HttpUriRequest, Void, HttpResponse> {

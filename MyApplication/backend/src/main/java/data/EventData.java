@@ -36,6 +36,7 @@ public class EventData extends DataObject {
     protected boolean closed;
     protected String address;
     protected long closeDate;
+    protected boolean reported = false;
     protected List<String> items;
 
     public EventData() {};
@@ -211,6 +212,10 @@ public class EventData extends DataObject {
         return teams;
     }
 
+    public void setReported(boolean b) {
+        reported = true;
+    }
+
     public static class EventTeam {
         List<String> members;
 
@@ -228,7 +233,9 @@ public class EventData extends DataObject {
             return members.size();
         }
 
-
+        public List<String> getMembers() {
+            return members;
+        }
     }
 
 }

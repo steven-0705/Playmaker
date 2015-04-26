@@ -235,9 +235,22 @@ public class Utils {
         params.put("vote", index);
 
         String resp = Utils.postReq(Utils.EVENTS_URL, params);
-        System.out.println(resp);
+        //System.out.println(resp);
         EventData event = gson.fromJson(resp, EventData.class);
         return event;
     }
 
+    public static EventData getEvent(String userId, long groupId, long eventId) {
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("user_id", userId);
+        params.put("group_id", groupId+"");
+        params.put("event_id", eventId+"");
+
+        String resp = Utils.getReq(Utils.EVENTS_URL, params);
+        //System.out.println(resp);
+        EventData event = gson.fromJson(resp, EventData.class);
+        return event;
+    }
+
+    public static void inviteUser(String userEmail, )
 }
