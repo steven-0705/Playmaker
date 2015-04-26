@@ -10,7 +10,9 @@ public class UserBean extends DataBean{
     protected List<UserGroupBean> groups;
     protected List<Invite> invites;
 
-    private UserBean() {};
+    private UserBean() {
+        groups = new ArrayList<UserGroupBean>();
+    };
 
     public String getId() {
         return id;

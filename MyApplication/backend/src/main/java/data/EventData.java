@@ -54,7 +54,7 @@ public class EventData extends DataObject {
                 options.add(new Date(Math.round(date)).toString());
                 pollMeaning.add(Math.round(date));
             }
-            PollData poll = new PollData(options, 0, groupId);
+            datePoll = new PollData(options, 0, groupId);
         }
 
         this.type = type;
@@ -63,6 +63,11 @@ public class EventData extends DataObject {
         this.name = name;
         this.closeDate = closeDate;
         autoTeams = autogen;
+    }
+
+    public void dateVote(String user, int choice) {
+        if (!closed)
+            datePoll.addVote(user, choice);
     }
 
     public void checkPoll() {
