@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -39,7 +40,7 @@ public class GroupFragment extends Fragment implements AsyncResponse{
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState)
     {
-        DatastoreAdapter dsa = new DatastoreAdapter(GroupFragment.this);
+
         super.onViewCreated(view, savedInstanceState);
         
     }
@@ -51,5 +52,12 @@ public class GroupFragment extends Fragment implements AsyncResponse{
         }
         GroupBean group = (GroupBean) o;
         List<GroupBean.GroupEventData> eventList = group.getEvents();
+        ListView listView = (ListView) getView().findViewById(R.id.user_event_list);
+        List<String> list = new ArrayList<String>();
+        for(GroupBean.GroupEventData event: eventList) {
+            list.add(event.getName());
+        }
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1, list);
+        listView.setAdapter(arrayAdapter);
     }
 }
