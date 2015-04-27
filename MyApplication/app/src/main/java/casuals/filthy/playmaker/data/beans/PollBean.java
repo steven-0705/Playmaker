@@ -22,6 +22,14 @@ public class PollBean extends DataBean {
         return groupId;
     }
 
+    public List<String> getOptions() {
+        return options;
+    }
+
+    public Map<String, Integer> getVotes() {
+        return votes;
+    }
+
     public int[] compile() {
         int[] results = new int[options.size()];
         for (Integer vote: votes.values()) {

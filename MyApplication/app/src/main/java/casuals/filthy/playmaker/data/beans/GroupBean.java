@@ -162,7 +162,7 @@ public class GroupBean extends DataBean {
     public List<Map<String, String>> getRecentNotification() {
         int i = 1;
         int index;
-        SimpleDateFormat format = new SimpleDateFormat("hh:mm a M/dd/yy");
+        SimpleDateFormat format = new SimpleDateFormat("h:mm a M/dd/yy");
         List<Map<String, String>> results = new ArrayList<Map<String, String>>();
         while (i <= 10 && (index=notifications.size() - i) >= 0) {
 

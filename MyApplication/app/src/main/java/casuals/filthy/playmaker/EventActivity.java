@@ -7,19 +7,25 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.security.acl.Group;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import casuals.filthy.playmaker.data.AsyncResponse;
 import casuals.filthy.playmaker.data.DatastoreAdapter;
 import casuals.filthy.playmaker.data.beans.EventBean;
+import casuals.filthy.playmaker.data.beans.PollBean;
 
 /**
  * Created by Steven on 4/25/2015.
@@ -124,21 +130,35 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
         TextView poll_message = (TextView) findViewById(R.id.poll_message);
         //final Button participants = (Button) findViewById(R.id.user_button);
         //final Button items = (Button) findViewById(R.id.item_button);
-        CheckBox poll_option1 = (CheckBox) findViewById(R.id.poll_option1);
-        CheckBox poll_option2 = (CheckBox) findViewById(R.id.poll_option2);
-        CheckBox poll_option3 = (CheckBox) findViewById(R.id.poll_option3);
+        LinearLayout pollView = (LinearLayout) findViewById(R.id.poll);
         TextView event_date = (TextView) findViewById(R.id.event_date);
         TextView event_time = (TextView) findViewById(R.id.event_time);
 
         if(event.isClosed()) {
+            pollView.setVisibility(View.GONE);
             poll_message.setVisibility(View.GONE);
-            poll_option1.setVisibility(View.GONE);
-            poll_option2.setVisibility(View.GONE);
-            poll_option3.setVisibility(View.GONE);
         }
         else {
             event_date.setVisibility(View.GONE);
             event_time.setVisibility(View.GONE);
+
+            pollView.setVisibility(View.VISIBLE);
+            pollView.removeAllViews();
+            SimpleDateFormat format = new SimpleDateFormat("h:mm a M/dd/yy");
+
+            String[] opts = new String[event.getPollMeaning().size()];
+            for (int i = 0; i < opts.length; i++)
+                opts[i] = format.format(new Date(event.getPollMeaning().get(i)));
+
+            ListView options = new ListView(this);
+            options.setAdapter(new ArrayAdapter<String>(this,
+                    android.R.layout.simple_list_item_single_choice,
+                    android.R.id.text1, opts));
+            options.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            options.setLayoutParams(lp);
+
+            pollView.addView(options);
         }
 
         if (!event.isReported())
@@ -167,7 +187,7 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
             for (EventBean.EventTeam team: event.getTeams()) {
                 t++;
                 TextView entry = new TextView(EventActivity.this);
-                entry.setText("Team " + t);
+                entry.setText("    Team " + t);
                 entry.setTextSize(32);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 entry.setLayoutParams(lp);
