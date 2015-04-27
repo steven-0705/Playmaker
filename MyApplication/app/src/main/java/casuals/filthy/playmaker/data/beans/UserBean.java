@@ -12,6 +12,7 @@ public class UserBean extends DataBean{
 
     private UserBean() {
         groups = new ArrayList<UserGroupBean>();
+        invites = new ArrayList<Invite>();
     };
 
     public String getId() {
