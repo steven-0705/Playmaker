@@ -80,9 +80,6 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
         progress.setMessage("Retrieving your data...");
         progress.show();
 
-        DatastoreAdapter adapter = new DatastoreAdapter(this);
-        adapter.getGroup(GroupActivity.getGroupId());
-
         viewpager = (CustomViewPager) findViewById(R.id.custompager);
         ft = new FragmentPageAdapter(getSupportFragmentManager());
         actionbar = getActionBar();
@@ -114,6 +111,9 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
                 checkforSignOut();
             }
         });
+
+        DatastoreAdapter adapter = new DatastoreAdapter(this);
+        adapter.getGroup(GroupActivity.getGroupId());
 
     }
 
@@ -235,6 +235,29 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
                     DatastoreAdapter adapter = new DatastoreAdapter(null);
                     adapter.inviteUser(groupId, input.getText().toString(), userName);
                     Toast.makeText(getApplicationContext(), "Invitation Sent", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        alert.show();
+    }
+
+    public void sendNotification(View v) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
+        final EditText input= new EditText(v.getContext());
+        input.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        input.setSingleLine();
+        alert.setTitle("Your Message:");
+        alert.setView(input);
+        alert.setPositiveButton("Send", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (input.getText().toString().length() < 4) {
+                    Toast.makeText(getApplicationContext(), "Message too short", Toast.LENGTH_SHORT).show();
+                } else {
+                    String temp = input.getText().toString();
+                    DatastoreAdapter adapter = new DatastoreAdapter(GroupActivity.this);
+                    adapter.sendNotification(groupId, input.getText().toString(), userName, getUserId());
+                    Toast.makeText(getApplicationContext(), "Message Sent", Toast.LENGTH_SHORT).show();
                 }
             }
         });

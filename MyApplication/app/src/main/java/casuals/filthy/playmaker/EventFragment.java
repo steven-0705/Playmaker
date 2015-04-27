@@ -76,12 +76,21 @@ public class EventFragment extends Fragment implements AsyncResponse{
         if (getView() == null)
             return;
         ListView listView = (ListView) getView().findViewById(R.id.group_event_list);
+        TextView name = (TextView) getView().findViewById(R.id.group_name);
+        name.setText(group.getName());
         List<String> list = new ArrayList<String>();
         List<Long> idList = new ArrayList<Long>();
         for(GroupBean.GroupEventData event: eventList) {
             list.add(event.getName());
             idList.add(event.getEventId());
         }
+
+        if (list.size() == 0) {
+            ((TextView) getView().findViewById(R.id.np_events_text)).setVisibility(View.VISIBLE);
+        } else {
+            ((TextView) getView().findViewById(R.id.np_events_text)).setVisibility(View.GONE);
+        }
+
         GroupActivity.setEventIds(idList);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1, list);
         listView.setAdapter(arrayAdapter);

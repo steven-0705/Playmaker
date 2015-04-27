@@ -36,8 +36,9 @@ public class GroupsServlet extends HttpServlet {
         // get the parameters
         String userId = (String) params.get("user_id");//req.getParameter("user_id");
         String groupName = (String) params.get("group_name");//req.getParameter("group_name");
+        String action = (String) params.get("action");
 
-        if (userId == null || groupName == null) {
+        if (userId == null) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing user_id or group_name");
             return;
         }
@@ -49,11 +50,34 @@ public class GroupsServlet extends HttpServlet {
             return;
         }
 
+        GroupData group;
 
-        long id = DatastoreServiceFactory.getDatastoreService().allocateIds("group", 1).getStart().getId();
-        GroupData group = new GroupData(id, groupName);
-        group.addAdmin(user);
-        user.addGroup(group);
+        if (action != null && action.equals("notify")) {
+            String groupIdString = (String) params.get("group_id");
+            String userName = (String) params.get("user_name");
+            String message = (String) params.get("message");
+            if (groupIdString == null || userName == null || message == null) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing fields");
+                return;
+            }
+            long groupId = Long.parseLong(groupIdString);
+
+            group = ofy().load().type(GroupData.class).id(groupId).now();
+            if (group == null) {
+                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "group not found");
+                return;
+            }
+
+            group.addNotification(userName, message);
+
+        }
+        else {
+            // create a new group
+            long id = DatastoreServiceFactory.getDatastoreService().allocateIds("group", 1).getStart().getId();
+            group = new GroupData(id, groupName);
+            group.addAdmin(user);
+            user.addGroup(group);
+        }
 
         // put the data back
         ofy().save().entities(user, group).now();
