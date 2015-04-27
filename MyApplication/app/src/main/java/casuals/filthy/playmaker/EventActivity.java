@@ -253,6 +253,9 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
 
     public void reportScores(View v) {
         // TODO make intent
+        Intent i = new Intent(EventActivity.this.getApplicationContext(), StatsActivity.class);
+        i.putExtra("EVENT_ID", event.getId());
+        startActivity(i);
     }
 }
 

@@ -196,18 +196,22 @@ public class EventCreate extends Activity implements AsyncResponse{
                     }, mHour, mMin, false);
                     TimePicker.setTitle("Select Time");
                     DatePicker = new DatePickerDialog(v.getContext(), new DatePickerDialog.OnDateSetListener() {
-                        public void onDateSet(android.widget.DatePicker datepicker, int year, int month, int day) {
+                        public void onDateSet(DatePicker datepicker, int year, int month, int day) {
                             // TODO Auto-generated method stub
-                            month = month + 1;
-                            String temp = "" + month + "/" + day + "/" + year;
-                            for (int i = 0; i < date.length; i++) { // This loop and these checks are necessary because Android is dumb and detects a single Click twice
-                                if (date[i].matches("")) {
-                                    date[i] = (temp);
-                                    TimePicker.show();
-                                    break;
-                                }
-                                if (date[i].matches(temp)) {
-                                    break;
+                            if(datepicker.isShown()) {
+                                month = month + 1;
+                                String temp = "" + month + "/" + day + "/" + year;
+                                for (int i = 0; i < date.length; i++) { // This loop and these checks are necessary because Android is dumb and detects a single Click twice
+                                    if (date[i].matches("")) {
+                                        date[i] = (temp);
+                                        TimePicker.show();
+                                        break;
+                                    }
+                                    /*
+                                    if (date[i].matches(temp)) {
+                                        break;
+                                    }
+                                    */
                                 }
                             }
                         }
@@ -331,6 +335,7 @@ public class EventCreate extends Activity implements AsyncResponse{
                 np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
                     @Override
                     public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                        Log.w("Numteam1: ", String.valueOf(newVal));
                         numTeam=newVal;
                     }
                 });
@@ -344,7 +349,7 @@ public class EventCreate extends Activity implements AsyncResponse{
                         teamEnabled.setChecked(false);
                         popupWindow.dismiss();
                     }
-                });
+            });
                 Button btnDismiss = (Button)popupView.findViewById(R.id.confirm);
                 btnDismiss.setOnClickListener(new Button.OnClickListener(){
                     @Override
@@ -353,7 +358,8 @@ public class EventCreate extends Activity implements AsyncResponse{
                         popupWindow.dismiss();
                         autoTeamEnabled.setEnabled(true);
                         autoText.setEnabled(true);
-
+                        if (numTeam == 0)
+                                numTeam = 2;
 
                     }});
                 popupWindow.showAtLocation(buttonView.getRootView(), Gravity.CENTER, 0, 0);
