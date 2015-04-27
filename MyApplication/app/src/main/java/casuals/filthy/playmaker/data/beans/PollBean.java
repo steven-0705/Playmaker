@@ -9,8 +9,8 @@ public class PollBean extends DataBean {
 
     protected long id;
     protected long groupId;
-    protected List<String> options;
-    protected Map<String, Integer> votes;
+    protected List<String> options = new ArrayList<String>();
+    protected Map<String, Integer> votes = new HashMap<String,Integer>();
 
     public PollBean() {};
 
@@ -20,6 +20,14 @@ public class PollBean extends DataBean {
 
     public long getGroupId() {
         return groupId;
+    }
+
+    public List<String> getOptions() {
+        return options;
+    }
+
+    public Map<String, Integer> getVotes() {
+        return votes;
     }
 
     public int[] compile() {

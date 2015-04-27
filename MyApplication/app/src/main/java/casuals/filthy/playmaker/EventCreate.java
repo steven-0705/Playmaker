@@ -66,17 +66,29 @@ public class EventCreate extends Activity implements AsyncResponse{
     double latitude;
     double longitude;
     static int numTeam = 0;
-    GroupBean gb = new GroupBean();
+    static boolean teamAuto = false;
     List<Address> geocodeMatches = null;
     private MapView mapView;
     private GoogleMap gMap;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        Bundle extras = getIntent().getExtras();
+        String[] items = new String[extras == null ? 1 : extras.size()+1];
+        if(extras != null) {
+            for(int i = 0; i<extras.size(); i++)
+            {
+                String item = extras.getString("EVENT_TYPE_"+i);
+                item = ((char) (item.charAt(0) - 32)) + item.substring(1);
+                items[i] = item;
+            }
+        }
+        items[extras == null ? 0 : extras.size()] = "Add New Event Type";
         setContentView(R.layout.events);
-        List<String> eventHist = gb.getEventTypes(); // this requests a history of event types from group bean
+
         Spinner dropdown = (Spinner) findViewById(R.id.spinner1);
-        String[] items = new String[]{"Basketball", "Baseball", "LAN Party", "Add New Event Type"};
+
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, items);
         dropdown.setAdapter(adapter);
         mapView = new MapView(this.getApplicationContext());
@@ -98,12 +110,13 @@ public class EventCreate extends Activity implements AsyncResponse{
         final String[] miltime = new String[3];
         final String[] hourAndMin = new String[2];
         final Spinner getOption = (Spinner) findViewById(R.id.spinner1);
-        getTime.setEnabled(false);
         itemList.setEnabled(false);
         getOther.setEnabled(false);
         getTeam.setEnabled(false);
 
         final Switch teamEnabled = (Switch) findViewById(R.id.switch2);
+        final Switch autoTeamEnabled = (Switch) findViewById(R.id.autoEnable);
+        final TextView autoText = (TextView) findViewById(R.id.AutoGenerateTeamText);
 
         for (int i=0; i<date.length; i++) {
             date[i] = "";
@@ -183,18 +196,22 @@ public class EventCreate extends Activity implements AsyncResponse{
                     }, mHour, mMin, false);
                     TimePicker.setTitle("Select Time");
                     DatePicker = new DatePickerDialog(v.getContext(), new DatePickerDialog.OnDateSetListener() {
-                        public void onDateSet(android.widget.DatePicker datepicker, int year, int month, int day) {
+                        public void onDateSet(DatePicker datepicker, int year, int month, int day) {
                             // TODO Auto-generated method stub
-                            month = month + 1;
-                            String temp = "" + month + "/" + day + "/" + year;
-                            for (int i = 0; i < date.length; i++) { // This loop and these checks are necessary because Android is dumb and detects a single Click twice
-                                if (date[i].matches("")) {
-                                    date[i] = (temp);
-                                    TimePicker.show();
-                                    break;
-                                }
-                                if (date[i].matches(temp)) {
-                                    break;
+                            if(datepicker.isShown()) {
+                                month = month + 1;
+                                String temp = "" + month + "/" + day + "/" + year;
+                                for (int i = 0; i < date.length; i++) { // This loop and these checks are necessary because Android is dumb and detects a single Click twice
+                                    if (date[i].matches("")) {
+                                        date[i] = (temp);
+                                        TimePicker.show();
+                                        break;
+                                    }
+                                    /*
+                                    if (date[i].matches(temp)) {
+                                        break;
+                                    }
+                                    */
                                 }
                             }
                         }
@@ -214,6 +231,18 @@ public class EventCreate extends Activity implements AsyncResponse{
                     String [] items = itemList.getText().toString().split(", ");
                     EditText edittext = (EditText) findViewById(R.id.edittext2);
                     String location = edittext.getText().toString();
+                    if(location.isEmpty())
+                    {
+                        Toast.makeText(getApplicationContext(), "Please Enter a Location", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if(nameOfEvent.getText().toString().isEmpty())
+                    {
+                        Toast.makeText(getApplicationContext(), "Please Enter Title of Event", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     int numdates = 0;
 
                     for (int k = 0; k < items.length; k++) {
@@ -229,8 +258,13 @@ public class EventCreate extends Activity implements AsyncResponse{
                     for (int i = 0; i < numdates; i++) {
                         String[] tempdate = date[i].split("/");
                         String[] temptime = miltime[i].split(":");
-                        Date eventdate = new Date(Integer.parseInt(tempdate[2]), Integer.parseInt(tempdate[0]), Integer.parseInt(tempdate[1]), Integer.parseInt(temptime[0]), Integer.parseInt(temptime[1]));
+                        Date eventdate = new Date(Integer.parseInt(tempdate[2]), Integer.parseInt(tempdate[0]) - 1, Integer.parseInt(tempdate[1]), Integer.parseInt(temptime[0]), Integer.parseInt(temptime[1]));
                         EventDates.add(eventdate);
+                    }
+                    if(EventDates.isEmpty())
+                    {
+                        Toast.makeText(getApplicationContext(), "Please Enter Dates", Toast.LENGTH_SHORT).show();
+                        return;
                     }
                     Collections.sort(EventDates);
                     for(int i = 0; i<EventDates.size(); i++)
@@ -240,11 +274,18 @@ public class EventCreate extends Activity implements AsyncResponse{
                     Log.w("ListLen: ", Integer.toString(EventDates.size()));
                     DatastoreAdapter dsa = new DatastoreAdapter(EventCreate.this);
 
+
+
                     if (getOption.getSelectedItem().toString() == "Add New Event Type") {
-                        dsa.createEvent(GroupActivity.getUserId(), GroupActivity.getGroupId(), nameOfEvent.getText().toString(),  getOther.getText().toString(), (EventTimes.get(0)-(24*60*60*1000)), location,false,0,EventTimes, getItems);
+                        if(getOther.getText().toString().isEmpty())
+                        {
+                            Toast.makeText(getApplicationContext(), "Please Enter New Event Type", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        dsa.createEvent(GroupActivity.getUserId(), GroupActivity.getGroupId(), nameOfEvent.getText().toString(),  getOther.getText().toString(), (EventTimes.get(0)-(24*60*60*1000)), location,true /*teamAuto*/,numTeam,EventTimes, getItems);
 
                     } else {
-                        dsa.createEvent(GroupActivity.getUserId(), GroupActivity.getGroupId(), nameOfEvent.getText().toString(), getOption.getSelectedItem().toString(), (EventTimes.get(0) - (24 * 60 * 60 * 1000)), location, false, 0, EventTimes, getItems);
+                        dsa.createEvent(GroupActivity.getUserId(), GroupActivity.getGroupId(), nameOfEvent.getText().toString(), getOption.getSelectedItem().toString(), (EventTimes.get(0) - (24 * 60 * 60 * 1000)), location, true /*teamAuto*/, numTeam, EventTimes, getItems);
                     }
                     finish();
                 }
@@ -294,6 +335,7 @@ public class EventCreate extends Activity implements AsyncResponse{
                 np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
                     @Override
                     public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                        Log.w("Numteam1: ", String.valueOf(newVal));
                         numTeam=newVal;
                     }
                 });
@@ -307,14 +349,17 @@ public class EventCreate extends Activity implements AsyncResponse{
                         teamEnabled.setChecked(false);
                         popupWindow.dismiss();
                     }
-                });
+            });
                 Button btnDismiss = (Button)popupView.findViewById(R.id.confirm);
                 btnDismiss.setOnClickListener(new Button.OnClickListener(){
                     @Override
                     public void onClick(View v) {
                         // TODO Auto-generated method stub
                         popupWindow.dismiss();
-
+                        autoTeamEnabled.setEnabled(true);
+                        autoText.setEnabled(true);
+                        if (numTeam == 0)
+                                numTeam = 2;
 
                     }});
                 popupWindow.showAtLocation(buttonView.getRootView(), Gravity.CENTER, 0, 0);
@@ -323,7 +368,27 @@ public class EventCreate extends Activity implements AsyncResponse{
             else
             {
                 numTeam=0;
+                autoTeamEnabled.setEnabled(false);
+                autoText.setEnabled(false);
+                autoTeamEnabled.setChecked(false);
+                teamAuto = false;
             }
+        }
+    });
+
+    autoTeamEnabled.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            if(isChecked)
+            {
+                teamAuto = true;
+            }
+            else
+            {
+                teamAuto = false;
+            }
+
+
         }
     });
 
