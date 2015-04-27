@@ -3,6 +3,7 @@ package casuals.filthy.playmaker;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,15 +14,19 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import casuals.filthy.playmaker.data.AsyncResponse;
 import casuals.filthy.playmaker.data.DatastoreAdapter;
 import casuals.filthy.playmaker.data.beans.EventBean;
+import casuals.filthy.playmaker.data.beans.PollBean;
 
 /**
  * Created by Steven on 4/25/2015.
  */
 public class EventActivity extends BaseActivity implements AsyncResponse {
-    private boolean eventCompleted;
+    private boolean eventCompleted = true;
     private long eventId;
     private ProgressDialog progress;
 
@@ -45,8 +50,6 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
         setContentView(R.layout.events_page);
         final TextView event_date = (TextView) findViewById(R.id.event_date);
         final TextView event_time = (TextView) findViewById(R.id.event_time);
-        final TextView event_name = (TextView) findViewById(R.id.event_name);
-        final TextView event_type = (TextView) findViewById(R.id.event_type);
         final TextView poll_message = (TextView) findViewById(R.id.poll_message);
         final Button participants = (Button) findViewById(R.id.user_button);
         final Button items = (Button) findViewById(R.id.item_button);
@@ -113,9 +116,31 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
         EventBean event = (EventBean) o;
         TextView event_name = (TextView) findViewById(R.id.event_name);
         TextView event_type = (TextView) findViewById(R.id.event_type);
+        TextView event_date = (TextView) findViewById(R.id.event_date);
+        TextView event_time = (TextView) findViewById(R.id.event_time);
         event_name.setText(event.getName());
         event_type.setText(event.getType());
+        Date date = new Date(event.getDate());
+        SimpleDateFormat dateformat = new SimpleDateFormat("M/dd/yy");
+        SimpleDateFormat timeformat = new SimpleDateFormat("h:mm a");
+        String dateString = dateformat.format(date);
+        String timeString = timeformat.format(date);
+        if(timeString.charAt(0) == '0') { timeString.substring(1); }
+        event_date.setText("Date: " + dateString);
+        event_time.setText("Time: " + timeString);
 
         progress.dismiss();
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+

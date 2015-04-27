@@ -228,7 +228,7 @@ public class EventCreate extends Activity implements AsyncResponse{
                     for (int i = 0; i < numdates; i++) {
                         String[] tempdate = date[i].split("/");
                         String[] temptime = miltime[i].split(":");
-                        Date eventdate = new Date(Integer.parseInt(tempdate[2]), Integer.parseInt(tempdate[0]), Integer.parseInt(tempdate[1]), Integer.parseInt(temptime[0]), Integer.parseInt(temptime[1]));
+                        Date eventdate = new Date(Integer.parseInt(tempdate[2]), Integer.parseInt(tempdate[0]) - 1, Integer.parseInt(tempdate[1]), Integer.parseInt(temptime[0]), Integer.parseInt(temptime[1]));
                         EventDates.add(eventdate);
                     }
                     Collections.sort(EventDates);
