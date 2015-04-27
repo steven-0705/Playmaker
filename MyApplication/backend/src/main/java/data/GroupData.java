@@ -38,6 +38,9 @@ public class GroupData extends DataObject {
                 return;
         }
         users.add(new GroupUserDetailed(user));
+
+        // make a notification
+        addNotification(getName() , user.getName()+ " has joined the group");
     }
 
     public void addAdmin(UserData user) {
@@ -51,7 +54,7 @@ public class GroupData extends DataObject {
         addEventType(event.getType());
 
         // make a notification
-        addNotification("Group" ,"Event '" + event.getName()+ "' of type '" + event.getType() + "' was created.");
+        addNotification(getName() ,"Event '" + event.getName()+ "' of type '" + event.getType() + "' was created.");
     }
 
     public boolean isUserAdmin(String userId) {
@@ -76,7 +79,8 @@ public class GroupData extends DataObject {
         if (eventTypes == null) {
             eventTypes = new ArrayList<String>();
         }
-        eventTypes.add(type);
+        if (!eventTypes.contains(type))
+            eventTypes.add(type);
     }
 
     public PollData getPoll(long id) {
