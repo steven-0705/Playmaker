@@ -2,6 +2,7 @@ package casuals.filthy.playmaker;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -218,6 +219,9 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
 
     public void reportScores(View v) {
         // TODO make intent
+        Intent i = new Intent(EventActivity.this.getApplicationContext(), StatsActivity.class);
+        i.putExtra("EVENT_ID", event.getId());
+        startActivity(i);
     }
 }
 
