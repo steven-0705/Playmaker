@@ -335,6 +335,7 @@ public class EventCreate extends Activity implements AsyncResponse{
                 np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
                     @Override
                     public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                        Log.w("Numteam1: ", String.valueOf(newVal));
                         numTeam=newVal;
                     }
                 });
@@ -348,7 +349,7 @@ public class EventCreate extends Activity implements AsyncResponse{
                         teamEnabled.setChecked(false);
                         popupWindow.dismiss();
                     }
-                });
+            });
                 Button btnDismiss = (Button)popupView.findViewById(R.id.confirm);
                 btnDismiss.setOnClickListener(new Button.OnClickListener(){
                     @Override
@@ -357,7 +358,8 @@ public class EventCreate extends Activity implements AsyncResponse{
                         popupWindow.dismiss();
                         autoTeamEnabled.setEnabled(true);
                         autoText.setEnabled(true);
-
+                        if (numTeam == 0)
+                                numTeam = 2;
 
                     }});
                 popupWindow.showAtLocation(buttonView.getRootView(), Gravity.CENTER, 0, 0);
