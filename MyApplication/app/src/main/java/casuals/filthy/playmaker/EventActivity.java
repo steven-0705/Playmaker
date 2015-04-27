@@ -1,5 +1,6 @@
 package casuals.filthy.playmaker;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -22,6 +23,7 @@ import casuals.filthy.playmaker.data.beans.EventBean;
 public class EventActivity extends BaseActivity implements AsyncResponse {
     private boolean eventCompleted;
     private long eventId;
+    private ProgressDialog progress;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,13 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
         if(extras != null) {
             eventId = extras.getLong("EVENT_ID");
         }
+
+        setContentView(R.layout.activity_main);
+        progress = new ProgressDialog(this);
+        progress.setTitle("Loading");
+        progress.setMessage("Retrieving your data...");
+        progress.show();
+
         DatastoreAdapter adapter = new DatastoreAdapter(this);
         adapter.getEvent(GroupActivity.getGroupId(), eventId);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -106,5 +115,7 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
         TextView event_type = (TextView) findViewById(R.id.event_type);
         event_name.setText(event.getName());
         event_type.setText(event.getType());
+
+        progress.dismiss();
     }
 }
