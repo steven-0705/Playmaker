@@ -9,7 +9,7 @@ public class EventBean extends DataBean {
 
     protected long id;
     protected long date;
-    protected PollBean datePoll;
+    protected PollBean datePoll = new PollBean();
     protected List<Long> pollMeaning = new ArrayList<Long>();
     protected String type;
     protected String description = "No description available";
