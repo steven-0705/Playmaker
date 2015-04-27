@@ -18,6 +18,17 @@
         android:layout_below="@+id/group_name"
         android:layout_centerHorizontal="true"
         android:layout_above="@+id/eventCreate" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="There are no upcoming events"
+        android:id="@+id/np_events_text"
+        android:layout_marginTop="@dimen/abc_search_view_text_min_width"
+        android:layout_centerHorizontal="true"
+        android:textSize="20sp"
+        android:visibility="gone"/>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
