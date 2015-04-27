@@ -41,16 +41,6 @@ public class StatsActivity extends Activity implements AsyncResponse{
         }
         DatastoreAdapter dsa = new DatastoreAdapter(this);
         dsa.getEvent(GroupActivity.getGroupId(), EventId);
-        int numteams = 0;
-        /*numteams = event.getNumTeams();
-        Log.w("NumTeams: ", String.valueOf(numteams));*/
-        LinearLayout ll = (LinearLayout) findViewById(R.id.LinearLayout1);
-        /*for (int i = 0; i < 30; i++) {
-            TextView tv = new TextView(StatsActivity.this);
-            tv.setText("Dynamic layouts ftw!");
-            tv.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
-            ll.addView(tv);;
-        }*/
     }
 
     @Override
