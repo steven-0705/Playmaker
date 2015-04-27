@@ -245,7 +245,6 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
         AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
         final EditText input= new EditText(v.getContext());
         input.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        input.setSingleLine();
         alert.setTitle("Your Message:");
         alert.setView(input);
         alert.setPositiveButton("Send", new DialogInterface.OnClickListener() {
@@ -262,6 +261,10 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
             }
         });
         alert.show();
+    }
+
+    public void showMembers(View v) {
+
     }
 
 }

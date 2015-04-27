@@ -4,7 +4,7 @@
     android:orientation="horizontal">
 
 
-    <TextView
+    <!--<TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Group Name"
@@ -12,17 +12,17 @@
         android:layout_alignParentTop="true"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:textSize="30sp" />
+        android:textSize="30sp" />-->
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Notifications"
         android:id="@+id/notification_text"
-        android:layout_below="@id/group_name"
-        android:layout_marginTop="20dp"
         android:textSize="24sp"
-        android:layout_marginLeft="10dp"/>
+        android:layout_below="@+id/members_button"
+        android:layout_alignRight="@+id/inviteMember"
+        android:layout_alignEnd="@+id/inviteMember" />
 
     <View
         android:layout_width="fill_parent"
@@ -58,5 +58,31 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Members ()"
+        android:id="@+id/members_button"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:textStyle="bold"
+        android:textSize="24sp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:clickable="true"
+        android:onClick="showMembers"
+        android:textColor="@color/wallet_link_text_light" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:id="@+id/buttons_line"
+        android:background="@android:color/darker_gray"
+        android:textColor="@color/wallet_link_text_light"
+        android:layout_above="@+id/inviteMember"
+        android:layout_alignRight="@+id/notify"
+        android:layout_alignEnd="@+id/notify" />
 
 </RelativeLayout>

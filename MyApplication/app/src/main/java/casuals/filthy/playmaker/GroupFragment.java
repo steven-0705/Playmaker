@@ -14,6 +14,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListAdapter;
@@ -67,11 +68,13 @@ public class GroupFragment extends Fragment implements AsyncResponse{
         if (group == null || getView() == null)
             return;
 
-        ((TextView) getView().findViewById(R.id.group_name)).setText(group.getName());
+        //((TextView) getView().findViewById(R.id.group_name)).setText(group.getName());
         ListView notifications = (ListView) getView().findViewById(R.id.notifications);
         List<Map<String, String>> notificationList = group.getRecentNotification();
         ListAdapter notificationsAdapter = new SimpleAdapter(getActivity().getBaseContext(), notificationList, R.layout.notification_view, from, to);
         notifications.setAdapter(notificationsAdapter);
+
+        ((Button)getView().findViewById(R.id.members_button)).setText("Members ("+group.getUsers().size()+")");
 
     }
 

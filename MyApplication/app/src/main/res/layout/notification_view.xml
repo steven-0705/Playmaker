@@ -26,9 +26,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Name"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textAppearance="?android:attr/textAppearanceSmall"
         android:layout_alignParentRight="true"
-        android:textStyle="italic"
+        android:textStyle="bold"
         android:layout_below="@id/notify_filler"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"/>

@@ -150,9 +150,9 @@ public class GroupBean extends DataBean {
     public List<Map<String, String>> getRecentNotification() {
         int i = 1;
         int index;
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm MM/dd/yy");
+        SimpleDateFormat format = new SimpleDateFormat("hh:mm a M/dd/yy");
         List<Map<String, String>> results = new ArrayList<Map<String, String>>();
-        while (i < 5 && (index=notifications.size() - i) >= 0) {
+        while (i <= 10 && (index=notifications.size() - i) >= 0) {
 
             HashMap<String, String> value = new HashMap<String, String>();
             value.put("MESSAGE", notifications.get(index).getBody());
