@@ -230,6 +230,8 @@ public class GroupData extends DataObject {
         public String body;
         public long date;
 
+        public Notification() {};
+
         public Notification(String name, long date, String body) {
             this.name = name;
             this.date = date;

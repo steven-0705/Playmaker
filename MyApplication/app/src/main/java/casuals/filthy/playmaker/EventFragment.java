@@ -30,7 +30,6 @@ import casuals.filthy.playmaker.data.beans.GroupBean;
 public class EventFragment extends Fragment implements AsyncResponse{
 
     private GroupBean group;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -46,6 +45,12 @@ public class EventFragment extends Fragment implements AsyncResponse{
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity().getApplicationContext(), EventCreate.class);
+                List<String> eventTypes = group.getEventTypes();
+                int index = 0;
+                for(String type: eventTypes) {
+                    i.putExtra("EVENT_TYPE_" + index, type);
+                    index++;
+                }
                 startActivity(i);
             }
         });
@@ -98,6 +103,7 @@ public class EventFragment extends Fragment implements AsyncResponse{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Long eventId = GroupActivity.getEventIds().get(position);
+                group.getEventTypes();
                 Intent i = new Intent(getActivity().getApplicationContext(), EventActivity.class);
                 i.putExtra("EVENT_ID", eventId);
                 startActivity(i);

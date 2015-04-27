@@ -1,6 +1,7 @@
 package casuals.filthy.playmaker.data.beans;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,18 +10,18 @@ public class EventBean extends DataBean {
     protected long id;
     protected long date;
     protected PollBean datePoll;
-    protected List<Long> pollMeaning;
+    protected List<Long> pollMeaning = new ArrayList<Long>();
     protected String type;
     protected String description = "No description available";
-    protected Map<String, String> attending;
+    protected Map<String, String> attending = new HashMap<String, String>();
     protected long groupId;
     protected int numTeams = 2;
-    protected List<EventTeam> teams;
+    protected List<EventTeam> teams = new ArrayList<EventTeam>();
     protected boolean autoTeams = true;
     protected boolean closed;
     protected String address;
     protected long closeDate;
-    protected List<String> items;
+    protected List<String> items = new ArrayList<String>();
     protected boolean reported;
 
     public boolean isClosed() {
@@ -96,16 +97,12 @@ public class EventBean extends DataBean {
             members = new ArrayList<String>();
         }
 
-        public void add(String member) {
-            if (members == null)
-                members = new ArrayList<String>();
-            members.add(member);
-        }
-
         public int size() {
             return members.size();
         }
 
-
+        public List<String> getMembers() {
+            return members;
+        }
     }
 }
