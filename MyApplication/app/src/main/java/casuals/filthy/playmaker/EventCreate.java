@@ -196,18 +196,22 @@ public class EventCreate extends Activity implements AsyncResponse{
                     }, mHour, mMin, false);
                     TimePicker.setTitle("Select Time");
                     DatePicker = new DatePickerDialog(v.getContext(), new DatePickerDialog.OnDateSetListener() {
-                        public void onDateSet(android.widget.DatePicker datepicker, int year, int month, int day) {
+                        public void onDateSet(DatePicker datepicker, int year, int month, int day) {
                             // TODO Auto-generated method stub
-                            month = month + 1;
-                            String temp = "" + month + "/" + day + "/" + year;
-                            for (int i = 0; i < date.length; i++) { // This loop and these checks are necessary because Android is dumb and detects a single Click twice
-                                if (date[i].matches("")) {
-                                    date[i] = (temp);
-                                    TimePicker.show();
-                                    break;
-                                }
-                                if (date[i].matches(temp)) {
-                                    break;
+                            if(datepicker.isShown()) {
+                                month = month + 1;
+                                String temp = "" + month + "/" + day + "/" + year;
+                                for (int i = 0; i < date.length; i++) { // This loop and these checks are necessary because Android is dumb and detects a single Click twice
+                                    if (date[i].matches("")) {
+                                        date[i] = (temp);
+                                        TimePicker.show();
+                                        break;
+                                    }
+                                    /*
+                                    if (date[i].matches(temp)) {
+                                        break;
+                                    }
+                                    */
                                 }
                             }
                         }
