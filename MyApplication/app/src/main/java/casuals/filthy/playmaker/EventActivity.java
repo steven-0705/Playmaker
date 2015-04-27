@@ -32,7 +32,6 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
         if(extras != null) {
             eventId = extras.getLong("EVENT_ID");
         }
-
         setContentView(R.layout.activity_main);
         progress = new ProgressDialog(this);
         progress.setTitle("Loading");
