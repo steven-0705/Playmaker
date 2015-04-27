@@ -70,6 +70,16 @@ public class GroupsServlet extends HttpServlet {
 
             group.addNotification(userName, message);
 
+            ofy().save().entities(group).now();
+
+            // respond
+            String groupJson = gson.toJson(group);
+            resp.setStatus(HttpServletResponse.SC_OK);
+            resp.setContentType("application/json");
+            resp.getWriter().write(groupJson);
+            resp.getWriter().flush();
+            resp.getWriter().close();
+
         }
         else {
             // create a new group

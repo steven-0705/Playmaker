@@ -5,6 +5,7 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.security.acl.Group;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -87,6 +88,16 @@ public class GroupTests {
         group = Utils.getGroup(group.getId());
         assertEquals(group.getUsers().size(), 5);
 
+    }
+
+    @Test
+    public void groupsNotificationCreation() {
+        GroupData group = Utils.addGroup(user1.getId(), "notifyGroup");
+        int notes = group.getNotifications().size();
+
+        group = Utils.sendNotification("MESSAGE", group.getId(), user1.getName(), user1.getId());
+
+        assertEquals(notes + 1, group.getNotifications().size());
     }
 
 

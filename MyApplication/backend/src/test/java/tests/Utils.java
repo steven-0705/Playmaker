@@ -271,4 +271,18 @@ public class Utils {
 
         String resp = Utils.postReq(Utils.USERS_URL, params);
     }
+
+    public static GroupData sendNotification(String message, long groupId, String userName, String userId) {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("user_id", userId);
+        params.put("user_name", userName);
+        params.put("group_id", groupId+"");
+        params.put("message", message);
+        params.put("action", "notify");
+
+        String resp = Utils.postReq(Utils.GROUPS_URL, params);
+        System.out.println(resp);
+        GroupData group = gson.fromJson(resp, GroupData.class);
+        return group;
+    }
 }
