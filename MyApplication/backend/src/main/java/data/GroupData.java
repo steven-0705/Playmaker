@@ -178,6 +178,7 @@ public class GroupData extends DataObject {
         public long date;
         public long eventId;
         public String type;
+        protected boolean reported = false;
 
         public GroupEventData() {};
 
@@ -217,6 +218,10 @@ public class GroupData extends DataObject {
 
         public void setEventId(long eventId) {
             this.eventId = eventId;
+        }
+
+        public void reported() {
+            reported = true;
         }
     }
 

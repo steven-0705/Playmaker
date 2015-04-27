@@ -95,7 +95,8 @@
         android:layout_height="1dp"
         android:layout_below="@id/edittext1"
         android:background="@android:color/background_dark"
-        android:id="@+id/button" />
+        android:id="@+id/button"
+        android:layout_marginBottom="10dp" />
 
 
 
@@ -128,7 +129,8 @@
         android:layout_below="@id/switch2"
         android:background="@android:color/background_dark"
         android:layout_marginTop="15dp"
-        android:id="@+id/buffer" />
+        android:id="@+id/buffer"
+        android:layout_marginBottom="10dp" />
 
     <Button
         android:id="@+id/button1"
@@ -158,7 +160,8 @@
         android:layout_height="1dp"
         android:layout_below="@id/EditTime"
         android:layout_marginTop="10dp"
-        android:background="@android:color/background_dark"/>
+        android:background="@android:color/background_dark"
+        android:layout_marginBottom="10dp" />
     <Button
         android:id="@+id/additem"
         android:layout_marginTop="20dp"
@@ -224,7 +227,8 @@
         android:layout_alignParentStart="true"
         android:layout_toLeftOf="@+id/view"
         android:layout_toStartOf="@+id/view"
-        android:singleLine="true"/>
+        android:singleLine="true"
+        android:layout_marginBottom="10dp" />
 
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
@@ -242,9 +246,11 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_below="@id/map"
-    android:layout_centerHorizontal="true"
-    android:text="Submit"
-    />
+        android:text="Submit"
+        android:layout_alignRight="@+id/eventTextView"
+        android:layout_alignEnd="@+id/eventTextView"
+        android:layout_alignLeft="@+id/eventTextView"
+        android:layout_alignStart="@+id/eventTextView" />
     <Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
@@ -255,7 +261,8 @@
         android:layout_alignTop="@+id/edittext2"
         android:layout_alignRight="@+id/itemlist"
         android:layout_alignEnd="@+id/itemlist"
-        android:layout_above="@+id/map" />
+        android:layout_above="@+id/map"
+        android:layout_marginBottom="5dp" />
 
 
 

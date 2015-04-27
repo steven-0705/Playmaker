@@ -73,6 +73,18 @@ public class GroupBean extends DataBean {
         return result;
     }
 
+    public List<GroupEventData> getEventsUnreported() {
+        Collections.sort(events);
+        List<GroupEventData> result = new ArrayList<GroupEventData>();
+        for (int i = 0; i < events.size(); i++) {
+            if (System.currentTimeMillis() > events.get(i).date + 1000 * 60 * 60 * 12 && !events.get(i).isReported()) {
+                result.add(events.get(i));
+            }
+        }
+
+        return result;
+    }
+
     public long getId() {
         return id;
     }
@@ -169,6 +181,7 @@ public class GroupBean extends DataBean {
         public String name;
         public long date;
         public long eventId;
+        protected boolean reported = false;
 
         public GroupEventData() {};
 
@@ -182,6 +195,10 @@ public class GroupBean extends DataBean {
 
         public long getEventId() {
             return eventId;
+        }
+
+        public boolean isReported() {
+            return reported;
         }
 
         @Override

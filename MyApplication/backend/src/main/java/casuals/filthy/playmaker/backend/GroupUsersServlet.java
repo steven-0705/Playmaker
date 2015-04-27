@@ -64,8 +64,9 @@ public class GroupUsersServlet extends HttpServlet {
         }
 
         event.setReported(true);
+        group.getEvent(eventId).reported();
 
-        ofy().save().entities(group, event).now();
+        ofy().save().entities(group, event, group).now();
 
         // respond
         String userJson = gson.toJson(group);

@@ -211,6 +211,10 @@ public class EventData extends DataObject {
         return attending;
     }
 
+    public boolean isReported() {
+        return reported;
+    }
+
     public List<EventTeam> getTeams() {
         return teams;
     }
