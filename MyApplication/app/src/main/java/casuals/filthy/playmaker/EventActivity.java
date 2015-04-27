@@ -2,12 +2,14 @@ package casuals.filthy.playmaker;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -159,6 +161,7 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
             for (int i = 0; i < opts.length; i++)
                 opts[i] = format.format(new Date(event.getPollMeaning().get(i)));
 
+            // create the poll
             ListView options = new ListView(this);
             options.setAdapter(new ArrayAdapter<String>(this,
                     android.R.layout.simple_list_item_single_choice,
@@ -166,6 +169,19 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
             options.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
             options.setLayoutParams(lp);
+
+            // check if they have already voted
+            if (event.getDatePoll().getVotes().containsKey(GroupActivity.getUserId())) {
+                int pos = event.getDatePoll().getVotes().get(GroupActivity.getUserId());
+                options.setItemChecked(pos, true);
+            }
+
+            options.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    new DatastoreAdapter(EventActivity.this).voteOnDate(GroupActivity.getUserId(), GroupActivity.getGroupId(), event.getId(), position);
+                }
+            });
 
             pollView.addView(options);
         }

@@ -364,6 +364,29 @@ public class DatastoreAdapter {
         request.execute(post);
     }
 
+    public void voteOnDate(String userId, long groupId, long eventId, int index) {
+        HttpPost post = new HttpPost(SERVER_URL + SERVLET_EVENTS);
+
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("user_id", userId);
+        params.put("group_id", groupId+"");
+        params.put("event_id", eventId+"");
+        params.put("action", "vote");
+        params.put("vote", index);
+
+        post.setHeader("Content-Type", "application/json");
+        try {
+            post.setEntity(new StringEntity(gson.toJson(params)));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        type = GroupBean.class;
+        ServletHttpAsyncTask request = new ServletHttpAsyncTask();
+        task = request;
+        request.execute(post);
+    }
+
     public void sendNotification(long groupId, String message, String userName, String userId) {
         HttpPost post = new HttpPost(SERVER_URL + SERVLET_GROUPS);
 

@@ -74,7 +74,7 @@ public class EventCreate extends Activity implements AsyncResponse{
         super.onCreate(savedInstanceState);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         Bundle extras = getIntent().getExtras();
-        String[] items = new String[extras.size()+1];
+        String[] items = new String[extras == null ? 1 : extras.size()+1];
         if(extras != null) {
             for(int i = 0; i<extras.size(); i++)
             {
@@ -83,7 +83,7 @@ public class EventCreate extends Activity implements AsyncResponse{
                 items[i] = item;
             }
         }
-        items[extras.size()] = "Add New Event Type";
+        items[extras == null ? 0 : extras.size()] = "Add New Event Type";
         setContentView(R.layout.events);
 
         Spinner dropdown = (Spinner) findViewById(R.id.spinner1);
@@ -278,10 +278,10 @@ public class EventCreate extends Activity implements AsyncResponse{
                             Toast.makeText(getApplicationContext(), "Please Enter New Event Type", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        dsa.createEvent(GroupActivity.getUserId(), GroupActivity.getGroupId(), nameOfEvent.getText().toString(),  getOther.getText().toString(), (EventTimes.get(0)-(24*60*60*1000)), location,teamAuto,numTeam,EventTimes, getItems);
+                        dsa.createEvent(GroupActivity.getUserId(), GroupActivity.getGroupId(), nameOfEvent.getText().toString(),  getOther.getText().toString(), (EventTimes.get(0)-(24*60*60*1000)), location,true /*teamAuto*/,numTeam,EventTimes, getItems);
 
                     } else {
-                        dsa.createEvent(GroupActivity.getUserId(), GroupActivity.getGroupId(), nameOfEvent.getText().toString(), getOption.getSelectedItem().toString(), (EventTimes.get(0) - (24 * 60 * 60 * 1000)), location, teamAuto, numTeam, EventTimes, getItems);
+                        dsa.createEvent(GroupActivity.getUserId(), GroupActivity.getGroupId(), nameOfEvent.getText().toString(), getOption.getSelectedItem().toString(), (EventTimes.get(0) - (24 * 60 * 60 * 1000)), location, true /*teamAuto*/, numTeam, EventTimes, getItems);
                     }
                     finish();
                 }

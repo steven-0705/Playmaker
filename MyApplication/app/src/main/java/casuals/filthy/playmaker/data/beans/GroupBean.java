@@ -14,12 +14,12 @@ import casuals.filthy.playmaker.R;
 
 public class GroupBean extends DataBean {
 
-    public long id;
-    public List<GroupUserBean> users;
-    public List<GroupEventData> events = new ArrayList<GroupEventData>();
-    public List<String> eventTypes = new ArrayList<String>();
-    public List<PollBean> polls;
-    public List<Notification> notifications = new ArrayList<Notification>();
+    protected long id;
+    protected List<GroupUserBean> users;
+    protected List<GroupEventData> events = new ArrayList<GroupEventData>();
+    protected List<String> eventTypes = new ArrayList<String>();
+    protected List<PollBean> polls;
+    protected List<Notification> notifications = new ArrayList<Notification>();
 
     private static String comparing;
 
