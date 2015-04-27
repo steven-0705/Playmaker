@@ -1,5 +1,6 @@
 package casuals.filthy.playmaker.data.beans;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -149,13 +150,14 @@ public class GroupBean extends DataBean {
     public List<Map<String, String>> getRecentNotification() {
         int i = 1;
         int index;
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm MM/dd/yy");
         List<Map<String, String>> results = new ArrayList<Map<String, String>>();
         while (i < 5 && (index=notifications.size() - i) >= 0) {
 
             HashMap<String, String> value = new HashMap<String, String>();
             value.put("MESSAGE", notifications.get(index).getBody());
-            value.put("DATE", new Date(notifications.get(index).getDate()).toString());
-            value.put("NAME", notifications.get(index).getName());
+            value.put("DATE", format.format(new Date(notifications.get(index).getDate())));
+            value.put("NAME", "-" + notifications.get(index).getName());
             results.add(value);
             i++;
         }

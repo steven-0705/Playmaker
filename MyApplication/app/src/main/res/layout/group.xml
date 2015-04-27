@@ -1,37 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="horizontal">
 
-    <RelativeLayout
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Group Name"
+        android:id="@+id/group_name"
+        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="30sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Notifications"
+        android:id="@+id/notification_text"
+        android:layout_below="@id/group_name"
+        android:layout_marginTop="20dp"
+        android:textSize="24sp"
+        android:layout_marginLeft="10dp"/>
+
+    <View
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="1dp"
+        android:id="@+id/notification_line"
+        android:layout_below="@id/notification_text"
+        android:background="@android:color/darker_gray"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Group Name"
-            android:id="@+id/group_name"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:textSize="30sp" />
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/notifications"
+        android:layout_below="@id/notification_line"
+        android:padding="5dp"
+        android:layout_marginBottom="@dimen/abc_action_button_min_height_material">
+        </ListView>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Members"
-            android:id="@+id/members"
-            android:layout_below="@id/group_name"
-            android:layout_marginTop="40dp"
-            android:textSize="18sp"
-            android:layout_marginLeft="10dp"/>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Invite Member"
-            android:id="@+id/inviteMember"
-            android:onClick="inviteMember"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
-    </RelativeLayout>
-</ScrollView>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Invite Member"
+        android:id="@+id/inviteMember"
+        android:onClick="inviteMember"
+        android:layout_alignParentBottom="true"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send Notification"
+        android:id="@+id/notify"
+        android:onClick="sendNotification"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+</RelativeLayout>

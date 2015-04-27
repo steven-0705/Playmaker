@@ -26,6 +26,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -34,20 +35,27 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import casuals.filthy.playmaker.data.AsyncResponse;
+import casuals.filthy.playmaker.data.DatastoreAdapter;
+import casuals.filthy.playmaker.data.beans.GroupBean;
 
 public class LeaderboardFragment extends ListFragment implements AsyncResponse {
 
     List<HashMap<String,String>>  Entries = LeaderboardEntries.ITEMS;
     String[] from = {LeaderboardEntries.KEY_ICON, LeaderboardEntries.KEY_NAME, LeaderboardEntries.KEY_PLACE, LeaderboardEntries.KEY_POINTS};
     int[] to = {R.id.item_icon, R.id.item_textName, R.id.item_textPlace, R.id.item_textDate};
+    private GroupBean group;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         View leaderboardView =  super.onCreateView(inflater, container, savedInstanceState);
-        SimpleAdapter adapter = new SimpleAdapter(getActivity().getBaseContext(), Entries , R.layout.leaderboard_item_view, from, to);
-        setListAdapter(adapter);
+
+        if (group == null) {
+            DatastoreAdapter adapter = new DatastoreAdapter(this);
+            adapter.getGroup(GroupActivity.getGroupId());
+        }
+
         return leaderboardView;
 
     }
@@ -60,29 +68,8 @@ public class LeaderboardFragment extends ListFragment implements AsyncResponse {
         registerForContextMenu(getListView());
         setHasOptionsMenu(true);
         getListView().addHeaderView(header);
-        Spinner spin = (Spinner) getListView().findViewById(R.id.spinner);
-        spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        List<String> categories = new ArrayList<String>();
-        categories.add("Football");
-        categories.add("Baseball");
-        categories.add("Soccer");
-        categories.add("Basektball");
-        categories.add("LAN PARTY");
-        categories.add("Quidditch");
-        ArrayAdapter<String> dataAdapater = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item,categories);
-        dataAdapater.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spin.setAdapter(dataAdapater);
         getListView().setDividerHeight(10);
+        setEmptyText("No scores reported yet\n\nPlease check back later");
     }
 
     @Override
@@ -112,11 +99,50 @@ public class LeaderboardFragment extends ListFragment implements AsyncResponse {
 
     @Override
     public void response(Object o) {
+        if (!(o instanceof GroupBean))
+            return;
 
+        group = (GroupBean) o;
+        refreshView();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        refreshView();
+    }
+
+    private void refreshView() {
+        if (group == null || getView() == null)
+            return;
+
+        if (group.getEventTypes().size() == 0) {
+            setListAdapter(new SimpleAdapter(getActivity().getBaseContext(), new ArrayList<Map<String, String>>(), R.layout.leaderboard_item_view, from, to));
+            return;
+        }
+
+        Spinner spin = (Spinner) getListView().findViewById(R.id.spinner);
+        spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                List<Map<String, String>> results = group.getRanks(group.getEventTypes().get(position));
+                SimpleAdapter adapter = new SimpleAdapter(getActivity().getBaseContext(), results , R.layout.leaderboard_item_view, from, to);
+                setListAdapter(adapter);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        ArrayAdapter<String> dataAdapater = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item,group.getEventTypes());
+        dataAdapater.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spin.setAdapter(dataAdapater);
+
+        List<Map<String, String>> results = group.getRanks(group.getEventTypes().get(0));
+        SimpleAdapter adapter = new SimpleAdapter(getActivity().getBaseContext(), results , R.layout.leaderboard_item_view, from, to);
+        setListAdapter(adapter);
+        /*SimpleAdapter adapter = new SimpleAdapter(getActivity().getBaseContext(), Entries , R.layout.leaderboard_item_view, from, to);
+        setListAdapter(adapter);*/
     }
 }
