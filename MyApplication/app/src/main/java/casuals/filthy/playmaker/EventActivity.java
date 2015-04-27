@@ -11,7 +11,11 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.security.acl.Group;
 
 import casuals.filthy.playmaker.data.AsyncResponse;
 import casuals.filthy.playmaker.data.DatastoreAdapter;
@@ -21,9 +25,9 @@ import casuals.filthy.playmaker.data.beans.EventBean;
  * Created by Steven on 4/25/2015.
  */
 public class EventActivity extends BaseActivity implements AsyncResponse {
-    private boolean eventCompleted;
     private long eventId;
     private ProgressDialog progress;
+    private EventBean event;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,21 +43,25 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
         progress.setMessage("Retrieving your data...");
         progress.show();
 
-        DatastoreAdapter adapter = new DatastoreAdapter(this);
-        adapter.getEvent(GroupActivity.getGroupId(), eventId);
+
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.events_page);
-        final TextView event_date = (TextView) findViewById(R.id.event_date);
+
+        DatastoreAdapter adapter = new DatastoreAdapter(this);
+        adapter.getEvent(GroupActivity.getGroupId(), eventId);
+
+
+        /*final TextView event_date = (TextView) findViewById(R.id.event_date);
         final TextView event_time = (TextView) findViewById(R.id.event_time);
         final TextView event_name = (TextView) findViewById(R.id.event_name);
         final TextView event_type = (TextView) findViewById(R.id.event_type);
         final TextView poll_message = (TextView) findViewById(R.id.poll_message);
-        final Button participants = (Button) findViewById(R.id.user_button);
-        final Button items = (Button) findViewById(R.id.item_button);
+        //final Button participants = (Button) findViewById(R.id.user_button);
+        //final Button items = (Button) findViewById(R.id.item_button);
         final CheckBox poll_option1 = (CheckBox) findViewById(R.id.poll_option1);
         final CheckBox poll_option2 = (CheckBox) findViewById(R.id.poll_option2);
         final CheckBox poll_option3 = (CheckBox) findViewById(R.id.poll_option3);
-        if(eventCompleted) {
+        if() {
             poll_message.setVisibility(View.INVISIBLE);
             poll_option1.setVisibility(View.INVISIBLE);
             poll_option2.setVisibility(View.INVISIBLE);
@@ -62,8 +70,8 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
         else {
             event_date.setVisibility(View.INVISIBLE);
             event_time.setVisibility(View.INVISIBLE);
-        }
-        participants.setOnClickListener(new View.OnClickListener() {
+        }*/
+        /*participants.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 GroupActivity.viewpager.setPagingEnabled(false);
                 LayoutInflater inflater = (LayoutInflater) getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -73,7 +81,6 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
                 dismissButton.setOnClickListener(new Button.OnClickListener(){
                     @Override
                     public void onClick(View v) {
-                        // TODO Auto-generated method stub
                         popupWindow.dismiss();
                         GroupActivity.viewpager.setPagingEnabled(true);
                     }});
@@ -90,13 +97,12 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
                 dismissButton.setOnClickListener(new Button.OnClickListener(){
                     @Override
                     public void onClick(View v) {
-                        // TODO Auto-generated method stub
                         popupWindow.dismiss();
                         GroupActivity.viewpager.setPagingEnabled(true);
                     }});
                 popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
             }
-        });
+        });*/
     }
 
     @Override
@@ -110,12 +116,97 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
         if(!(o instanceof EventBean)) {
             return;
         }
-        EventBean event = (EventBean) o;
+        event = (EventBean) o;
         TextView event_name = (TextView) findViewById(R.id.event_name);
         TextView event_type = (TextView) findViewById(R.id.event_type);
         event_name.setText(event.getName());
         event_type.setText(event.getType());
+        TextView poll_message = (TextView) findViewById(R.id.poll_message);
+        //final Button participants = (Button) findViewById(R.id.user_button);
+        //final Button items = (Button) findViewById(R.id.item_button);
+        CheckBox poll_option1 = (CheckBox) findViewById(R.id.poll_option1);
+        CheckBox poll_option2 = (CheckBox) findViewById(R.id.poll_option2);
+        CheckBox poll_option3 = (CheckBox) findViewById(R.id.poll_option3);
+        TextView event_date = (TextView) findViewById(R.id.event_date);
+        TextView event_time = (TextView) findViewById(R.id.event_time);
+
+        if(event.isClosed()) {
+            poll_message.setVisibility(View.GONE);
+            poll_option1.setVisibility(View.GONE);
+            poll_option2.setVisibility(View.GONE);
+            poll_option3.setVisibility(View.GONE);
+        }
+        else {
+            event_date.setVisibility(View.GONE);
+            event_time.setVisibility(View.GONE);
+        }
+
+        if (!event.isReported())
+            findViewById(R.id.report_scores).setVisibility(View.VISIBLE);
+
+        // populate the items
+        LinearLayout items = (LinearLayout) findViewById(R.id.items_list);
+        items.removeAllViews();
+        for (String item: event.getItems()) {
+            TextView entry = new TextView(EventActivity.this);
+            entry.setText(" - " + item);
+            entry.setTextSize(24);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            entry.setLayoutParams(lp);
+            items.addView(entry);
+        }
+
+        // populate attendees
+        if (!event.getAttending().keySet().contains(GroupActivity.getUserId()))
+            ((Button) findViewById(R.id.join_event_button)).setVisibility(View.VISIBLE);
+
+        LinearLayout attendees = (LinearLayout) findViewById(R.id.attendees_list);
+        attendees.removeAllViews();
+        if (event.getNumTeams() > 0) {
+            int t = 0;
+            for (EventBean.EventTeam team: event.getTeams()) {
+                t++;
+                TextView entry = new TextView(EventActivity.this);
+                entry.setText("Team " + t);
+                entry.setTextSize(32);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                entry.setLayoutParams(lp);
+                attendees.addView(entry);
+
+                // add members
+                for (String memberId: team.getMembers()) {
+                    TextView user = new TextView(EventActivity.this);
+                    user.setText(event.getAttending().get(memberId));
+                    user.setTextSize(24);
+                    lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                    user.setLayoutParams(lp);
+                    attendees.addView(user);
+                }
+
+            }
+        }
+        else {
+            for (String memberId: event.getAttending().keySet()) {
+                TextView user = new TextView(EventActivity.this);
+                user.setText(event.getAttending().get(memberId));
+                user.setTextSize(24);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                user.setLayoutParams(lp);
+                attendees.addView(user);
+            }
+        }
 
         progress.dismiss();
+    }
+
+    public void joinEvent(View v) {
+        ((Button) findViewById(R.id.join_event_button)).setVisibility(View.GONE);
+        DatastoreAdapter da = new DatastoreAdapter(this);
+        da.joinEvent(GroupActivity.getGroupId(), event.getId(), GroupActivity.getUserId());
+        Toast.makeText(this, "Joined event", Toast.LENGTH_SHORT).show();
+    }
+
+    public void reportScores(View v) {
+        // TODO make intent
     }
 }
