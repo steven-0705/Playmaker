@@ -2,23 +2,32 @@ package casuals.filthy.playmaker.data.beans;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import casuals.filthy.playmaker.LeaderboardEntries;
+import casuals.filthy.playmaker.R;
 
 public class GroupBean extends DataBean {
 
     public long id;
-    public List<GroupUserData> users;
-    public List<GroupEventData> events;
-    public List<String> eventTypes;
+    public List<GroupUserBean> users;
+    public List<GroupEventData> events = new ArrayList<GroupEventData>();
+    public List<String> eventTypes = new ArrayList<String>();
     public List<PollBean> polls;
-    public List<Notification> notifications;
+    public List<Notification> notifications = new ArrayList<Notification>();
+
+    private static String comparing;
 
     public GroupBean() {};
 
     public GroupBean(long id, String name) {
         this.id = id;
         this.name = name;
-        users = new ArrayList<GroupUserData>();
+        users = new ArrayList<GroupUserBean>();
         events = new ArrayList<GroupEventData>();
         eventTypes = new ArrayList<String>();
         polls = new ArrayList<PollBean>();
@@ -26,7 +35,7 @@ public class GroupBean extends DataBean {
     }
 
     public boolean isUserAdmin(String userId) {
-        for (GroupUserData user: users) {
+        for (GroupUserBean user: users) {
             if (user.id.equals(userId))
                 return true;
         }
@@ -67,7 +76,7 @@ public class GroupBean extends DataBean {
         return id;
     }
 
-    public List<GroupUserData> getUsers() {
+    public List<GroupUserBean> getUsers() {
         return users;
     }
 
@@ -87,30 +96,71 @@ public class GroupBean extends DataBean {
         return notifications;
     }
 
-    public static class GroupUserData {
+    public List<Map<String, String>> getRanks(String type) {
 
-        public String name;
-        public String id;
-        public String type;
-        public boolean admin;
-
-        public GroupUserData() {};
-
-        public String getName() {
-            return name;
+        List<GroupUserBean> ranked = new ArrayList<GroupUserBean>();
+        for (GroupUserBean user: users) {
+            if (user.getStats() != null  && user.getStats().get(type) != null && user.getStats().get(type).computeScore() > 0) {
+                ranked.add(user);
+            }
         }
 
-        public String getId() {
-            return id;
+        comparing = type;
+        Collections.sort(ranked, new Comparator<GroupUserBean>() {
+            @Override
+            public int compare(GroupUserBean lhs, GroupUserBean rhs) {
+                return  lhs.getStats().get(comparing).compareTo(rhs.getStats().get(comparing));
+            }
+        });
+
+        List<Map<String, String>> results = new ArrayList<Map<String, String>>();
+
+        int i = 1;
+        for (GroupUserBean user: ranked) {
+            Map<String, String> entry = new HashMap<String, String>();
+            entry.put(LeaderboardEntries.KEY_NAME, user.getName());
+            entry.put(LeaderboardEntries.KEY_POINTS, user.getStats().get(type).computeScore()+"");
+            switch (i) {
+                case 1:
+                    entry.put(LeaderboardEntries.KEY_PLACE, "1st Place");
+                    entry.put(LeaderboardEntries.KEY_ICON,  String.valueOf(R.drawable.first_place));
+                    break;
+                case 2:
+                    entry.put(LeaderboardEntries.KEY_PLACE, "2nd Place");
+                    entry.put(LeaderboardEntries.KEY_ICON,  String.valueOf(R.drawable.second_place));
+                    break;
+                case 3:
+                    entry.put(LeaderboardEntries.KEY_PLACE, "3rd Place");
+                    entry.put(LeaderboardEntries.KEY_ICON,  String.valueOf(R.drawable.third_place));
+                    break;
+                default:
+                    entry.put(LeaderboardEntries.KEY_PLACE, i + "th Place");
+                    entry.put(LeaderboardEntries.KEY_ICON,  String.valueOf(R.drawable.std_ribbon));
+                    break;
+            }
+
+            results.add(entry);
+            i++;
         }
 
-        public String getType() {
-            return type;
+        return results;
+    }
+
+    public List<Map<String, String>> getRecentNotification() {
+        int i = 1;
+        int index;
+        List<Map<String, String>> results = new ArrayList<Map<String, String>>();
+        while (i < 5 && (index=notifications.size() - i) >= 0) {
+
+            HashMap<String, String> value = new HashMap<String, String>();
+            value.put("MESSAGE", notifications.get(index).getBody());
+            value.put("DATE", new Date(notifications.get(index).getDate()).toString());
+            value.put("NAME", notifications.get(index).getName());
+            results.add(value);
+            i++;
         }
 
-        public boolean isAdmin() {
-            return admin;
-        }
+        return results;
     }
 
     public static class GroupEventData implements Comparable<GroupEventData>{

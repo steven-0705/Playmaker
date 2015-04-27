@@ -364,6 +364,28 @@ public class DatastoreAdapter {
         request.execute(post);
     }
 
+    public void sendNotification(long groupId, String message, String userName, String userId) {
+        HttpPost post = new HttpPost(SERVER_URL + SERVLET_GROUPS);
+
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("user_id", userId);
+        params.put("user_name", userName);
+        params.put("group_id", groupId+"");
+        params.put("message", message);
+        params.put("action", "notify");
+        post.setHeader("Content-Type", "application/json");
+        try {
+            post.setEntity(new StringEntity(gson.toJson(params)));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        type = UserBean.class;
+        ServletHttpAsyncTask request = new ServletHttpAsyncTask();
+        task = request;
+        request.execute(post);
+    }
+
 
     class ServletHttpAsyncTask extends AsyncTask<HttpUriRequest, Void, HttpResponse> {
         //private Context context;
