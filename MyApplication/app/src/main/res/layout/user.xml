@@ -77,6 +77,12 @@
             android:layout_height="fill_parent"
             android:orientation="vertical">
 
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/notification_text"
+                android:background="@android:color/darker_gray"/>
+
             <TabWidget
                 android:id="@android:id/tabs"
                 android:layout_width="fill_parent"
@@ -99,6 +105,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/user_invites"
+                    android:visibility="invisible"
                     android:layout_above="@+id/signOut"
                     android:layout_below="@+id/groupCreate"
                     android:layout_gravity="center" />

@@ -166,8 +166,8 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
            List<String> list2 = new ArrayList<String>();
            List<Long> idList2 = new ArrayList<Long>();
            for(UserBean.Invite invite: inviteList) {
-               list.add(invite.getInviter());
-               idList.add(invite.getGroupId());
+               list2.add(invite.getInviter());
+               idList2.add(invite.getGroupId());
            }
 
            setGroupIds(idList);
