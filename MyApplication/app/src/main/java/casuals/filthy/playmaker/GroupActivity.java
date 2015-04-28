@@ -238,13 +238,14 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
                 }
             }
         });
-        alert.show();
+        alert.setNegativeButton("Cancel", null).show();
     }
 
     public void sendNotification(View v) {
         AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
         final EditText input= new EditText(v.getContext());
         input.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        input.setLines(3);
         alert.setTitle("Your Message:");
         alert.setView(input);
         alert.setPositiveButton("Send", new DialogInterface.OnClickListener() {
@@ -260,7 +261,7 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
                 }
             }
         });
-        alert.show();
+        alert.setNegativeButton("Cancel", null).show();
     }
 
     public void showMembers(View v) {
