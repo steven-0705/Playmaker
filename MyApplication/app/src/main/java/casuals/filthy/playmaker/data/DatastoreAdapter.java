@@ -3,6 +3,7 @@ package casuals.filthy.playmaker.data;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -67,7 +68,8 @@ public class DatastoreAdapter {
                     }
                     break;
                 case 400:
-                    System.out.print(task.getResponse());
+                    //System.out.print(task.getResponse());
+                    Log.e("DATASTORE_ADAPTER", "Error: " + task.getResponse());
                     // todo do something about the error
                     break;
                 default:

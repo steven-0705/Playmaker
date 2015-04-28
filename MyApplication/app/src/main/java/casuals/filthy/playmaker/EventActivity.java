@@ -60,58 +60,6 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
 
         DatastoreAdapter adapter = new DatastoreAdapter(this);
         adapter.getEvent(GroupActivity.getGroupId(), eventId);
-
-
-        /*final TextView event_date = (TextView) findViewById(R.id.event_date);
-        final TextView event_time = (TextView) findViewById(R.id.event_time);
-        final TextView poll_message = (TextView) findViewById(R.id.poll_message);
-        //final Button participants = (Button) findViewById(R.id.user_button);
-        //final Button items = (Button) findViewById(R.id.item_button);
-        final CheckBox poll_option1 = (CheckBox) findViewById(R.id.poll_option1);
-        final CheckBox poll_option2 = (CheckBox) findViewById(R.id.poll_option2);
-        final CheckBox poll_option3 = (CheckBox) findViewById(R.id.poll_option3);
-        if() {
-            poll_message.setVisibility(View.INVISIBLE);
-            poll_option1.setVisibility(View.INVISIBLE);
-            poll_option2.setVisibility(View.INVISIBLE);
-            poll_option3.setVisibility(View.INVISIBLE);
-        }
-        else {
-            event_date.setVisibility(View.INVISIBLE);
-            event_time.setVisibility(View.INVISIBLE);
-        }*/
-        /*participants.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                GroupActivity.viewpager.setPagingEnabled(false);
-                LayoutInflater inflater = (LayoutInflater) getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View popupView = inflater.inflate(R.layout.participant_popout, null);
-                final PopupWindow popupWindow = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                Button dismissButton = (Button)popupView.findViewById(R.id.dismiss);
-                dismissButton.setOnClickListener(new Button.OnClickListener(){
-                    @Override
-                    public void onClick(View v) {
-                        popupWindow.dismiss();
-                        GroupActivity.viewpager.setPagingEnabled(true);
-                    }});
-                popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
-            }
-        });
-        items.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                GroupActivity.viewpager.setPagingEnabled(false);
-                LayoutInflater inflater = (LayoutInflater) getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View popupView = inflater.inflate(R.layout.items_popout, null);
-                final PopupWindow popupWindow = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                Button dismissButton = (Button)popupView.findViewById(R.id.dismiss);
-                dismissButton.setOnClickListener(new Button.OnClickListener(){
-                    @Override
-                    public void onClick(View v) {
-                        popupWindow.dismiss();
-                        GroupActivity.viewpager.setPagingEnabled(true);
-                    }});
-                popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
-            }
-        });*/
     }
 
     @Override
@@ -157,9 +105,13 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
             pollView.removeAllViews();
             SimpleDateFormat format = new SimpleDateFormat("h:mm a M/dd/yy");
 
+            // compile votes
+
+            // generate the options
             String[] opts = new String[event.getPollMeaning().size()];
-            for (int i = 0; i < opts.length; i++)
-                opts[i] = format.format(new Date(event.getPollMeaning().get(i)));
+            for (int i = 0; i < opts.length; i++) {
+                opts[i] = format.format(new Date(event.getPollMeaning().get(i))) + "\t" + event.getDatePoll().getVotes();
+            }
 
             // create the poll
             ListView options = new ListView(this);
@@ -256,6 +208,13 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
         Intent i = new Intent(EventActivity.this.getApplicationContext(), StatsActivity.class);
         i.putExtra("EVENT_ID", event.getId());
         startActivity(i);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        new DatastoreAdapter(this).getEvent(GroupActivity.getGroupId(), eventId);
     }
 }
 

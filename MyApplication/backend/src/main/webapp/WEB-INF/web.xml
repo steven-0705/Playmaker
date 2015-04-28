@@ -33,7 +33,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>GroupUsersServlet</servlet-name>
-        <url-pattern>/group/users</url-pattern>
+        <url-pattern>/groups/users</url-pattern>
     </servlet-mapping>
 
     <servlet>
