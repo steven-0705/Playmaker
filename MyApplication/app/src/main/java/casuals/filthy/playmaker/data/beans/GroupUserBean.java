@@ -52,5 +52,17 @@ public class GroupUserBean extends DataBean{
         public String getPlayer() {
             return player;
         }
+
+        public int getNumPlayed() {
+            return numPlayed;
+        }
+
+        public int getTotalUp() {
+            return totalUp;
+        }
+
+        public int getTotalDown() {
+            return totalDown;
+        }
     }
 }

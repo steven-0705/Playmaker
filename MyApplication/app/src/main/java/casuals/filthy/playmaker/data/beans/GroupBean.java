@@ -109,8 +109,7 @@ public class GroupBean extends DataBean {
         return notifications;
     }
 
-    public List<Map<String, String>> getRanks(String type) {
-
+    public List<GroupUserBean> getRanksList(String type) {
         List<GroupUserBean> ranked = new ArrayList<GroupUserBean>();
         for (GroupUserBean user: users) {
             if (user.getStats() != null  && user.getStats().get(type) != null && user.getStats().get(type).computeScore() > 0) {
@@ -125,6 +124,13 @@ public class GroupBean extends DataBean {
                 return  lhs.getStats().get(comparing).compareTo(rhs.getStats().get(comparing));
             }
         });
+
+        return ranked;
+    }
+
+    /*public List<Map<String, String>> getRanks(String type) {
+
+        List<GroupUserBean> ranked = getRanksList(type);
 
         List<Map<String, String>> results = new ArrayList<Map<String, String>>();
 
@@ -157,14 +163,14 @@ public class GroupBean extends DataBean {
         }
 
         return results;
-    }
+    }*/
 
     public List<Map<String, String>> getRecentNotification() {
         int i = 1;
         int index;
         SimpleDateFormat format = new SimpleDateFormat("h:mm a M/dd/yy");
         List<Map<String, String>> results = new ArrayList<Map<String, String>>();
-        while (i <= 10 && (index=notifications.size() - i) >= 0) {
+        while (i <= 20 && (index=notifications.size() - i) >= 0) {
 
             HashMap<String, String> value = new HashMap<String, String>();
             value.put("MESSAGE", notifications.get(index).getBody());
