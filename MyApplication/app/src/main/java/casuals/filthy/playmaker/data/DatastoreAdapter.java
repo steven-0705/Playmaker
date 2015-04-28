@@ -383,7 +383,7 @@ public class DatastoreAdapter {
             e.printStackTrace();
         }
 
-        type = GroupBean.class;
+        type = EventBean.class;
         ServletHttpAsyncTask request = new ServletHttpAsyncTask();
         task = request;
         request.execute(post);

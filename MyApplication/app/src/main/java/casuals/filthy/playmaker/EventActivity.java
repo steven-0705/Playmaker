@@ -106,11 +106,14 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
             SimpleDateFormat format = new SimpleDateFormat("h:mm a M/dd/yy");
 
             // compile votes
+            int[] votes = new int[event.getPollMeaning().size()];
+            for (int vote: event.getDatePoll().getVotes().values())
+                    votes[vote]++;
 
             // generate the options
             String[] opts = new String[event.getPollMeaning().size()];
             for (int i = 0; i < opts.length; i++) {
-                opts[i] = format.format(new Date(event.getPollMeaning().get(i))) + "\t" + event.getDatePoll().getVotes();
+                opts[i] = votes[i] + " |   " + format.format(new Date(event.getPollMeaning().get(i)));
             }
 
             // create the poll
