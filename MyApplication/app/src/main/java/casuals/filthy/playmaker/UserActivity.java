@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,9 +69,32 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
         final TextView user_name = (TextView) findViewById(R.id.user_display);
         final TextView user_email = (TextView) findViewById(R.id.user_user);
         final ImageView user_image = (ImageView) findViewById(R.id.user_image);
-        final TextView user_group = (TextView) findViewById(R.id.user_groups);
         final Button createGroup = (Button) findViewById(R.id.groupCreate);
+        final TabHost user_tab = (TabHost) findViewById(R.id.user_tabHost);
         final ListView groupList = (ListView) findViewById(R.id.user_group_list);
+        final ListView userInviteList = (ListView) findViewById(R.id.user_invites);
+
+        TabHost host = (TabHost)findViewById(R.id.user_tabHost);
+        host.setup();
+
+        host.addTab(host.newTabSpec("one")
+                .setIndicator("Your Groups")
+                .setContent(new TabHost.TabContentFactory() {
+
+                    public View createTabContent(String tag) {
+                        return (ListView) findViewById(R.id.user_group_list);
+                    }
+                }));
+
+        host.addTab(host.newTabSpec("two")
+                .setIndicator("Your Invites")
+                .setContent(new TabHost.TabContentFactory() {
+
+                    public View createTabContent(String tag) {
+                        return (ListView) findViewById(R.id.user_invites);
+                    }
+                }));
+
         user_name.setText(userName);
         user_email.setText(userEmail);
         createGroup.setOnClickListener(new View.OnClickListener() {
@@ -123,14 +147,29 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
                return;
            }
            UserBean user = (UserBean) o;
+
            List<UserBean.UserGroupBean> groupList = user.getGroups();
+           List<UserBean.Invite> inviteList = user.getInvites();
+
            ListView listView = (ListView) findViewById(R.id.user_group_list);
+           ListView listView2 = (ListView) findViewById(R.id.user_invites);
+
+           //   For Groups
            List<String> list = new ArrayList<String>();
            List<Long> idList = new ArrayList<Long>();
            for(UserBean.UserGroupBean group: groupList) {
                list.add(group.getName());
                idList.add(group.getId());
            }
+
+           //   For Invites
+           List<String> list2 = new ArrayList<String>();
+           List<Long> idList2 = new ArrayList<Long>();
+           for(UserBean.Invite invite: inviteList) {
+               list2.add(invite.getInviter());
+               idList2.add(invite.getGroupId());
+           }
+
            setGroupIds(idList);
            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, list);
            listView.setAdapter(arrayAdapter);
@@ -146,6 +185,11 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
                    startActivity(i);
                }
            });
+
+
+           ArrayAdapter<String> arrayAdapter2 = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, list2);
+           listView2.setAdapter(arrayAdapter2);
+
            progress.dismiss();
        }
 

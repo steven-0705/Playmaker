@@ -44,18 +44,6 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Groups"
-        android:id="@+id/user_groups"
-        android:layout_below="@id/user_image"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="75dp"
-        android:layout_marginLeft="10dp"/>
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -76,14 +64,56 @@
         android:layout_alignRight="@+id/user_user"
         android:layout_alignEnd="@+id/user_user" />
 
-    <ListView
+    <TabHost
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/user_group_list"
-        android:layout_below="@+id/user_groups"
-        android:layout_alignLeft="@+id/user_groups"
-        android:layout_alignStart="@+id/user_groups"
-        android:layout_above="@+id/signOut" />
+        android:layout_height="match_parent"
+        android:id="@+id/user_tabHost"
+        android:layout_below="@+id/groupCreate"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/signOut">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/notification_text"
+                android:background="@android:color/darker_gray"/>
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"></TabWidget>
+
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/user_group_list"
+                    android:layout_above="@+id/signOut"
+                    android:layout_below="@+id/groupCreate"
+                    android:layout_gravity="center" />
+
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/user_invites"
+                    android:visibility="invisible"
+                    android:layout_above="@+id/signOut"
+                    android:layout_below="@+id/groupCreate"
+                    android:layout_gravity="center" />
+
+            </FrameLayout>
+
+        </LinearLayout>
+    </TabHost>
 
 
 </RelativeLayout>

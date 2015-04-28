@@ -36,6 +36,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/notifications"
         android:layout_below="@id/notification_line"
+        android:clickable="false"
         android:padding="5dp"
         android:layout_marginBottom="@dimen/abc_action_button_min_height_material">
         </ListView>

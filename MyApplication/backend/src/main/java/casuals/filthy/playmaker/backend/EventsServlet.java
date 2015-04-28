@@ -189,9 +189,7 @@ public class EventsServlet extends HttpServlet {
             int voteInt = (int) Math.round(vote);
             event.dateVote(userId, voteInt);
         }
-
-        // add user
-        if (userId != null) {
+        else if (userId != null) {
             UserData user = ofy().load().type(UserData.class).id(userId).now();
             if (user == null) {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND, "user not found");

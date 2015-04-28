@@ -65,8 +65,9 @@ public class GroupUsersServlet extends HttpServlet {
 
         event.setReported(true);
         group.getEvent(eventId).reported();
+        group.addNotification(group.getName(), "Scores reported for event '" + event.getName() +"'");
 
-        ofy().save().entities(group, event, group).now();
+        ofy().save().entities(group, event).now();
 
         // respond
         String userJson = gson.toJson(group);

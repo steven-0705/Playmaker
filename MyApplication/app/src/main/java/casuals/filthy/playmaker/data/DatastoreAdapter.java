@@ -3,6 +3,7 @@ package casuals.filthy.playmaker.data;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -67,7 +68,8 @@ public class DatastoreAdapter {
                     }
                     break;
                 case 400:
-                    System.out.print(task.getResponse());
+                    //System.out.print(task.getResponse());
+                    Log.e("DATASTORE_ADAPTER", "Error: " + task.getResponse());
                     // todo do something about the error
                     break;
                 default:
@@ -359,6 +361,29 @@ public class DatastoreAdapter {
         }
 
         type = GroupBean.class;
+        ServletHttpAsyncTask request = new ServletHttpAsyncTask();
+        task = request;
+        request.execute(post);
+    }
+
+    public void voteOnDate(String userId, long groupId, long eventId, int index) {
+        HttpPost post = new HttpPost(SERVER_URL + SERVLET_EVENTS);
+
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("user_id", userId);
+        params.put("group_id", groupId+"");
+        params.put("event_id", eventId+"");
+        params.put("action", "vote");
+        params.put("vote", index);
+
+        post.setHeader("Content-Type", "application/json");
+        try {
+            post.setEntity(new StringEntity(gson.toJson(params)));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        type = EventBean.class;
         ServletHttpAsyncTask request = new ServletHttpAsyncTask();
         task = request;
         request.execute(post);

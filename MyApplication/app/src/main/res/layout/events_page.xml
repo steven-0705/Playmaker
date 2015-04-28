@@ -15,7 +15,14 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:text="Event Name"
-            android:textSize="30sp" />
+            android:textSize="46sp" />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/event_name"
+            android:background="@android:color/darker_gray"/>
 
         <TextView
             android:id="@+id/event_type"
@@ -26,7 +33,7 @@
             android:layout_below="@+id/event_name"
             android:layout_marginTop="40dp"
             android:text="Event Type"
-            android:textSize="24sp" />
+            android:textSize="34sp" />
 
         <TextView
             android:id="@+id/event_date"
@@ -53,35 +60,22 @@
         <TextView
             android:id="@+id/poll_message"
             android:layout_width="wrap_content"
+            android:layout_marginTop="15dp"
             android:layout_height="wrap_content"
-            android:text="When would you like the event to take place?"
+            android:text="Pick the date:"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:textSize="18dp"
             android:layout_below="@+id/event_time"
             android:layout_alignRight="@+id/event_name"
             android:layout_alignEnd="@+id/event_name" />
 
-        <CheckBox
-            android:id="@+id/poll_option1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/poll_message" />
-
-        <CheckBox
-            android:id="@+id/poll_option2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/poll_option1" />
-
-        <CheckBox
-            android:id="@+id/poll_option3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/poll_option2" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:orientation="vertical"
+            android:layout_below="@id/poll_message"
+            android:id="@+id/poll"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -89,9 +83,9 @@
             android:text="Items"
             android:id="@+id/items_text"
             android:textSize="24sp"
-            android:layout_below="@+id/poll_option3"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"/>
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/poll" />
 
         <View
             android:layout_width="fill_parent"
@@ -138,21 +132,21 @@
             android:layout_height="wrap_content"
             android:text="Join Event"
             android:id="@+id/join_event_button"
-            android:layout_alignTop="@+id/event_type"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignBottom="@id/attendees_text"
             android:onClick="joinEvent"
-            android:visibility="gone"/>
+            android:visibility="invisible"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Report Scores"
             android:id="@+id/report_scores"
-            android:layout_alignTop="@+id/event_date"
+            android:layout_alignTop="@+id/event_type"
             android:layout_alignParentRight="true"
             android:onClick="reportScores"
-            android:visibility="gone"
+            android:visibility="invisible"
             android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
