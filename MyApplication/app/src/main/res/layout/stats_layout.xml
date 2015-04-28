@@ -15,12 +15,18 @@
         android:textSize="50sp"
         android:gravity="center"/>
 
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/team_list"
+        android:layout_below="@id/stats_title"
+       />
 
     <ScrollView
         android:id="@+id/scrollView1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/stats_title">
+        android:layout_below="@+id/team_list">
 
     <LinearLayout
         android:id="@+id/LinearLayout1"
