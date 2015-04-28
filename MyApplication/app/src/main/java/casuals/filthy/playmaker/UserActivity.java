@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -127,6 +128,9 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
 
         DatastoreAdapter adapter = new DatastoreAdapter(this);
         adapter.getUser(userId, userName, userEmail);
+//        ImageView previewThumbnail = (ImageView) findViewById(R.id.user_image);
+//        Bitmap b = BaseActivity.personImageView;
+//        previewThumbnail.setImageBitmap(b);
     }
 
     @Override

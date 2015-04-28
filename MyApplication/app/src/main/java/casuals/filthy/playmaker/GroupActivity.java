@@ -7,12 +7,15 @@ import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -52,7 +55,11 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
             groupId = extras.getLong("GROUP_ID");
             userName = extras.getString("USER_NAME");
         }
+
+
+
         setContentView(R.layout.activity_main);
+
         progress = new ProgressDialog(this);
         progress.setTitle("Loading");
         progress.setMessage("Retrieving your data...");
