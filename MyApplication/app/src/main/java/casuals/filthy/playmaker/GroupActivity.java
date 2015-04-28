@@ -3,55 +3,33 @@ package casuals.filthy.playmaker;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.Notification;
 import android.app.ProgressDialog;
-import android.app.Service;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.view.MotionEvent;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import casuals.filthy.playmaker.data.DatastoreAdapter;
 import casuals.filthy.playmaker.data.AsyncResponse;
-import casuals.filthy.playmaker.data.beans.UserBean;
+import casuals.filthy.playmaker.data.beans.GroupBean;
+import casuals.filthy.playmaker.data.beans.GroupUserBean;
 
 
-import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.CheckBox;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import com.google.android.gms.common.ConnectionResult;
-
-import com.google.android.gms.common.GooglePlayServicesUtil;
-
-import com.google.android.gms.common.SignInButton;
-
-import com.google.android.gms.common.api.GoogleApiClient;
-
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-
-import com.google.android.gms.plus.Plus;
-
-import com.google.android.gms.plus.model.people.Person;
-
 
 
 public class GroupActivity extends BaseActivity implements ActionBar.TabListener, AsyncResponse{
@@ -264,6 +242,27 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
     }
 
     public void showMembers(View v) {
+        GroupBean group = GroupFragment.group;
+        AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
+        alert.setTitle("Here are all The Members");
+        ListView members = new ListView(v.getContext());
+        List<GroupUserBean> membersLista = group.getUsers();
+        List<String> userNames = new ArrayList<String>();
+        for(GroupUserBean user: membersLista){
+            userNames.add(user.getName());
+        }
+       String[] from = {"MESSAGE", "NAME", "DATE"};
+        int[] to = {R.id.notify_message, R.id.notify_name, R.id.member_date};
+        ListAdapter membersAdapter = new ArrayAdapter<String>(getBaseContext(), R.layout.members_view,R.id.member_name ,userNames);
+        members.setAdapter(membersAdapter);
+        alert.setView(members);
+        alert.setPositiveButton("Done", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        alert.show();
 
     }
 

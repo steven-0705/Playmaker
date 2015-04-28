@@ -208,4 +208,5 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
     public void reportScores(View v) {
         // TODO make intent
     }
+
 }
