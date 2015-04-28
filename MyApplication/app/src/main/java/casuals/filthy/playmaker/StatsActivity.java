@@ -82,14 +82,17 @@ public class StatsActivity extends Activity implements AsyncResponse{
                         ListView teamsView = (ListView) findViewById(R.id.team_list);
                         List<Integer> score = new ArrayList<Integer>();
                         List<Integer> down = new ArrayList<Integer>();
+
+                        int first = teamsView.getFirstVisiblePosition();
+                        int last = first + teamsView.getChildCount() - 1;
                         for (int i = 0; i < event.getTeams().size(); i++) {
-                            NumberPicker np = (NumberPicker) ((View) teamsView.getAdapter().getView(0, null, null)).findViewById(R.id.rankPicker);
+                            NumberPicker np = (NumberPicker) getViewByPosition(i, teamsView).findViewById(R.id.rankPicker);
 
                             score.add(event.getTeams().size() + 1 - np.getValue());
                             down.add(0);
                         }
 
-                        new DatastoreAdapter(null).reportEventStats(GroupActivity.getUserId(),
+                        new DatastoreAdapter(EventActivity.instance).reportEventStats(GroupActivity.getUserId(),
                                 GroupActivity.getGroupId(), event.getId(), score, down);
 
                         finish();
@@ -98,6 +101,18 @@ public class StatsActivity extends Activity implements AsyncResponse{
                 })
                 .setNegativeButton("No", null)
                 .show();
+    }
+
+    public View getViewByPosition(int position, ListView listView) {
+        final int firstListItemPosition = listView.getFirstVisiblePosition();
+        final int lastListItemPosition = firstListItemPosition + listView.getChildCount() - 1;
+
+        if (position < firstListItemPosition || position > lastListItemPosition ) {
+            return listView.getAdapter().getView(position, null, listView);
+        } else {
+            final int childIndex = position - firstListItemPosition;
+            return listView.getChildAt(childIndex);
+        }
     }
 }
 

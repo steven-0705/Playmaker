@@ -40,6 +40,7 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
     private long eventId;
     private ProgressDialog progress;
     private EventBean event;
+    public static EventActivity instance = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -208,6 +209,7 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
 
     public void reportScores(View v) {
         // TODO make intent
+        instance = this;
         Intent i = new Intent(EventActivity.this.getApplicationContext(), StatsActivity.class);
         i.putExtra("EVENT_ID", event.getId());
         startActivity(i);
