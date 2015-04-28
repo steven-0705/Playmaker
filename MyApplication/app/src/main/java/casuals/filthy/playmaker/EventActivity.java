@@ -142,7 +142,7 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
             pollView.addView(options);
         }
 
-        if (!event.isReported())
+        if (!event.isReported() && GroupActivity.isAdmin() && event.getAttending() != null && event.getAttending().size() > 0)
             findViewById(R.id.report_scores).setVisibility(View.VISIBLE);
 
         // populate the items
