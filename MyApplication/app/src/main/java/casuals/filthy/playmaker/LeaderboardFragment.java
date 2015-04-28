@@ -69,7 +69,6 @@ public class LeaderboardFragment extends ListFragment implements AsyncResponse {
         setHasOptionsMenu(true);
         getListView().addHeaderView(header);
         getListView().setDividerHeight(10);
-        setEmptyText("No scores reported yet\n\nPlease check back later");
     }
 
     @Override
