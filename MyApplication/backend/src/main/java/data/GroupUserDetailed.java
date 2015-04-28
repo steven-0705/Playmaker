@@ -4,7 +4,9 @@ import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 
 import java.security.acl.Group;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,7 +37,7 @@ public class GroupUserDetailed extends DataObject {
      * @param up
      * @param down
      */
-    public void addEventStats(String type, int up, int down) {
+    public void addEventStats(String type, double up, double down) {
         if (stats == null)
             stats = new HashMap<String, PlayerStats>();
 
@@ -44,8 +46,8 @@ public class GroupUserDetailed extends DataObject {
             stat = new PlayerStats(id);
 
         stat.numPlayed++;
-        stat.totalUp += up;
-        stat.totalDown += down;
+        stat.ups.add(up);
+        stat.downs.add(down);
         stats.put(type, stat);
     }
 
@@ -78,8 +80,8 @@ public class GroupUserDetailed extends DataObject {
     public static class PlayerStats implements Comparable<PlayerStats> {
 
         protected int numPlayed = 0;
-        protected int totalUp = 0;
-        protected int totalDown = 0;
+        protected List<Double> ups = new ArrayList<Double>();
+        protected List<Double> downs = new ArrayList<Double>();
         protected String player;
 
         public PlayerStats() {};
@@ -89,8 +91,17 @@ public class GroupUserDetailed extends DataObject {
         }
 
         public long computeScore() {
-            return Math.round(totalUp * 100 + (totalUp * numPlayed) +
-                    (totalDown != 0 ? ((double) totalUp / totalDown) : 0));
+            double score = 1200;
+            for(Double ratio: ups) {
+                if(ratio > 0.5) {
+                    score += (ratio * 20);
+                }
+                else {
+                   score -= ((1 - ratio) * 20);
+                }
+            }
+            if(score < 600) { score = 600; }
+            return (long) score;
         }
 
         @Override
