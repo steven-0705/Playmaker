@@ -1,5 +1,7 @@
 package casuals.filthy.playmaker.data.beans;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -57,7 +59,7 @@ public class GroupUserBean extends DataBean{
 
         @Override
         public int compareTo(PlayerStats o) {
-            return (int) (this.computeScore() - o.computeScore());
+            return (int) (o.computeScore() - this.computeScore());
         }
 
         public String getPlayer() {

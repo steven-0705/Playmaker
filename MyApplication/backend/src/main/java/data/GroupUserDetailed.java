@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import sun.rmi.runtime.Log;
+
 /**
  * Created by Chris on 4/11/2015.
  */
@@ -106,7 +108,7 @@ public class GroupUserDetailed extends DataObject {
 
         @Override
         public int compareTo(PlayerStats o) {
-            return (int) (this.computeScore() - o.computeScore());
+            return (int) (o.computeScore() - this.computeScore());
         }
 
         public String getPlayer() {
