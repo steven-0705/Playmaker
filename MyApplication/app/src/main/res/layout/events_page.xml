@@ -15,7 +15,14 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:text="Event Name"
-            android:textSize="30sp" />
+            android:textSize="46sp" />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/event_name"
+            android:background="@android:color/darker_gray"/>
 
         <TextView
             android:id="@+id/event_type"
@@ -26,7 +33,7 @@
             android:layout_below="@+id/event_name"
             android:layout_marginTop="40dp"
             android:text="Event Type"
-            android:textSize="28sp" />
+            android:textSize="34sp" />
 
         <TextView
             android:id="@+id/event_date"
