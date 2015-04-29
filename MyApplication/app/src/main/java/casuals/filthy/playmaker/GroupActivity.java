@@ -63,9 +63,9 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
         actionbar.setDisplayShowHomeEnabled(false);
         viewpager.setAdapter(ft);
         actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        actionbar.addTab(actionbar.newTab().setIcon(R.drawable.group_icon).setText("Group").setTabListener(this));
-        actionbar.addTab(actionbar.newTab().setIcon(R.drawable.event_icon).setText("Events").setTabListener(this));
-        actionbar.addTab(actionbar.newTab().setIcon(R.drawable.leaderboard_icon).setText("Leader Board").setTabListener(this));
+        actionbar.addTab(actionbar.newTab().setIcon(R.drawable.group_icon2).setText("Group").setTabListener(this));
+        actionbar.addTab(actionbar.newTab().setIcon(R.drawable.event_icon2).setText("Events").setTabListener(this));
+        actionbar.addTab(actionbar.newTab().setIcon(R.drawable.leaderboard_icon2).setText("Leader Board").setTabListener(this));
         viewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int arg0) {

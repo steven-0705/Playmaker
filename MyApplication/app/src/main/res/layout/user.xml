@@ -30,20 +30,6 @@
         android:textSize="30dp"
         android:layout_marginRight="10dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="andrew.luck@gmail.com"
-        android:id="@+id/user_user"
-        android:layout_below="@id/user_display"
-        android:layout_toRightOf="@id/user_image"
-        android:gravity="right"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp" />
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -65,8 +51,8 @@
         android:text="Create Group"
         android:id="@+id/groupCreate"
         android:layout_below="@+id/user_image"
-        android:layout_alignRight="@+id/user_user"
-        android:layout_alignEnd="@+id/user_user" />
+        android:layout_alignRight="@+id/user_display"
+        android:layout_alignEnd="@+id/user_display" />
 
     <TabHost
         android:layout_width="wrap_content"

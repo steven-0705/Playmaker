@@ -58,7 +58,6 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.user);
         final TextView user_name = (TextView) findViewById(R.id.user_display);
-        final TextView user_email = (TextView) findViewById(R.id.user_user);
         final Button createGroup = (Button) findViewById(R.id.groupCreate);
         ImageView previewThumbnail = (ImageView) findViewById(R.id.user_image);
         Bitmap b = BaseActivity.personImageView;
@@ -86,7 +85,6 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
                 }));
 
         user_name.setText(userName);
-        user_email.setText(userEmail);
         createGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
