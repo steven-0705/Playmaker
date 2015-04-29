@@ -60,7 +60,7 @@ public class GroupData extends DataObject {
     public boolean isUserAdmin(String userId) {
         for (GroupUserDetailed user: users) {
             if (user.getId().equals(userId))
-                return true;
+                return user.isAdmin();
         }
 
         return false;

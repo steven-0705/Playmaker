@@ -6,9 +6,12 @@ import com.google.appengine.repackaged.com.google.api.client.util.store.DataStor
 import com.google.appengine.repackaged.com.google.api.client.util.store.DataStoreUtils;
 import com.google.gson.Gson;
 import com.googlecode.objectify.ObjectifyService;
+import com.googlecode.objectify.annotation.Entity;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -16,7 +19,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import data.EventData;
 import data.GroupData;
+import data.GroupUserDetailed;
 import data.UserData;
 
 import static casuals.filthy.playmaker.backend.OfyService.ofy;
@@ -127,4 +132,81 @@ public class GroupsServlet extends HttpServlet {
         resp.getWriter().close();
     }
 
+    @Override
+    public void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        HashMap<String, Object> params = ServletUtils.getParams(req.getInputStream());
+
+        String groupIdString = req.getParameter("group_id");
+        String userId = req.getParameter("user_id");
+
+        if (userId == null || groupIdString == null) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing parameters");
+            return;
+        }
+
+        long groupId = Long.parseLong(groupIdString);
+        GroupData group = ofy().load().type(GroupData.class).id(groupId).now();
+
+        if (!group.isUserAdmin(userId)) {
+
+            UserData user = ofy().load().type(UserData.class).id(userId).now();
+            for (int i = 0; i < group.getUsers().size(); i++) {
+                if (group.getUsers().get(i).getId().equals(userId)) {
+                    group.getUsers().remove(i);
+                    break;
+                }
+            }
+
+            for (int i = 0; i < user.getGroups().size(); i++) {
+                if (user.getGroups().get(i).getId() == group.getId()) {
+                    user.getGroups().remove(i);
+                    break;
+                }
+            }
+
+            ofy().save().entities(group, user).now();
+
+            String userJson = gson.toJson(user);
+            resp.setStatus(HttpServletResponse.SC_OK);
+            resp.setContentType("application/json");
+            resp.getWriter().write(userJson);
+            resp.getWriter().flush();
+            resp.getWriter().close();
+            return;
+        }
+
+        // delete user pointers
+        List<UserData> store = new ArrayList<UserData>();
+        UserData caller = null;
+        for (GroupUserDetailed user: group.getUsers()) {
+            UserData changeMe = ofy().load().type(UserData.class).id(user.getId()).now();
+            USER: for (int i = 0; i < changeMe.getGroups().size(); i++) {
+                if (changeMe.getGroups().get(i).getId() == group.getId()) {
+                    changeMe.getGroups().remove(i);
+                    break USER;
+                }
+            }
+            store.add(changeMe);
+            if (changeMe.getId().equals(userId))
+                caller = changeMe;
+        }
+
+        // delete the events
+        for (GroupData.GroupEventData event: group.getEvents()) {
+            ofy().delete().type(EventData.class).id(event.getEventId());
+        }
+
+        ofy().delete().type(GroupData.class).id(group.getId());
+
+        ofy().save().entities(store);
+
+        String userJson = gson.toJson(caller);
+        resp.setStatus(HttpServletResponse.SC_OK);
+        resp.setContentType("application/json");
+        resp.getWriter().write(userJson);
+        resp.getWriter().flush();
+        resp.getWriter().close();
+    }
+
 }
+
