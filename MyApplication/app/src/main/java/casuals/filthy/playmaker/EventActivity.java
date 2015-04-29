@@ -231,6 +231,7 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
 
         new DatastoreAdapter(this).getEvent(GroupActivity.getGroupId(), eventId);
     }
+
 }
 
 

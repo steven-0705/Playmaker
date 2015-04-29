@@ -24,6 +24,9 @@ import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -32,6 +35,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,7 +51,10 @@ import android.widget.Toast;
 //import org.apache.http.message.BasicNameValuePair;
 //import org.apache.http.util.EntityUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -64,11 +71,9 @@ public class BaseActivity extends FragmentActivity implements
         ResultCallback<LoadPeopleResult>, View.OnClickListener {
 
     private static final String TAG = "android-plus-quickstart";
-
     private static final int STATE_DEFAULT = 0;
     private static final int STATE_SIGN_IN = 1;
     private static final int STATE_IN_PROGRESS = 2;
-
     private static final int RC_SIGN_IN = 0;
 
     private static final String SAVED_PROGRESS = "sign_in_progress";
@@ -79,7 +84,7 @@ public class BaseActivity extends FragmentActivity implements
 
     // Base URL for your token exchange server, no trailing slash.
     private static final String SERVER_BASE_URL = "SERVER_BASE_URL";
-
+    public static Bitmap personImageView;
     // URL where the client should GET the scopes that the server would like granted
     // before asking for a serverAuthCode
     private static final String EXCHANGE_TOKEN_URL = SERVER_BASE_URL + "/exchangetoken";
@@ -374,6 +379,38 @@ public class BaseActivity extends FragmentActivity implements
         Log.i(TAG, "we made it here");
             if(mGoogleApiClient.isConnected() && login==1) {
                 Person currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
+                if (currentUser.hasImage()) {
+
+                    Person.Image image = currentUser.getImage();
+
+
+                    new AsyncTask<String, Void, Bitmap>() {
+
+                        @Override
+                        protected Bitmap doInBackground(String... params) {
+
+                            try {
+                                URL url = new URL(params[0]);
+                                String urlString = url.toString();
+                                urlString = urlString.substring(0,urlString.length()-5);
+                                urlString = urlString + "sz=256";
+                                url = new URL(urlString);
+                                Log.w(TAG, "URL" + url.toString());
+                                InputStream in = url.openStream();
+                                return BitmapFactory.decodeStream(in);
+                            } catch (Exception e) {
+                        /* TODO log error */
+                            }
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Bitmap bitmap) {
+                            personImageView = bitmap;
+                        }
+                    }.execute(image.getUrl());
+                }
+            //}
                 Intent i = new Intent(getApplicationContext(), UserActivity.class);
                i.putExtra("ID",currentUser.getId());
                 i.putExtra("DISPLAY_NAME",currentUser.getDisplayName());

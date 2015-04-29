@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -75,7 +76,9 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
         final TabHost user_tab = (TabHost) findViewById(R.id.user_tabHost);
         final ListView groupList = (ListView) findViewById(R.id.user_group_list);
         final ListView userInviteList = (ListView) findViewById(R.id.user_invites);
-
+        ImageView previewThumbnail = (ImageView) findViewById(R.id.user_image);
+        Bitmap b = BaseActivity.personImageView;
+        previewThumbnail.setImageBitmap(b);
         TabHost host = (TabHost)findViewById(R.id.user_tabHost);
         host.setup();
 
@@ -129,6 +132,7 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
 
         DatastoreAdapter adapter = new DatastoreAdapter(this);
         adapter.getUser(userId, userName, userEmail);
+
     }
 
     @Override
@@ -140,6 +144,33 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
     @Override
     public void signOut() {
         super.signOut();
+    }
+
+    public static Button userSignOut;
+    public void checkforSignOut(View v){
+        if(userSignOut == null)
+        {
+            try{
+
+                userSignOut = (Button) findViewById(R.id.signOut);
+                userSignOut.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        BaseActivity.login=3;
+                        userSignOut = null;
+                        signOut();
+                        Intent i = new Intent(getApplicationContext(), BaseActivity.class);
+                        startActivity(i);
+                        finish();
+                    }
+                });
+                userSignOut=null;
+            }
+            catch(Exception e)
+            {
+                return;
+            }
+        }
     }
 
 
