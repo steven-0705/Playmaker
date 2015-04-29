@@ -80,20 +80,20 @@ public class StatsActivity extends Activity implements AsyncResponse{
                         // Lets submit some scores
 
                         ListView teamsView = (ListView) findViewById(R.id.team_list);
-                        List<Integer> score = new ArrayList<Integer>();
-                        List<Integer> down = new ArrayList<Integer>();
+                        List<Double> up = new ArrayList<Double>();
+                        List<Double> down = new ArrayList<Double>();
 
                         int first = teamsView.getFirstVisiblePosition();
                         int last = first + teamsView.getChildCount() - 1;
                         for (int i = 0; i < event.getTeams().size(); i++) {
                             NumberPicker np = (NumberPicker) getViewByPosition(i, teamsView).findViewById(R.id.rankPicker);
 
-                            score.add(event.getTeams().size() + 1 - np.getValue());
-                            down.add(0);
+                            up.add((double) (event.getTeams().size() + 1 - np.getValue()) / event.getTeams().size());
+                            down.add(0.0);
                         }
 
                         new DatastoreAdapter(EventActivity.instance).reportEventStats(GroupActivity.getUserId(),
-                                GroupActivity.getGroupId(), event.getId(), score, down);
+                                GroupActivity.getGroupId(), event.getId(), up, down);
 
                         finish();
                     }

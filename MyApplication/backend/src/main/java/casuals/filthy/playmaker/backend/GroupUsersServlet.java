@@ -59,7 +59,7 @@ public class GroupUsersServlet extends HttpServlet {
 
         for (int i = 0; i < up.size(); i++) {
             for (String user: event.getTeams().get(i).getMembers()) {
-                group.getUserById(user).addEventStats(event.getType(), (int)Math.round(up.get(i)), (int)Math.round(down.get(i)));
+                group.getUserById(user).addEventStats(event.getType(), up.get(i), down.get(i));
             }
         }
 

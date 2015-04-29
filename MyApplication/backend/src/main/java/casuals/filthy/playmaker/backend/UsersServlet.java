@@ -94,13 +94,18 @@ public class UsersServlet extends HttpServlet {
         String userEmail = (String) params.get("user_email");
         String groupIdString = (String) params.get("group_id");
 
-        if (action != null && action.equals("invite") && userEmail != null && groupIdString != null) {
+        if (action != null && action.equals("invite") && (userEmail != null || userId != null) && groupIdString != null) {
             UserData user = null;
-            List<UserData> users = ofy().load().type(UserData.class).list();
-            for (UserData u: users) {
-                if (userEmail.equals(u.getEmail())) {
-                    user = u;
-                    break;
+
+            if (userId != null)
+                user = ofy().load().type(UserData.class).id(userId).now();
+            else {
+                List<UserData> users = ofy().load().type(UserData.class).list();
+                for (UserData u : users) {
+                    if (userEmail.equals(u.getEmail())) {
+                        user = u;
+                        break;
+                    }
                 }
             }
             if (user == null) {
@@ -112,8 +117,11 @@ public class UsersServlet extends HttpServlet {
 
             user.addInvite(userName, groupId);
 
+            if (params.get("remove") != null && params.get("remove").equals("true"))
+                user.removeInvite(groupId);
+
             // done with all requests, save and return
-            ofy().save().entities(users).now();
+            ofy().save().entities(user).now();
             // respond
             resp.setStatus(HttpServletResponse.SC_OK);
             return;

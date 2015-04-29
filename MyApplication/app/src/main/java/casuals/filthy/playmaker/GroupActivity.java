@@ -25,7 +25,10 @@ import android.widget.Toast;
 import casuals.filthy.playmaker.data.DatastoreAdapter;
 import casuals.filthy.playmaker.data.AsyncResponse;
 import casuals.filthy.playmaker.data.beans.GroupBean;
+
 import casuals.filthy.playmaker.data.beans.GroupUserBean;
+import casuals.filthy.playmaker.data.beans.UserBean;
+
 
 
 import android.view.View;
@@ -45,6 +48,7 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
     private static List<Long> eventIds;
     private static CheckBox checkBox1, checkBox2, checkBox3, checkBox4;
     private ProgressDialog progress;
+    private static boolean admin;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -172,6 +176,10 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
             }
         }
 
+        if (o instanceof GroupBean) {
+            admin = ((GroupBean)o).isUserAdmin(getUserId());
+        }
+
         progress.dismiss();
 
     }
@@ -195,6 +203,10 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
 
     public static List<Long> getEventIds() {
         return eventIds;
+    }
+
+    public static boolean isAdmin() {
+        return admin;
     }
 
     public static void setEventIds(List<Long> list) {

@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.PopupWindow;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -39,6 +40,7 @@ import casuals.filthy.playmaker.data.beans.GroupBean;
 import casuals.filthy.playmaker.data.beans.UserBean;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -74,7 +76,9 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
         final TabHost user_tab = (TabHost) findViewById(R.id.user_tabHost);
         final ListView groupList = (ListView) findViewById(R.id.user_group_list);
         final ListView userInviteList = (ListView) findViewById(R.id.user_invites);
-
+        ImageView previewThumbnail = (ImageView) findViewById(R.id.user_image);
+        Bitmap b = BaseActivity.personImageView;
+        previewThumbnail.setImageBitmap(b);
         TabHost host = (TabHost)findViewById(R.id.user_tabHost);
         host.setup();
 
@@ -128,9 +132,7 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
 
         DatastoreAdapter adapter = new DatastoreAdapter(this);
         adapter.getUser(userId, userName, userEmail);
-//        ImageView previewThumbnail = (ImageView) findViewById(R.id.user_image);
-//        Bitmap b = BaseActivity.personImageView;
-//        previewThumbnail.setImageBitmap(b);
+
     }
 
     @Override
@@ -142,6 +144,33 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
     @Override
     public void signOut() {
         super.signOut();
+    }
+
+    public static Button userSignOut;
+    public void checkforSignOut(View v){
+        if(userSignOut == null)
+        {
+            try{
+
+                userSignOut = (Button) findViewById(R.id.signOut);
+                userSignOut.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        BaseActivity.login=3;
+                        userSignOut = null;
+                        signOut();
+                        Intent i = new Intent(getApplicationContext(), BaseActivity.class);
+                        startActivity(i);
+                        finish();
+                    }
+                });
+                userSignOut=null;
+            }
+            catch(Exception e)
+            {
+                return;
+            }
+        }
     }
 
 
@@ -167,15 +196,15 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
            }
 
            //   For Invites
-           List<String> list2 = new ArrayList<String>();
-           List<Long> idList2 = new ArrayList<Long>();
-           for(UserBean.Invite invite: inviteList) {
-               list2.add(invite.getInviter());
-               idList2.add(invite.getGroupId());
+           long[] inviteIds = new long[inviteList.size()];
+           String[] list2 = new String[inviteList.size()];
+           for(int i = 0; i < inviteList.size(); i++) {
+               list2[i] = ("Invite from " + inviteList.get(i).getInviter());
+               inviteIds[i] = inviteList.get(i).getGroupId();
            }
 
            setGroupIds(idList);
-           ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, list);
+           ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1, list);
            listView.setAdapter(arrayAdapter);
            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                @Override
@@ -191,8 +220,8 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
            });
 
 
-           ArrayAdapter<String> arrayAdapter2 = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, list2);
-           listView2.setAdapter(arrayAdapter2);
+           InviteAdapter inviteAdapter = new InviteAdapter(this , R.layout.invitation, R.id.invite_text, list2, inviteIds, this, userId);
+           listView2.setAdapter(inviteAdapter);
 
            progress.dismiss();
        }
@@ -213,5 +242,46 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
 
     public void setGroupIds(List<Long> list) {
         groupIds = list;
+    }
+
+    private class InviteAdapter extends ArrayAdapter<String> {
+
+        private final String userId;
+        private long[] ids;
+        private AsyncResponse resp;
+
+        public InviteAdapter(Context context, int resource, int textView, String[] objects, long[] ids, AsyncResponse resp, String userId) {
+            super(context, resource, textView, objects);
+
+            this.ids = ids;
+            this.resp = resp;
+            this.userId = userId;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            View v = super.getView(position, convertView, parent);
+
+            Button accept = (Button) v.findViewById(R.id.invite_accept);
+            Button ignore = (Button) v.findViewById(R.id.invite_ignore);
+
+            accept.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new DatastoreAdapter(resp).joinGroup(ids[position], userId);
+                }
+            });
+
+            ignore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new DatastoreAdapter(resp).inviteRemove(ids[position], userId);
+                }
+            });
+
+            return v;
+
+        }
+
     }
 }

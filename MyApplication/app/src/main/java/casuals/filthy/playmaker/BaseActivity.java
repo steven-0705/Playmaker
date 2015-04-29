@@ -391,6 +391,11 @@ public class BaseActivity extends FragmentActivity implements
 
                             try {
                                 URL url = new URL(params[0]);
+                                String urlString = url.toString();
+                                urlString = urlString.substring(0,urlString.length()-5);
+                                urlString = urlString + "sz=256";
+                                url = new URL(urlString);
+                                Log.w(TAG, "URL" + url.toString());
                                 InputStream in = url.openStream();
                                 return BitmapFactory.decodeStream(in);
                             } catch (Exception e) {
