@@ -132,29 +132,14 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
 
     public static Button userSignOut;
     public void checkforSignOut(View v){
-        if(userSignOut == null)
-        {
-            try{
-
                 userSignOut = (Button) findViewById(R.id.signOut);
-                userSignOut.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
                         BaseActivity.login=3;
                         userSignOut = null;
                         signOut();
                         Intent i = new Intent(getApplicationContext(), BaseActivity.class);
                         startActivity(i);
                         finish();
-                    }
-                });
-                userSignOut=null;
-            }
-            catch(Exception e)
-            {
-                return;
-            }
-        }
+
     }
 
 
