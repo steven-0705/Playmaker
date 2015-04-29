@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import casuals.filthy.playmaker.data.AsyncResponse;
 import casuals.filthy.playmaker.data.DatastoreAdapter;
@@ -46,8 +48,19 @@ public class StatsActivity extends Activity implements AsyncResponse{
         ListView lv = (ListView) findViewById(R.id.team_list);
 
         String[] names = new String[teamlist.size()];
-        for (int i = 0; i < teamlist.size(); i++) {
-            names[i] = "Team " + (i + 1);
+        Log.i("Num Teams: ", "" + teamlist.size());
+        if(event.getNumTeams() != 0) {
+            for (int i = 0; i < teamlist.size(); i++) {
+                names[i] = "Team " + (i + 1);
+            }
+        }
+        else {
+            Map<String,String> attending = event.getAttending();
+            for(int i = 0; i < teamlist.size(); i++) {
+                List<String> members = teamlist.get(i).getMembers();
+                String name = attending.get(members.get(0));
+                names[i] = name;
+            }
         }
 
         ListAdapter adapter = new RankAdapter(this,R.layout.rank_view,
