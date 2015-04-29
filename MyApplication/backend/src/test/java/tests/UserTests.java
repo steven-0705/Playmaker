@@ -87,4 +87,27 @@ public class UserTests {
         assertEquals(0, u2.getInvites().size());
     }
 
+    @Test
+    public void usersInviteUserRegect() throws InterruptedException {
+        UserData u1 = Utils.addUser("testestes123ts" + rand.nextInt(10000), "dsj123sadf;lj", rand.nextInt(10000)+ "gmail.com");
+        UserData u2 = Utils.addUser("teswerwrtestests" + rand.nextInt(10000), "dsjs123adf;lj", rand.nextInt(10000)+ "gmail.com");
+        GroupData group = Utils.addGroup(u1.getId(), "GROUPZZZ"+ rand.nextInt(10000));
+
+        synchronized (this) {
+            this.wait(500);
+        }
+
+        Utils.inviteUser(u2.getEmail(), group.getId(), u1.getName());
+
+        synchronized (this) {
+            this.wait(500);
+        }
+
+        u2 = Utils.getUser(u2.getId());
+
+        assertEquals(1, u2.getInvites().size());
+        u2 = Utils.joinGroup(u2.getId(), group.getId());
+
+        assertEquals(0, u2.getInvites().size());
+    }
 }

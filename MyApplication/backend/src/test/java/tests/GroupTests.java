@@ -100,5 +100,57 @@ public class GroupTests {
         assertEquals(notes + 1, group.getNotifications().size());
     }
 
+    @Test
+    public void groupsDeleteGroup() throws InterruptedException {
+        GroupData group = Utils.addGroup(user5.getId(), "delete me!!!");
+
+        user5 = Utils.getUser(user5.getId());
+        int groups = user5.getGroups().size();
+
+        synchronized (this) {
+            this.wait(500);
+        }
+
+        user5 = Utils.deleteGroup(user5.getId(), group.getId());
+
+        assertEquals(groups - 1, user5.getGroups().size());
+    }
+
+    @Test
+    public void groupsLeaveGroup() {
+        GroupData group = Utils.addGroup(user1.getId(), "delete me too!");
+        user1 = Utils.getUser(user1.getId());
+        user2 = Utils.joinGroup(user2.getId(), group.getId());
+        int groups = user1.getGroups().size();
+
+        user2 = Utils.deleteGroup(user2.getId(), group.getId());
+        user1 = Utils.getUser(user1.getId());
+
+        assertEquals(groups, user1.getGroups().size());
+    }
+
+
+    @Test
+    public void groupsDeleteGroupInvites() throws InterruptedException {
+        GroupData group = Utils.addGroup(user1.getId(), "delete me three!");
+        user1 = Utils.getUser(user1.getId());
+
+        Utils.inviteUser(user2.getEmail(), group.getId(), user1.getName());
+
+        synchronized (this) {
+            this.wait(1000);
+        }
+
+        user2 = Utils.getUser(user2.getId());
+
+        user1 = Utils.deleteGroup(user1.getId(), group.getId());
+
+        user2 = Utils.getUser(user2.getId());
+
+        if (user2.getInvites() == null)
+            assertTrue(true);
+        else
+            assertEquals(0, user2.getInvites().size());
+    }
 
 }

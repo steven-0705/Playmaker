@@ -187,10 +187,13 @@ public class GroupsServlet extends HttpServlet {
                 }
             }
 
-            USER: for (int i = 0; i < changeMe.getInvites().size(); i++) {
-                if (changeMe.getInvites().get(i).getGroupId() == group.getId()) {
-                    changeMe.getInvites().remove(i);
-                    break USER;
+            if (changeMe.getInvites() != null) {
+                USER:
+                for (int i = 0; i < changeMe.getInvites().size(); i++) {
+                    if (changeMe.getInvites().get(i).getGroupId() == group.getId()) {
+                        changeMe.getInvites().remove(i);
+                        break USER;
+                    }
                 }
             }
 

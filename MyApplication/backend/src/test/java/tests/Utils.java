@@ -55,6 +55,38 @@ public class Utils {
         return sb.toString();
     }
 
+    public static String deleteReq(String urlString, Map<String, String> params) {
+        try {
+            URL url = new URL(urlString + makeParams(params));
+            //System.out.println(url.toString());
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            //connection.setDoOutput(true);
+            connection.setRequestMethod("DELETE");
+
+            if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String line;
+                StringBuilder sb = new StringBuilder();
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                return sb.toString();
+            } else {
+                return "" + connection.getResponseCode();
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            assertFalse("Malformed url", false);
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            assertFalse("IO exception", false);
+            return null;
+        }
+    }
+
     public static String getReq(String urlString, Map<String, String> params) {
         try {
             URL url = new URL(urlString + makeParams(params));
@@ -284,5 +316,40 @@ public class Utils {
         System.out.println(resp);
         GroupData group = gson.fromJson(resp, GroupData.class);
         return group;
+    }
+
+    public static UserData deleteGroup(String userId, long groupId) {
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("user_id", userId);
+        params.put("group_id", groupId+"");
+
+        String resp = Utils.deleteReq(Utils.GROUPS_URL, params);
+        System.out.println(resp);
+        UserData user = gson.fromJson(resp, UserData.class);
+        return user;
+    }
+
+    public static GroupData deleteEvent(String userId, long eventId) {
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("user_id", userId);
+        params.put("event_id", eventId+"");
+        params.put("action", "delete");
+
+        String resp = Utils.deleteReq(Utils.EVENTS_URL, params);
+        System.out.println(resp);
+        GroupData group = gson.fromJson(resp, GroupData.class);
+        return group;
+    }
+
+    public static EventData leaveEvent(String userId, long eventId) {
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("user_id", userId);
+        params.put("event_id", eventId+"");
+        params.put("action", "leave");
+
+        String resp = Utils.deleteReq(Utils.EVENTS_URL, params);
+        System.out.println(resp);
+        EventData event = gson.fromJson(resp, EventData.class);
+        return event;
     }
 }

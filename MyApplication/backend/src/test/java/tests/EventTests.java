@@ -1,5 +1,7 @@
 package tests;
 
+import com.google.gson.JsonParseException;
+
 import org.junit.*;
 
 import java.util.ArrayList;
@@ -156,6 +158,37 @@ public class EventTests {
         event = Utils.getEvent(user1.getId(), group1.getId(), event.getId());
         assertTrue(event.isClosed());
         assertEquals((long) 110000000, event.getDate());
+    }
+
+    @Test
+    public void eventsDeleteEvent() {
+        group2 = Utils.addEvent(user2.getId(), group2.getId(), "delete meee", "soccer", 100001000, 2, true, 0);
+
+        int events = group2.getEvents().size();
+        group2 = Utils.deleteEvent(user2.getId(), group2.getEvents().get(group2.getEvents().size() - 1).getEventId());
+
+        assertEquals(events - 1, group2.getEvents().size());
+    }
+
+    @Test
+    public void eventsLeaveEvent() {
+        group2 = Utils.addEvent(user2.getId(), group2.getId(), "delete meee", "soccer", 100001000, 2, true, 0);
+        EventData event = Utils.joinEvent(user1.getId(),  group2.getEvents().get(group2.getEvents().size() - 1).getEventId(), group2.getId());
+
+        int members = event.getAttending().size();
+
+        event = Utils.leaveEvent(user1.getId(), group2.getEvents().get(group2.getEvents().size() - 1).getEventId());
+
+        assertEquals(members - 1, event.getAttending().size());
+        assertFalse(event.getAttending().containsKey(user1.getId()));
+    }
+
+    @Test (expected = JsonParseException.class)
+    public void eventsDeleteEventNonAdmin() {
+        group2 = Utils.addEvent(user2.getId(), group2.getId(), "delete meee", "soccer", 100001000, 2, true, 0);
+
+        int events = group2.getEvents().size();
+        group2 = Utils.deleteEvent(user1.getId(), group2.getEvents().get(group2.getEvents().size() - 1).getEventId());
     }
 
 }
