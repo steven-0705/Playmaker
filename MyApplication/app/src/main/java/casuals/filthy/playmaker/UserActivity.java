@@ -210,19 +210,19 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
                 {
                     final Long groupId = getGroupIds().get(position);
                     AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());
-                    alert.setTitle("Options");
+                    final AlertDialog dialog = alert.create();
+                    dialog.setTitle("Options");
                     ListView opt = new ListView(view.getContext());
-
                     List<String> optionHeadings = new ArrayList<String>();
                     optionHeadings.add("Open");
                     optionHeadings.add("Delete");
                     ListAdapter optionsAdapter = new ArrayAdapter<String>(getBaseContext(), R.layout.user_group_options,R.id.user_option ,optionHeadings);
                     opt.setAdapter(optionsAdapter);
-                    alert.setView(opt);
-                    alert.setPositiveButton("Done", new DialogInterface.OnClickListener(){
+                    dialog.setView(opt);
+                    dialog.setButton("Done",new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
+                            dialog.dismiss();
                         }
                     });
                     opt.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -235,16 +235,18 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
                                 i.putExtra("GROUP_ID", groupId);
                                 i.putExtra("USER_NAME", userName);
                                 startActivity(i);
+                                dialog.dismiss();
                             }
                             else if(position ==1){
                                 new DatastoreAdapter(UserActivity.this).leaveGroup(groupId,getId());
+                                dialog.dismiss();
                             }
                         }
                     });
 
 
 
-                    alert.show();
+                    dialog.show();
                     return true;
                 }
 
