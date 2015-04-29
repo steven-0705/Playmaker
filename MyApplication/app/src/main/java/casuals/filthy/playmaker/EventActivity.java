@@ -168,11 +168,20 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
             for (EventBean.EventTeam team: event.getTeams()) {
                 t++;
                 TextView entry = new TextView(EventActivity.this);
-                entry.setText("    Team " + t);
+                entry.setText("Team " + t);
+                //entry.setBackgroundColor(getResources().getColor(android.R.color.primary_text_light));
                 entry.setTextSize(32);
+                LinearLayout.LayoutParams viewLp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1);
+                viewLp.setMargins(60, 5, 60, 0);
+                entry.setLayoutParams(viewLp);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 entry.setLayoutParams(lp);
                 attendees.addView(entry);
+
+                View v = new View(this);
+                v.setLayoutParams(viewLp);
+                v.setBackgroundColor(getResources().getColor(android.R.color.black));
+                attendees.addView(v);
 
                 // add members
                 for (String memberId: team.getMembers()) {
@@ -180,6 +189,7 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
                     user.setText(event.getAttending().get(memberId));
                     user.setTextSize(24);
                     lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                    lp.setMargins(60, 5, 60, 0);
                     user.setLayoutParams(lp);
                     attendees.addView(user);
                 }
