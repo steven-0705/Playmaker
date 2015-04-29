@@ -25,7 +25,7 @@ public class GroupFragment extends Fragment implements AsyncResponse{
     private static String[] from = {"MESSAGE", "NAME", "DATE"};
     private static int[] to = {R.id.notify_message, R.id.notify_name, R.id.notify_date};
 
-    private GroupBean group;
+    public static GroupBean group;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
