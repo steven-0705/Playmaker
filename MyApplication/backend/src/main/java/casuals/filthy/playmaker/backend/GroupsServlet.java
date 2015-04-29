@@ -186,6 +186,14 @@ public class GroupsServlet extends HttpServlet {
                     break USER;
                 }
             }
+
+            USER: for (int i = 0; i < changeMe.getInvites().size(); i++) {
+                if (changeMe.getInvites().get(i).getGroupId() == group.getId()) {
+                    changeMe.getInvites().remove(i);
+                    break USER;
+                }
+            }
+
             store.add(changeMe);
             if (changeMe.getId().equals(userId))
                 caller = changeMe;

@@ -66,5 +66,6 @@ public class GroupFragment extends Fragment implements AsyncResponse{
     @Override
     public void onResume() {
         super.onResume();
+        updateView();
     }
 }
