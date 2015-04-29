@@ -67,7 +67,7 @@ public class StatsActivity extends Activity implements AsyncResponse{
 
         lv.setAdapter(adapter);
 
-        ((TextView) findViewById(R.id.stats_title)).setText(event.getName() + " Stats");
+        //((TextView) findViewById(R.id.stats_title)).setText(event.getName() + " Stats");
     }
 
     public void submit(View v) {

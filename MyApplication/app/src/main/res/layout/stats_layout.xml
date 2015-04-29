@@ -10,7 +10,9 @@
         android:id="@+id/stats_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Stats"
+        android:background="@color/playmaker_green"
+        android:textColor="@android:color/white"
+        android:text="Final Score"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="50sp"
         android:gravity="center"/>
@@ -23,12 +25,15 @@
         android:layout_above="@+id/ranks_submit" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Submit Ranks"
         android:id="@+id/ranks_submit"
+        android:background="@color/playmaker_green"
+        android:textColor="@android:color/white"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:textStyle="bold"
         android:onClick="submit"
         android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
