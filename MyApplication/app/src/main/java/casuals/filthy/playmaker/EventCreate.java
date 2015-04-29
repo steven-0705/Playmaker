@@ -86,7 +86,6 @@ public class EventCreate extends Activity implements AsyncResponse{
         final Button button1 = (Button) findViewById(R.id.button1);
         final Button button2 = (Button) findViewById(R.id.button2);
         final Button button3 = (Button) findViewById(R.id.additem);
-        final EditText getLoc = (EditText) findViewById(R.id.edittext2);
         final EditText getOther = (EditText) findViewById(R.id.edittext1);
         final EditText nameOfEvent = (EditText) findViewById(R.id.TitleNameofEvent);
         final TextView getTime = (TextView) findViewById(R.id.EditTime);

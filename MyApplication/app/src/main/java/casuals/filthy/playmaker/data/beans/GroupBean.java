@@ -9,9 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import casuals.filthy.playmaker.LeaderboardEntries;
-import casuals.filthy.playmaker.R;
-
 public class GroupBean extends DataBean {
 
     protected long id;
