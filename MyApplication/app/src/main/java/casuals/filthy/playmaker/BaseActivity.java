@@ -21,10 +21,17 @@ import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import java.io.InputStream;
+import java.net.URL;
 
 
 /**
@@ -109,7 +116,7 @@ public class BaseActivity extends FragmentActivity implements
 
     private TextView mStatus, mProfile;
     public static int login = 0;
-
+    public static Bitmap personImageView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -328,6 +335,37 @@ public class BaseActivity extends FragmentActivity implements
     public void onResult(LoadPeopleResult peopleData) {
             if(mGoogleApiClient.isConnected() && login==1) {
                 Person currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
+                if (currentUser.hasImage()) {
+
+                    Person.Image image = currentUser.getImage();
+
+
+                    new AsyncTask<String, Void, Bitmap>() {
+
+                        @Override
+                        protected Bitmap doInBackground(String... params) {
+
+                            try {
+                                URL url = new URL(params[0]);
+                                String urlString = url.toString();
+                                urlString = urlString.substring(0,urlString.length()-5);
+                                urlString = urlString + "sz=256";
+                                url = new URL(urlString);
+                                Log.w(TAG, "URL" + url.toString());
+                                InputStream in = url.openStream();
+                                return BitmapFactory.decodeStream(in);
+                            } catch (Exception e) {
+                        /* TODO log error */
+                            }
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Bitmap bitmap) {
+                            personImageView = bitmap;
+                        }
+                    }.execute(image.getUrl());
+                }
                 Intent i = new Intent(getApplicationContext(), UserActivity.class);
                i.putExtra("ID",currentUser.getId());
                 i.putExtra("DISPLAY_NAME",currentUser.getDisplayName());
