@@ -99,6 +99,11 @@ public class EventData extends DataObject {
         // reform teams
         if (autoTeams && numTeams > 0)
             updateTeams();
+        else if (numTeams == 0) {
+            EventTeam team = new EventTeam();
+            team.add(id);
+            teams.add(team);
+        }
     }
 
     public void setTeams(List<List<String>> teamsList) {
