@@ -93,7 +93,7 @@ public class GroupUserDetailed extends DataObject {
         }
 
         public long computeScore() {
-            double score = 1200;
+            double score = 700;
             for(Double ratio: ups) {
                 if(ratio > 0.5) {
                     score += (ratio * 20);
@@ -102,7 +102,7 @@ public class GroupUserDetailed extends DataObject {
                    score -= ((1 - ratio) * 20);
                 }
             }
-            if(score < 600) { score = 600; }
+            if(score < 100) { score = 100; }
             return (long) score;
         }
 
