@@ -114,7 +114,7 @@ public class BaseActivity extends FragmentActivity implements
 
     private SignInButton mSignInButton;
 
-    private TextView mStatus, mProfile;
+
     public static int login = 0;
     public static Bitmap personImageView;
     @Override
@@ -123,8 +123,7 @@ public class BaseActivity extends FragmentActivity implements
         setContentView(R.layout.google_login);
 
         mSignInButton = (SignInButton) findViewById(R.id.sign_in_button);
-        mStatus = (TextView) findViewById(R.id.sign_in_status);
-        mProfile = (TextView) findViewById(R.id.textView12);
+
 
 
         // Button listeners
@@ -138,7 +137,7 @@ public class BaseActivity extends FragmentActivity implements
         }
 
         mGoogleApiClient = buildGoogleApiClient();
-        mProfile.setText("remember to sign into gmail for now");
+
 
     }
 
@@ -186,7 +185,6 @@ public class BaseActivity extends FragmentActivity implements
             // between connected and not connected.
             switch (v.getId()) {
                 case R.id.sign_in_button:
-                    mStatus.setText(R.string.status_signing_in);
                     mSignInProgress = STATE_SIGN_IN;
                     mGoogleApiClient.connect();
                     break;
@@ -224,9 +222,7 @@ public class BaseActivity extends FragmentActivity implements
         // Retrieve some profile information to personalize our app for the user.
         Person currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
         String email = Plus.AccountApi.getAccountName(mGoogleApiClient);
-        mStatus.setText(String.format(
-                getResources().getString(R.string.signed_in_as),
-                email));//how to get e-mail
+
         Plus.PeopleApi.loadVisible(mGoogleApiClient, null)
                 .setResultCallback(this);
 
@@ -381,12 +377,6 @@ public class BaseActivity extends FragmentActivity implements
         mSignInButton.setEnabled(true);
 
 
-
-
-
-        mStatus.setText(R.string.status_signed_out);
-
-
     }
 
     @Override
@@ -407,7 +397,7 @@ public class BaseActivity extends FragmentActivity implements
                         @Override
                         public void onCancel(DialogInterface dialog) {
                             mSignInProgress = STATE_DEFAULT;
-                            mStatus.setText(R.string.status_signed_out);
+
                         }
                     });
         } else {
@@ -418,7 +408,7 @@ public class BaseActivity extends FragmentActivity implements
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     mSignInProgress = STATE_DEFAULT;
-                                    mStatus.setText(R.string.status_signed_out);
+
                                 }
                             }).create();
         }

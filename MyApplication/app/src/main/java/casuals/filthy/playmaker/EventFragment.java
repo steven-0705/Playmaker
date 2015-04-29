@@ -118,7 +118,9 @@ public class EventFragment extends Fragment implements AsyncResponse{
                 ListView opt = new ListView(view.getContext());
                 List<String> optionHeadings = new ArrayList<String>();
                 optionHeadings.add("Open");
+                if(GroupActivity.isAdmin()){
                 optionHeadings.add("Delete");
+                }
                 ListAdapter optionsAdapter = new ArrayAdapter<String>(getActivity().getBaseContext(), R.layout.user_group_options,R.id.user_option ,optionHeadings);
                 opt.setAdapter(optionsAdapter);
                 dialog.setView(opt);
