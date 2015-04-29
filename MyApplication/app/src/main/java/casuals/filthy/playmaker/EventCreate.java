@@ -1,24 +1,17 @@
 package casuals.filthy.playmaker;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -31,14 +24,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -46,23 +37,19 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
-import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 import casuals.filthy.playmaker.data.AsyncResponse;
 import casuals.filthy.playmaker.data.DatastoreAdapter;
-import casuals.filthy.playmaker.data.beans.GroupBean;
 
 /**
  * Created by Shane on 4/20/2015.
  */
 public class EventCreate extends Activity implements AsyncResponse{
-    DatastoreAdapter test = new DatastoreAdapter(this);
     double latitude;
     double longitude;
     static int numTeam = 0;
@@ -79,7 +66,7 @@ public class EventCreate extends Activity implements AsyncResponse{
             for(int i = 0; i<extras.size(); i++)
             {
                 String item = extras.getString("EVENT_TYPE_"+i);
-                item = ((char) (item.charAt(0) - 32)) + item.substring(1);
+                item = item.substring(0,1).toUpperCase() + item.substring(1);
                 items[i] = item;
             }
         }
@@ -108,7 +95,6 @@ public class EventCreate extends Activity implements AsyncResponse{
         final TextView getTeam = (TextView) findViewById(R.id.event_team);
         final String[] time = new String[3];
         final String[] miltime = new String[3];
-        final String[] hourAndMin = new String[2];
         final Spinner getOption = (Spinner) findViewById(R.id.spinner1);
         itemList.setEnabled(false);
         getOther.setEnabled(false);
@@ -153,45 +139,45 @@ public class EventCreate extends Activity implements AsyncResponse{
                     int mDay = currentDate.get(Calendar.DAY_OF_MONTH);
                     final int mHour = currentDate.get(Calendar.HOUR);
                     final int mMin = currentDate.get(Calendar.MINUTE);
-                    int i = 0;
-                    boolean timeReady = false;
                     DatePickerDialog DatePicker;
                     final TimePickerDialog TimePicker;
                     TimePicker = new TimePickerDialog(v.getContext(), new TimePickerDialog.OnTimeSetListener() {
                         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                             // Do something with the time chosen by the user
-                            String temp = "";
-                            if (minute / 10 == 0) {
-                                if (hourOfDay == 12) {
-                                    temp = "" + "12" + ":0" + minute + " PM";
-                                }
+                            if(view.isShown()) {
+                                String temp = "";
+                                if (minute / 10 == 0) {
+                                    if (hourOfDay == 12) {
+                                        temp = "" + "12" + ":0" + minute + " PM";
+                                    }
 
-                                if (hourOfDay > 12) {
-                                    temp = "" + (hourOfDay - 12) + ":0" + minute + " PM";
+                                    if (hourOfDay > 12) {
+                                        temp = "" + (hourOfDay - 12) + ":0" + minute + " PM";
+                                    }
+                                    if (hourOfDay < 12) {
+                                        temp = "" + hourOfDay + ":0" + minute + " AM";
+                                    }
+                                } else {
+                                    if (hourOfDay == 12) {
+                                        temp = "" + "12" + ":" + minute + " PM";
+                                    }
+                                    if (hourOfDay > 12) {
+                                        temp = "" + (hourOfDay - 12) + ":" + minute + " PM";
+                                    }
+                                    if (hourOfDay < 12) {
+                                        temp = "" + hourOfDay + ":" + minute + " AM";
+                                    }
                                 }
-                                if (hourOfDay < 12) {
-                                    temp = "" + hourOfDay + ":0" + minute + " AM";
+                                for (int i = 0; i < time.length; i++) { // This loop and these checks are necessary because Android is dumb and detects a single Click twice
+                                    if (!date[i].matches("") && time[i].matches("")) {
+                                        time[i] = (temp);
+                                        miltime[i] = hourOfDay + ":" + minute;
+                                        break;
+                                    }
                                 }
-                            } else {
-                                if (hourOfDay == 12) {
-                                    temp = "" + "12" + ":" + minute + " PM";
-                                }
-                                if (hourOfDay > 12) {
-                                    temp = "" + (hourOfDay - 12) + ":" + minute + " PM";
-                                }
-                                if (hourOfDay < 12) {
-                                    temp = "" + hourOfDay + ":" + minute + " AM";
-                                }
+                                temp = date[0] + " " + time[0] + "\n" + date[1] + " " + time[1] + "\n" + date[2] + " " + time[2] + "\n";
+                                getTime.setText(temp); // sets the Text field to a max of 3 dates
                             }
-                            for (int i = 0; i < time.length; i++) { // This loop and these checks are necessary because Android is dumb and detects a single Click twice
-                                if (!date[i].matches("") && time[i].matches("")) {
-                                    time[i] = (temp);
-                                    miltime[i] = hourOfDay + ":" + minute;
-                                    break;
-                                }
-                            }
-                            temp = date[0] + " " + time[0] + "\n" + date[1] + " " + time[1] + "\n" + date[2] + " " + time[2] + "\n";
-                            getTime.setText(temp); // sets the Text field to a max of 3 dates
                         }
                     }, mHour, mMin, false);
                     TimePicker.setTitle("Select Time");
@@ -201,17 +187,26 @@ public class EventCreate extends Activity implements AsyncResponse{
                             if(datepicker.isShown()) {
                                 month = month + 1;
                                 String temp = "" + month + "/" + day + "/" + year;
+                                int numDates = 0;
+                                int numTimes = 0;
+                                for(int i = 0; i < date.length; i++) {
+                                    if(!(date[i].matches(""))) {
+                                        numDates++;
+                                    }
+                                    if(!(time[i].matches(""))) {
+                                        numTimes++;
+                                    }
+                                }
+                                while(numDates != numTimes) {
+                                    date[numDates - 1] = "";
+                                    numDates--;
+                                }
                                 for (int i = 0; i < date.length; i++) { // This loop and these checks are necessary because Android is dumb and detects a single Click twice
                                     if (date[i].matches("")) {
                                         date[i] = (temp);
                                         TimePicker.show();
                                         break;
                                     }
-                                    /*
-                                    if (date[i].matches(temp)) {
-                                        break;
-                                    }
-                                    */
                                 }
                             }
                         }
@@ -271,7 +266,6 @@ public class EventCreate extends Activity implements AsyncResponse{
                     {
                         EventTimes.add(i, EventDates.get(i).getTime());
                     }
-                    Log.w("ListLen: ", Integer.toString(EventDates.size()));
                     DatastoreAdapter dsa = new DatastoreAdapter(EventCreate.this);
 
 
@@ -335,7 +329,6 @@ public class EventCreate extends Activity implements AsyncResponse{
                 np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
                     @Override
                     public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                        Log.w("Numteam1: ", String.valueOf(newVal));
                         numTeam=newVal;
                     }
                 });

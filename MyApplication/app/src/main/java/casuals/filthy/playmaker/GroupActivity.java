@@ -3,57 +3,24 @@ package casuals.filthy.playmaker;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.Notification;
 import android.app.ProgressDialog;
-import android.app.Service;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.view.MotionEvent;
 import android.view.inputmethod.EditorInfo;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import casuals.filthy.playmaker.data.DatastoreAdapter;
 import casuals.filthy.playmaker.data.AsyncResponse;
 import casuals.filthy.playmaker.data.beans.GroupBean;
-import casuals.filthy.playmaker.data.beans.UserBean;
 
-
-import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.CheckBox;
 
 import java.util.List;
-
-import com.google.android.gms.common.ConnectionResult;
-
-import com.google.android.gms.common.GooglePlayServicesUtil;
-
-import com.google.android.gms.common.SignInButton;
-
-import com.google.android.gms.common.api.GoogleApiClient;
-
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-
-import com.google.android.gms.plus.Plus;
-
-import com.google.android.gms.plus.model.people.Person;
-
-
 
 public class GroupActivity extends BaseActivity implements ActionBar.TabListener, AsyncResponse{
     ActionBar actionbar;
@@ -63,7 +30,6 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
     private static String gUserId;
     private static String userName;
     private static List<Long> eventIds;
-    private static CheckBox checkBox1, checkBox2, checkBox3, checkBox4;
     private ProgressDialog progress;
     private static boolean admin;
 
@@ -241,7 +207,6 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
                 } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(input.getText().toString()).matches()) {
                     Toast.makeText(getApplicationContext(), "Invalid Email", Toast.LENGTH_SHORT).show();
                 } else {
-                    String temp = input.getText().toString();
                     DatastoreAdapter adapter = new DatastoreAdapter(null);
                     adapter.inviteUser(groupId, input.getText().toString(), userName);
                     Toast.makeText(getApplicationContext(), "Invitation Sent", Toast.LENGTH_SHORT).show();
@@ -264,7 +229,6 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
                 if (input.getText().toString().length() < 4) {
                     Toast.makeText(getApplicationContext(), "Message too short", Toast.LENGTH_SHORT).show();
                 } else {
-                    String temp = input.getText().toString();
                     DatastoreAdapter adapter = new DatastoreAdapter(GroupActivity.this);
                     adapter.sendNotification(groupId, input.getText().toString(), userName, getUserId());
                     Toast.makeText(getApplicationContext(), "Message Sent", Toast.LENGTH_SHORT).show();

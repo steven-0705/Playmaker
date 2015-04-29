@@ -7,16 +7,13 @@ package casuals.filthy.playmaker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.People.*;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
-import com.google.android.gms.plus.model.people.PersonBuffer;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -26,32 +23,9 @@ import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-//import org.apache.http.HttpResponse;
-//import org.apache.http.NameValuePair;
-//import org.apache.http.client.ClientProtocolException;
-//import org.apache.http.client.HttpClient;
-//import org.apache.http.client.entity.UrlEncodedFormEntity;
-//import org.apache.http.client.methods.HttpGet;
-//import org.apache.http.client.methods.HttpPost;
-//import org.apache.http.impl.client.DefaultHttpClient;
-//import org.apache.http.message.BasicNameValuePair;
-//import org.apache.http.util.EntityUtils;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Android Google+ Quickstart activity.
@@ -209,16 +183,6 @@ public class BaseActivity extends FragmentActivity implements
                     mSignInProgress = STATE_SIGN_IN;
                     mGoogleApiClient.connect();
                     break;
-//                case R.id.sign_out_button:
-//                    // We clear the default account on sign out so that Google Play
-//                    // services will not return an onConnected callback without user
-//                    // interaction.
-//                    if (mGoogleApiClient.isConnected()) {
-//                        Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-//                        mGoogleApiClient.disconnect();
-//                    }
-//                    onSignedOut();
-//                    break;
             }
         }
 
@@ -243,7 +207,6 @@ public class BaseActivity extends FragmentActivity implements
             login = 2;
         }
 
-        Log.i(TAG, "onConnected");
 
         // Update the user interface to reflect that the user is signed in.
         mSignInButton.setEnabled(false);
@@ -274,21 +237,17 @@ public class BaseActivity extends FragmentActivity implements
     public void onConnectionFailed(ConnectionResult result) {
         // Refer to the javadoc for ConnectionResult to see what error codes might
         // be returned in onConnectionFailed.
-        Log.i(TAG, "onConnectionFailed: ConnectionResult.getErrorCode() = "
-                + result.getErrorCode());
 
         if (result.getErrorCode() == ConnectionResult.API_UNAVAILABLE) {
             // An API requested for GoogleApiClient is not available. The device's current
             // configuration might not be supported with the requested API or a required component
             // may not be installed, such as the Android Wear application. You may need to use a
             // second GoogleApiClient to manage the application's optional APIs.
-            Log.w(TAG, "API Unavailable.");
         } else if (mSignInProgress != STATE_IN_PROGRESS) {
             // We do not have an intent in progress so we should store the latest
             // error resolution intent for use when the sign in button is clicked.
             mSignInIntent = result.getResolution();
             mSignInError = result.getErrorCode();
-            Log.i(TAG, "mSignInProgress != State Progress");
             //Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
             if (mSignInProgress == STATE_SIGN_IN) {
                 // STATE_SIGN_IN indicates the user already clicked the sign in button
@@ -296,7 +255,6 @@ public class BaseActivity extends FragmentActivity implements
                 // or they click cancel.
                 resolveSignInError();
 
-                Log.i(TAG, "we made it here");
             }
 
         }
@@ -327,10 +285,7 @@ public class BaseActivity extends FragmentActivity implements
                 mSignInProgress = STATE_IN_PROGRESS;
                 startIntentSenderForResult(mSignInIntent.getIntentSender(),
                         RC_SIGN_IN, null, 0, 0, 0);
-                Log.i(TAG, "SIGN IN ERROR");
             } catch (SendIntentException e) {
-                Log.i(TAG, "Sign in intent could not be sent: "
-                        + e.getLocalizedMessage());
                 // The intent was canceled before it was sent.  Attempt to connect to
                 // get an updated ConnectionResult.
                 mSignInProgress = STATE_SIGN_IN;
@@ -371,7 +326,6 @@ public class BaseActivity extends FragmentActivity implements
 
     @Override
     public void onResult(LoadPeopleResult peopleData) {
-        Log.i(TAG, "we made it here");
             if(mGoogleApiClient.isConnected() && login==1) {
                 Person currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
                 Intent i = new Intent(getApplicationContext(), UserActivity.class);
@@ -414,7 +368,6 @@ public class BaseActivity extends FragmentActivity implements
                     new DialogInterface.OnCancelListener() {
                         @Override
                         public void onCancel(DialogInterface dialog) {
-                            Log.e(TAG, "Google Play services resolution cancelled");
                             mSignInProgress = STATE_DEFAULT;
                             mStatus.setText(R.string.status_signed_out);
                         }
@@ -426,8 +379,6 @@ public class BaseActivity extends FragmentActivity implements
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Log.e(TAG, "Google Play services error could not be "
-                                            + "resolved: " + mSignInError);
                                     mSignInProgress = STATE_DEFAULT;
                                     mStatus.setText(R.string.status_signed_out);
                                 }

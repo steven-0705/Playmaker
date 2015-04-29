@@ -4,25 +4,18 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import casuals.filthy.playmaker.data.AsyncResponse;
 import casuals.filthy.playmaker.data.DatastoreAdapter;
 import casuals.filthy.playmaker.data.beans.EventBean;
-import casuals.filthy.playmaker.data.beans.UserBean;
 
 /**
  * Created by Shane on 4/21/2015.
@@ -31,11 +24,6 @@ public class StatsActivity extends Activity implements AsyncResponse{
 
     private EventBean event;
     private long EventId;
-
-    public static String[] places = {"1st", "2nd", "3rd", "4th" , "5th",
-            "6th", "7th", "8th", "9th", "10th", "11th", "14th", "15th",
-            "16th", "17th", "18th", "19th", "20th", "21st", "22nd", "23rd",
-            "24th", "25th", "26th", "27th", "28th", "29th", "30th" };
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,14 +72,11 @@ public class StatsActivity extends Activity implements AsyncResponse{
                         List<Double> up = new ArrayList<Double>();
                         List<Double> down = new ArrayList<Double>();
 
-                        int first = teamsView.getFirstVisiblePosition();
-                        int last = first + teamsView.getChildCount() - 1;
                         for (int i = 0; i < event.getTeams().size(); i++) {
                             NumberPicker np = (NumberPicker) getViewByPosition(i, teamsView).findViewById(R.id.rankPicker);
 
                             up.add((double) (event.getTeams().size() + 1 - np.getValue()) / event.getTeams().size());
                             down.add(0.0);
-                            Log.i("Ratio:", "" + (double) (event.getTeams().size() + 1 - np.getValue()) / event.getTeams().size());
                         }
 
                         new DatastoreAdapter(EventActivity.instance).reportEventStats(GroupActivity.getUserId(),

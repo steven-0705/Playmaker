@@ -6,6 +6,7 @@ package casuals.filthy.playmaker;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
 public class FragmentPageAdapter extends FragmentPagerAdapter {
     public FragmentPageAdapter(FragmentManager fm) {
         super(fm);

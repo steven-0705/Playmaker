@@ -1,45 +1,30 @@
 package casuals.filthy.playmaker;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.NumberPicker;
-import android.widget.PopupWindow;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.model.people.Person;
-
 import casuals.filthy.playmaker.data.AsyncResponse;
 import casuals.filthy.playmaker.data.DatastoreAdapter;
-import casuals.filthy.playmaker.data.beans.GroupBean;
 import casuals.filthy.playmaker.data.beans.UserBean;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -70,11 +55,7 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
         setContentView(R.layout.user);
         final TextView user_name = (TextView) findViewById(R.id.user_display);
         final TextView user_email = (TextView) findViewById(R.id.user_user);
-        final ImageView user_image = (ImageView) findViewById(R.id.user_image);
         final Button createGroup = (Button) findViewById(R.id.groupCreate);
-        final TabHost user_tab = (TabHost) findViewById(R.id.user_tabHost);
-        final ListView groupList = (ListView) findViewById(R.id.user_group_list);
-        final ListView userInviteList = (ListView) findViewById(R.id.user_invites);
 
         TabHost host = (TabHost)findViewById(R.id.user_tabHost);
         host.setup();
@@ -84,7 +65,7 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
                 .setContent(new TabHost.TabContentFactory() {
 
                     public View createTabContent(String tag) {
-                        return (ListView) findViewById(R.id.user_group_list);
+                        return findViewById(R.id.user_group_list);
                     }
                 }));
 
@@ -93,7 +74,7 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
                 .setContent(new TabHost.TabContentFactory() {
 
                     public View createTabContent(String tag) {
-                        return (ListView) findViewById(R.id.user_invites);
+                        return findViewById(R.id.user_invites);
                     }
                 }));
 

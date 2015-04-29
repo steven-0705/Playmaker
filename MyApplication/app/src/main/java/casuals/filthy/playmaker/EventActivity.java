@@ -1,29 +1,17 @@
 package casuals.filthy.playmaker;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.security.acl.Group;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,7 +19,6 @@ import java.util.Date;
 import casuals.filthy.playmaker.data.AsyncResponse;
 import casuals.filthy.playmaker.data.DatastoreAdapter;
 import casuals.filthy.playmaker.data.beans.EventBean;
-import casuals.filthy.playmaker.data.beans.PollBean;
 
 /**
  * Created by Steven on 4/25/2015.
@@ -80,8 +67,6 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
         event_name.setText(event.getName());
         event_type.setText(event.getType());
         TextView poll_message = (TextView) findViewById(R.id.poll_message);
-        //final Button participants = (Button) findViewById(R.id.user_button);
-        //final Button items = (Button) findViewById(R.id.item_button);
         LinearLayout pollView = (LinearLayout) findViewById(R.id.poll);
         TextView event_date = (TextView) findViewById(R.id.event_date);
         TextView event_time = (TextView) findViewById(R.id.event_time);
