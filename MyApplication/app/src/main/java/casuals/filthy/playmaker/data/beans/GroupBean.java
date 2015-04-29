@@ -38,7 +38,7 @@ public class GroupBean extends DataBean {
     public boolean isUserAdmin(String userId) {
         for (GroupUserBean user: users) {
             if (user.id.equals(userId))
-                return true;
+                return user.isAdmin();
         }
 
         return false;
