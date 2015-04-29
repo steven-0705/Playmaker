@@ -4,39 +4,24 @@ package casuals.filthy.playmaker;
  * Created by Shane on 3/19/2015.
  */
 import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import casuals.filthy.playmaker.data.AsyncResponse;
 import casuals.filthy.playmaker.data.DatastoreAdapter;
@@ -45,8 +30,11 @@ import casuals.filthy.playmaker.data.beans.GroupUserBean;
 
 public class LeaderboardFragment extends ListFragment implements AsyncResponse {
 
-    List<HashMap<String,String>>  Entries = LeaderboardEntries.ITEMS;
-    String[] from = {LeaderboardEntries.KEY_ICON, LeaderboardEntries.KEY_NAME, LeaderboardEntries.KEY_PLACE, LeaderboardEntries.KEY_POINTS};
+    public final static String KEY_ICON = "icon";
+    public final static String KEY_NAME = "name";
+    public final static String KEY_PLACE = "place";
+    public final static String KEY_POINTS = "points";
+    String[] from = {KEY_ICON, KEY_NAME, KEY_PLACE, KEY_POINTS};
     int[] to = {R.id.item_icon, R.id.item_textName, R.id.item_textPlace, R.id.item_textDate};
     private GroupBean group;
     private List<GroupUserBean> ranks;
@@ -85,22 +73,6 @@ public class LeaderboardFragment extends ListFragment implements AsyncResponse {
         {
             return;
         }
-        /*GroupActivity.viewpager.setPagingEnabled(false);
-        LayoutInflater inflater = (LayoutInflater) getActivity().getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View popupView = inflater.inflate(R.layout.leaderboard_popout, null);
-        final PopupWindow popupWindow = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        popupWindow.setBackgroundDrawable(null);
-
-        Button btnDismiss = (Button)popupView.findViewById(R.id.dismiss);
-        btnDismiss.setOnClickListener(new Button.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                popupWindow.dismiss();
-                GroupActivity.viewpager.setPagingEnabled(true);
-
-            }});
-        popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);*/
         GroupUserBean user = ranks.get(position - 1);
 
         AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
@@ -166,8 +138,6 @@ public class LeaderboardFragment extends ListFragment implements AsyncResponse {
         List<Map<String, String>> results = getRanks(group.getEventTypes().get(0));
         SimpleAdapter adapter = new SimpleAdapter(getActivity().getBaseContext(), results , R.layout.leaderboard_item_view, from, to);
         setListAdapter(adapter);
-        /*SimpleAdapter adapter = new SimpleAdapter(getActivity().getBaseContext(), Entries , R.layout.leaderboard_item_view, from, to);
-        setListAdapter(adapter);*/
     }
 
     public List<Map<String, String>> getRanks(String type) {
@@ -179,24 +149,24 @@ public class LeaderboardFragment extends ListFragment implements AsyncResponse {
         int i = 1;
         for (GroupUserBean user: ranks) {
             Map<String, String> entry = new HashMap<String, String>();
-            entry.put(LeaderboardEntries.KEY_NAME, user.getName());
-            entry.put(LeaderboardEntries.KEY_POINTS, user.getStats().get(type).computeScore()+"");
+            entry.put(KEY_NAME, user.getName());
+            entry.put(KEY_POINTS, user.getStats().get(type).computeScore()+"");
             switch (i) {
                 case 1:
-                    entry.put(LeaderboardEntries.KEY_PLACE, "1st Place");
-                    entry.put(LeaderboardEntries.KEY_ICON,  String.valueOf(R.drawable.first_place));
+                    entry.put(KEY_PLACE, "1st Place");
+                    entry.put(KEY_ICON,  String.valueOf(R.drawable.first_place));
                     break;
                 case 2:
-                    entry.put(LeaderboardEntries.KEY_PLACE, "2nd Place");
-                    entry.put(LeaderboardEntries.KEY_ICON,  String.valueOf(R.drawable.second_place));
+                    entry.put(KEY_PLACE, "2nd Place");
+                    entry.put(KEY_ICON,  String.valueOf(R.drawable.second_place));
                     break;
                 case 3:
-                    entry.put(LeaderboardEntries.KEY_PLACE, "3rd Place");
-                    entry.put(LeaderboardEntries.KEY_ICON,  String.valueOf(R.drawable.third_place));
+                    entry.put(KEY_PLACE, "3rd Place");
+                    entry.put(KEY_ICON,  String.valueOf(R.drawable.third_place));
                     break;
                 default:
-                    entry.put(LeaderboardEntries.KEY_PLACE, i + "th Place");
-                    entry.put(LeaderboardEntries.KEY_ICON,  String.valueOf(R.drawable.std_ribbon));
+                    entry.put(KEY_PLACE, i + "th Place");
+                    entry.put(KEY_ICON,  String.valueOf(R.drawable.std_ribbon));
                     break;
             }
 

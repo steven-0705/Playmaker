@@ -1,29 +1,17 @@
 package casuals.filthy.playmaker;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.security.acl.Group;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,7 +19,6 @@ import java.util.Date;
 import casuals.filthy.playmaker.data.AsyncResponse;
 import casuals.filthy.playmaker.data.DatastoreAdapter;
 import casuals.filthy.playmaker.data.beans.EventBean;
-import casuals.filthy.playmaker.data.beans.PollBean;
 
 /**
  * Created by Steven on 4/25/2015.
@@ -80,8 +67,6 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
         event_name.setText(event.getName());
         event_type.setText(event.getType());
         TextView poll_message = (TextView) findViewById(R.id.poll_message);
-        //final Button participants = (Button) findViewById(R.id.user_button);
-        //final Button items = (Button) findViewById(R.id.item_button);
         LinearLayout pollView = (LinearLayout) findViewById(R.id.poll);
         TextView event_date = (TextView) findViewById(R.id.event_date);
         TextView event_time = (TextView) findViewById(R.id.event_time);
@@ -168,11 +153,20 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
             for (EventBean.EventTeam team: event.getTeams()) {
                 t++;
                 TextView entry = new TextView(EventActivity.this);
-                entry.setText("    Team " + t);
+                entry.setText("Team " + t);
+                //entry.setBackgroundColor(getResources().getColor(android.R.color.primary_text_light));
                 entry.setTextSize(32);
+                LinearLayout.LayoutParams viewLp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1);
+                viewLp.setMargins(60, 5, 60, 0);
+                entry.setLayoutParams(viewLp);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 entry.setLayoutParams(lp);
                 attendees.addView(entry);
+
+                View v = new View(this);
+                v.setLayoutParams(viewLp);
+                v.setBackgroundColor(getResources().getColor(android.R.color.black));
+                attendees.addView(v);
 
                 // add members
                 for (String memberId: team.getMembers()) {
@@ -180,6 +174,7 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
                     user.setText(event.getAttending().get(memberId));
                     user.setTextSize(24);
                     lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                    lp.setMargins(60, 5, 60, 0);
                     user.setLayoutParams(lp);
                     attendees.addView(user);
                 }

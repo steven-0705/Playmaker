@@ -9,9 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import casuals.filthy.playmaker.LeaderboardEntries;
-import casuals.filthy.playmaker.R;
-
 public class GroupBean extends DataBean {
 
     protected long id;
@@ -38,7 +35,7 @@ public class GroupBean extends DataBean {
     public boolean isUserAdmin(String userId) {
         for (GroupUserBean user: users) {
             if (user.id.equals(userId))
-                return true;
+                return user.isAdmin();
         }
 
         return false;
@@ -65,7 +62,7 @@ public class GroupBean extends DataBean {
         Collections.sort(events);
         List<GroupEventData> result = new ArrayList<GroupEventData>();
         for (int i = 0; i < events.size(); i++) {
-            if (System.currentTimeMillis() < events.get(i).date + 1000 * 60 * 60 * 12) {
+            if (System.currentTimeMillis() <= events.get(i).date + 1000 * 60 * 60 * 6 && !events.get(i).isReported()) {
                 result.add(events.get(i));
             }
         }
@@ -77,7 +74,7 @@ public class GroupBean extends DataBean {
         Collections.sort(events);
         List<GroupEventData> result = new ArrayList<GroupEventData>();
         for (int i = 0; i < events.size(); i++) {
-            if (System.currentTimeMillis() > events.get(i).date + 1000 * 60 * 60 * 12 && !events.get(i).isReported()) {
+            if (System.currentTimeMillis() > events.get(i).date + 1000 * 60 * 60 * 6 || events.get(i).isReported()) {
                 result.add(events.get(i));
             }
         }

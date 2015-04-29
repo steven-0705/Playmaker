@@ -7,36 +7,25 @@ import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import casuals.filthy.playmaker.data.DatastoreAdapter;
 import casuals.filthy.playmaker.data.AsyncResponse;
 import casuals.filthy.playmaker.data.beans.GroupBean;
-
 import casuals.filthy.playmaker.data.beans.GroupUserBean;
-import casuals.filthy.playmaker.data.beans.UserBean;
-
-
 
 import android.view.View;
 import android.widget.Button;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class GroupActivity extends BaseActivity implements ActionBar.TabListener, AsyncResponse{
     ActionBar actionbar;
@@ -46,7 +35,6 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
     private static String gUserId;
     private static String userName;
     private static List<Long> eventIds;
-    private static CheckBox checkBox1, checkBox2, checkBox3, checkBox4;
     private ProgressDialog progress;
     private static boolean admin;
 
@@ -59,11 +47,7 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
             groupId = extras.getLong("GROUP_ID");
             userName = extras.getString("USER_NAME");
         }
-
-
-
         setContentView(R.layout.activity_main);
-
         progress = new ProgressDialog(this);
         progress.setTitle("Loading");
         progress.setMessage("Retrieving your data...");
@@ -228,7 +212,6 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
                 } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(input.getText().toString()).matches()) {
                     Toast.makeText(getApplicationContext(), "Invalid Email", Toast.LENGTH_SHORT).show();
                 } else {
-                    String temp = input.getText().toString();
                     DatastoreAdapter adapter = new DatastoreAdapter(null);
                     adapter.inviteUser(groupId, input.getText().toString(), userName);
                     Toast.makeText(getApplicationContext(), "Invitation Sent", Toast.LENGTH_SHORT).show();
@@ -251,7 +234,6 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
                 if (input.getText().toString().length() < 4) {
                     Toast.makeText(getApplicationContext(), "Message too short", Toast.LENGTH_SHORT).show();
                 } else {
-                    String temp = input.getText().toString();
                     DatastoreAdapter adapter = new DatastoreAdapter(GroupActivity.this);
                     adapter.sendNotification(groupId, input.getText().toString(), userName, getUserId());
                     Toast.makeText(getApplicationContext(), "Message Sent", Toast.LENGTH_SHORT).show();
@@ -262,6 +244,7 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
     }
 
     public void showMembers(View v) {
+
         GroupBean group = GroupFragment.group;
         AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
         alert.setTitle("Here are all The Members");
@@ -283,6 +266,7 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
             }
         });
         alert.show();
+
 
     }
 

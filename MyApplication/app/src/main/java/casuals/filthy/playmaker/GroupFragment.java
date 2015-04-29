@@ -3,6 +3,7 @@ package casuals.filthy.playmaker;
 /**
  * Created by Shane on 3/19/2015.
  */
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -53,8 +54,6 @@ public class GroupFragment extends Fragment implements AsyncResponse{
     private void updateView() {
         if (group == null || getView() == null)
             return;
-
-        //((TextView) getView().findViewById(R.id.group_name)).setText(group.getName());
         ListView notifications = (ListView) getView().findViewById(R.id.notifications);
         List<Map<String, String>> notificationList = group.getRecentNotification();
         ListAdapter notificationsAdapter = new SimpleAdapter(getActivity().getBaseContext(), notificationList, R.layout.notification_view, from, to);
@@ -69,4 +68,3 @@ public class GroupFragment extends Fragment implements AsyncResponse{
         super.onResume();
     }
 }
-
