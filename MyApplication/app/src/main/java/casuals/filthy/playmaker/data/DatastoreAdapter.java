@@ -64,7 +64,7 @@ public class DatastoreAdapter {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 200:
-                    if (caller != null) {
+                    if (caller != null && type != null) {
                         Object response = gson.fromJson(task.getResponse(), type);
                         caller.response(response);
                     }
@@ -439,6 +439,16 @@ public class DatastoreAdapter {
                 + "?user_id="+userId+"&group_id="+groupId);
 
         type = UserBean.class;
+        ServletHttpAsyncTask request = new ServletHttpAsyncTask();
+        task = request;
+        request.execute(post);
+    }
+
+    public void leaveEvent(long eventId, String userId) {
+        HttpDelete post = new HttpDelete(SERVER_URL + SERVLET_EVENTS
+                + "?user_id="+userId+"&event_id="+eventId);
+
+        type = null;
         ServletHttpAsyncTask request = new ServletHttpAsyncTask();
         task = request;
         request.execute(post);
