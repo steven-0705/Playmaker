@@ -48,7 +48,6 @@ public class StatsActivity extends Activity implements AsyncResponse{
         ListView lv = (ListView) findViewById(R.id.team_list);
 
         String[] names = new String[teamlist.size()];
-        Log.i("Num Teams: ", "" + teamlist.size());
         if(event.getNumTeams() != 0) {
             for (int i = 0; i < teamlist.size(); i++) {
                 names[i] = "Team " + (i + 1);
