@@ -101,8 +101,6 @@ public class EventCreate extends Activity implements AsyncResponse{
         getTeam.setEnabled(false);
 
         final Switch teamEnabled = (Switch) findViewById(R.id.switch2);
-        final Switch autoTeamEnabled = (Switch) findViewById(R.id.autoEnable);
-        final TextView autoText = (TextView) findViewById(R.id.AutoGenerateTeamText);
 
         for (int i=0; i<date.length; i++) {
             date[i] = "";
@@ -349,11 +347,9 @@ public class EventCreate extends Activity implements AsyncResponse{
                     public void onClick(View v) {
                         // TODO Auto-generated method stub
                         popupWindow.dismiss();
-                        autoTeamEnabled.setEnabled(true);
-                        autoText.setEnabled(true);
-                        if (numTeam == 0)
-                                numTeam = 2;
-
+                        if (numTeam == 0) {
+                            numTeam = 2;
+                        }
                     }});
                 popupWindow.showAtLocation(buttonView.getRootView(), Gravity.CENTER, 0, 0);
             }
@@ -361,29 +357,11 @@ public class EventCreate extends Activity implements AsyncResponse{
             else
             {
                 numTeam=0;
-                autoTeamEnabled.setEnabled(false);
-                autoText.setEnabled(false);
-                autoTeamEnabled.setChecked(false);
                 teamAuto = false;
             }
         }
     });
 
-    autoTeamEnabled.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            if(isChecked)
-            {
-                teamAuto = true;
-            }
-            else
-            {
-                teamAuto = false;
-            }
-
-
-        }
-    });
 
 
     }
