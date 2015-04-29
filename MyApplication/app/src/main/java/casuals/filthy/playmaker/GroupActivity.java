@@ -64,7 +64,6 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
         actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         actionbar.addTab(actionbar.newTab().setIcon(R.drawable.group_icon).setText("Group").setTabListener(this));
         actionbar.addTab(actionbar.newTab().setIcon(R.drawable.event_icon).setText("Events").setTabListener(this));
-
         actionbar.addTab(actionbar.newTab().setIcon(R.drawable.leaderboard_icon).setText("Leader Board").setTabListener(this));
         viewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -243,6 +242,32 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
         alert.setNegativeButton("Cancel", null).show();
     }
 
+//    public void showMembers(View v) {
+//
+//        GroupBean group = GroupFragment.group;
+//        AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
+//        alert.setTitle("Here are all The Members");
+//        ListView members = new ListView(v.getContext());
+//        List<GroupUserBean> membersLista = group.getUsers();
+//        List<String> userNames = new ArrayList<String>();
+//        for(GroupUserBean user: membersLista){
+//            userNames.add(user.getName());
+//        }
+//       String[] from = {"MESSAGE", "NAME", "DATE"};
+//        int[] to = {R.id.notify_message, R.id.notify_name, R.id.notify_date};
+//        ListAdapter membersAdapter = new ArrayAdapter<String>(getBaseContext(), R.layout.members_view,R.id.member_name ,userNames);
+//        members.setAdapter(membersAdapter);
+//        alert.setView(members);
+//        alert.setPositiveButton("Done", new DialogInterface.OnClickListener(){
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//
+//            }
+//        });
+//        alert.show();
+//
+//
+//    }
 
 }
 
