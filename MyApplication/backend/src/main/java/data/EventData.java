@@ -129,8 +129,19 @@ public class EventData extends DataObject {
 
         Collections.sort(ranking);
 
+        long[] totals = new long[teams.size()];
+
         for (int i = 0; i < ranking.size(); i++) {
-            teams.get(i % numTeams).add(ranking.get(i).getPlayer());
+            long min = Long.MAX_VALUE;
+            int minIndex = 0;
+            for (int j = 0; j < totals.length; j++) {
+                if (totals[j] < min) {
+                    min = totals[j];
+                    minIndex = j;
+                }
+            }
+            teams.get(minIndex).add(ranking.get(i).getPlayer());
+            totals[minIndex] += ranking.get(i).computeScore();
         }
 
     }

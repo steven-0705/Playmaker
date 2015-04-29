@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
@@ -90,6 +91,7 @@ public class StatsActivity extends Activity implements AsyncResponse{
 
                             up.add((double) (event.getTeams().size() + 1 - np.getValue()) / event.getTeams().size());
                             down.add(0.0);
+                            Log.i("Ratio:", "" + (double) (event.getTeams().size() + 1 - np.getValue()) / event.getTeams().size());
                         }
 
                         new DatastoreAdapter(EventActivity.instance).reportEventStats(GroupActivity.getUserId(),
