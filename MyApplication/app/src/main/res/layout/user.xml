@@ -55,7 +55,9 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:onClick="checkforSignOut"
-        android:background="@color/playmaker_green"/>
+        android:background="@color/playmaker_green"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"/>
 
     <Button
         android:layout_width="wrap_content"
