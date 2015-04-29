@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -23,6 +24,8 @@ import android.widget.Toast;
 
 import casuals.filthy.playmaker.data.AsyncResponse;
 import casuals.filthy.playmaker.data.DatastoreAdapter;
+import casuals.filthy.playmaker.data.beans.GroupBean;
+import casuals.filthy.playmaker.data.beans.GroupUserBean;
 import casuals.filthy.playmaker.data.beans.UserBean;
 
 import java.util.ArrayList;
@@ -195,11 +198,57 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
 
                    Intent i = new Intent(getApplicationContext(), GroupActivity.class);
                    i.putExtra("USER_ID", getId());
-                   i.putExtra("GROUP_ID",groupId);
+                   i.putExtra("GROUP_ID", groupId);
                    i.putExtra("USER_NAME", userName);
                    startActivity(i);
                }
            });
+
+            listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
+                {
+                    final Long groupId = getGroupIds().get(position);
+                    AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());
+                    alert.setTitle("Options");
+                    ListView opt = new ListView(view.getContext());
+
+                    List<String> optionHeadings = new ArrayList<String>();
+                    optionHeadings.add("Open");
+                    optionHeadings.add("Delete");
+                    ListAdapter optionsAdapter = new ArrayAdapter<String>(getBaseContext(), R.layout.user_group_options,R.id.user_option ,optionHeadings);
+                    opt.setAdapter(optionsAdapter);
+                    alert.setView(opt);
+                    alert.setPositiveButton("Done", new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                        }
+                    });
+                    opt.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            if(position == 0)
+                            {
+                                Intent i = new Intent(getApplicationContext(), GroupActivity.class);
+                                i.putExtra("USER_ID", getId());
+                                i.putExtra("GROUP_ID", groupId);
+                                i.putExtra("USER_NAME", userName);
+                                startActivity(i);
+                            }
+                            else if(position ==1){
+                                new DatastoreAdapter(UserActivity.this).leaveGroup(groupId,getId());
+                            }
+                        }
+                    });
+
+
+
+                    alert.show();
+                    return true;
+                }
+
+        });
 
 
            InviteAdapter inviteAdapter = new InviteAdapter(this , R.layout.invitation, R.id.invite_text, list2, inviteIds, this, userId);
