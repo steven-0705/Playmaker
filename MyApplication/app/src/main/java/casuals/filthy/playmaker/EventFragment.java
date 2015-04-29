@@ -1,5 +1,7 @@
 package casuals.filthy.playmaker;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -16,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import casuals.filthy.playmaker.data.AsyncResponse;
+import casuals.filthy.playmaker.data.DatastoreAdapter;
 import casuals.filthy.playmaker.data.beans.GroupBean;
 
 /**
@@ -101,5 +105,54 @@ public class EventFragment extends Fragment implements AsyncResponse{
                 startActivity(i);
             }
         });
+
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                final Long eventId = GroupActivity.getEventIds().get(position);
+                AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());
+                final AlertDialog dialog = alert.create();
+                dialog.setTitle("Options");
+                ListView opt = new ListView(view.getContext());
+                List<String> optionHeadings = new ArrayList<String>();
+                optionHeadings.add("Open");
+                optionHeadings.add("Delete");
+                ListAdapter optionsAdapter = new ArrayAdapter<String>(getActivity().getBaseContext(), R.layout.user_group_options,R.id.user_option ,optionHeadings);
+                opt.setAdapter(optionsAdapter);
+                dialog.setView(opt);
+                dialog.setButton("Done",new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                opt.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        if(position == 0)
+                        {
+                            Intent i = new Intent(getActivity().getApplicationContext(), EventActivity.class);
+                            i.putExtra("EVENT_ID", eventId);
+                            startActivity(i);
+                            dialog.dismiss();
+                        }
+                        else if(position ==1){
+                            //new DatastoreAdapter(EventFragment.this).leaveEvent(eventId,getId());
+                            dialog.dismiss();
+                        }
+                    }
+                });
+
+
+
+                dialog.show();
+                return true;
+            }
+
+        });
+
+
     }
 }
