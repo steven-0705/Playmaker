@@ -139,7 +139,7 @@ public class EventFragment extends Fragment implements AsyncResponse{
                             dialog.dismiss();
                         }
                         else if(position ==1){
-                            //new DatastoreAdapter(EventFragment.this).leaveEvent(eventId,getId());
+                            new DatastoreAdapter(EventFragment.this).leaveEvent(eventId,GroupActivity.getUserId());
                             dialog.dismiss();
                         }
                     }

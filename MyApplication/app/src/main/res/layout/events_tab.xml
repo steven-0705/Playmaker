@@ -56,5 +56,8 @@
         android:text="Create Event"
         android:id="@+id/eventCreate"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:background="@color/playmaker_green"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
 </RelativeLayout>

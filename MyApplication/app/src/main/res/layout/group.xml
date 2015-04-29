@@ -4,14 +4,19 @@
     android:orientation="horizontal">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/playmaker_green"
         android:text="Notifications"
+        android:gravity="center"
         android:id="@+id/notification_text"
-        android:textSize="24sp"
-        android:layout_below="@+id/members_button"
-        android:layout_alignRight="@+id/inviteMember"
-        android:layout_alignEnd="@+id/inviteMember" />
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="46sp"
+        />
+
 
     <View
         android:layout_width="fill_parent"
@@ -34,45 +39,31 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Invite Member"
+        android:text="        Invite        "
         android:id="@+id/inviteMember"
         android:onClick="inviteMember"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true"
+        android:background="@color/playmaker_green"
+        android:textColor="@android:color/white"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold" />
+
+
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Send Notification"
+        android:text="        Post        "
         android:id="@+id/notify"
         android:onClick="sendNotification"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Members ()"
-        android:id="@+id/members_button"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:textStyle="bold"
-        android:textSize="24sp"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:clickable="true"
-        android:onClick="showMembers"
-        android:textColor="@color/wallet_link_text_light" />
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:id="@+id/buttons_line"
-        android:background="@android:color/darker_gray"
-        android:textColor="@color/wallet_link_text_light"
-        android:layout_above="@+id/inviteMember"
-        android:layout_alignRight="@+id/notify"
-        android:layout_alignEnd="@+id/notify" />
+        android:background="@color/playmaker_green"
+        android:textColor="@android:color/white"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold" />
 
 </RelativeLayout>
