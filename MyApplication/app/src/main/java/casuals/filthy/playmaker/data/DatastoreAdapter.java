@@ -446,14 +446,23 @@ public class DatastoreAdapter {
 
     public void leaveEvent(long eventId, String userId) {
         HttpDelete post = new HttpDelete(SERVER_URL + SERVLET_EVENTS
-                + "?user_id="+userId+"&event_id="+eventId);
+                + "?user_id="+userId+"&event_id="+eventId+"&action=leave");
 
-        type = null;
+        type = EventBean.class;
         ServletHttpAsyncTask request = new ServletHttpAsyncTask();
         task = request;
         request.execute(post);
     }
 
+    public void deleteEvent(long eventId, String userId) {
+        HttpDelete post = new HttpDelete(SERVER_URL + SERVLET_EVENTS
+                + "?user_id="+userId+"&event_id="+eventId+"&action=delete");
+
+        type = GroupBean.class;
+        ServletHttpAsyncTask request = new ServletHttpAsyncTask();
+        task = request;
+        request.execute(post);
+    }
 
     class ServletHttpAsyncTask extends AsyncTask<HttpUriRequest, Void, HttpResponse> {
         //private Context context;
