@@ -100,6 +100,8 @@ public class EventData extends DataObject {
         if (autoTeams && numTeams > 0)
             updateTeams();
         else if (numTeams == 0) {
+            if (teams == null)
+                teams = new ArrayList<EventTeam>();
             EventTeam team = new EventTeam();
             team.add(id);
             teams.add(team);
