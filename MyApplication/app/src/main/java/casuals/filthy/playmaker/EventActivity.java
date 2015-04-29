@@ -65,11 +65,13 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
         TextView event_name = (TextView) findViewById(R.id.event_name);
         TextView event_type = (TextView) findViewById(R.id.event_type);
         event_name.setText(event.getName());
-        event_type.setText(event.getType());
+        String type = event.getType().substring(0, 1).toUpperCase() + event.getType().substring(1);
+        event_type.setText(type);
         TextView poll_message = (TextView) findViewById(R.id.poll_message);
         LinearLayout pollView = (LinearLayout) findViewById(R.id.poll);
         TextView event_date = (TextView) findViewById(R.id.event_date);
         TextView event_time = (TextView) findViewById(R.id.event_time);
+        TextView event_location = (TextView) findViewById(R.id.event_location);
         Date date = new Date(event.getDate());
         SimpleDateFormat dateformat = new SimpleDateFormat("M/dd/yy");
         SimpleDateFormat timeformat = new SimpleDateFormat("h:mm a");
@@ -78,6 +80,7 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
         if(timeString.charAt(0) == '0') { timeString.substring(1); }
         event_date.setText("Date: " + dateString);
         event_time.setText("Time: " + timeString);
+        event_location.setText("Location: " + event.getAddress());
 
         if(event.isClosed()) {
             pollView.setVisibility(View.GONE);
@@ -127,6 +130,17 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
             pollView.addView(options);
         }
 
+        if (event.getItems().size() == 0 || (event.getItems().size() == 1 && event.getItems().get(0).equals(""))) {
+            findViewById(R.id.items_text).setVisibility(View.GONE);
+            findViewById(R.id.items_line).setVisibility(View.GONE);
+            findViewById(R.id.items_list).setVisibility(View.GONE);
+        }
+        else {
+            findViewById(R.id.items_text).setVisibility(View.VISIBLE);
+            findViewById(R.id.items_line).setVisibility(View.VISIBLE);
+            findViewById(R.id.items_list).setVisibility(View.VISIBLE);
+        }
+
         if (!event.isReported() && GroupActivity.isAdmin() && event.getAttending() != null && event.getAttending().size() > 0)
             findViewById(R.id.report_scores).setVisibility(View.VISIBLE);
 
@@ -157,7 +171,7 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
                 //entry.setBackgroundColor(getResources().getColor(android.R.color.primary_text_light));
                 entry.setTextSize(32);
                 LinearLayout.LayoutParams viewLp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1);
-                viewLp.setMargins(60, 5, 60, 0);
+                viewLp.setMargins(5, 5, 60, 0);
                 entry.setLayoutParams(viewLp);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 entry.setLayoutParams(lp);
