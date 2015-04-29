@@ -1,28 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="10dp">
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/playmaker_green"
+            android:id="@+id/event_name_holder"
+            android:padding="15dp">
+
         <TextView
             android:id="@+id/event_name"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
+            android:background="@color/playmaker_green"
+            android:textColor="@android:color/white"
+            android:textAlignment="center"
             android:text="Event Name"
             android:textSize="46sp" />
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="2dp"
-            android:layout_marginTop="10dp"
-            android:layout_below="@id/event_name"
-            android:background="@android:color/darker_gray"/>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/event_type"
@@ -30,31 +35,46 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/event_name"
+            android:layout_below="@+id/event_name_holder"
             android:layout_marginTop="40dp"
+            android:layout_marginLeft="15dp"
             android:text="Event Type"
             android:textSize="34sp" />
+
+        <TextView
+            android:id="@+id/event_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="15dp"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/event_type"
+            android:layout_marginTop="20dp"
+            android:text="Location"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/event_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:layout_marginLeft="15dp"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/event_type"
-            android:layout_marginTop="40dp"
+            android:layout_below="@+id/event_location"
+            android:layout_marginTop="20dp"
             android:text="Date: 4/25/2015"
-            android:textSize="24sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/event_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:layout_marginLeft="15dp"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/event_date"
             android:text="Time: 12:00 PM"
-            android:textSize="24sp"
+            android:textSize="18sp"
             android:layout_marginBottom="10dp" />
 
         <TextView
@@ -64,53 +84,65 @@
             android:layout_height="wrap_content"
             android:text="Pick the date:"
             android:layout_alignParentLeft="true"
+            android:layout_marginLeft="15dp"
             android:layout_alignParentStart="true"
-            android:textSize="18dp"
+            android:textSize="24dp"
             android:layout_below="@+id/event_time"
-            android:layout_alignRight="@+id/event_name"
-            android:layout_alignEnd="@+id/event_name" />
+            android:layout_alignRight="@+id/event_name_holder"
+            android:layout_alignEnd="@+id/event_name_holder" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:orientation="vertical"
+            android:visibility="gone"
             android:layout_below="@id/poll_message"
             android:id="@+id/poll"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Items"
+            android:gravity="left"
+            android:text="  Items"
             android:id="@+id/items_text"
-            android:textSize="24sp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/poll" />
+            android:visibility="gone"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:background="@color/playmaker_green"
+            android:textColor="@android:color/white"
+            android:layout_below="@+id/poll"
+            android:layout_centerHorizontal="true" />
 
         <View
             android:layout_width="fill_parent"
             android:layout_height="1dp"
             android:id="@+id/items_line"
+            android:visibility="gone"
             android:layout_below="@id/items_text"
             android:background="@android:color/darker_gray"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_below="@id/items_line"
+            android:visibility="gone"
             android:padding="14dp"
             android:orientation="vertical"
             android:layout_height="wrap_content"
-            android:id="@+id/items_list"></LinearLayout>
+            android:layout_marginRight="55dp"
+            android:id="@+id/items_list"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Attendees"
+            android:text="  Attendees"
             android:id="@+id/attendees_text"
-            android:textSize="24sp"
+            android:gravity="left"
+            android:background="@color/playmaker_green"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="32sp"
             android:layout_below="@+id/items_list"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"/>
+            android:layout_centerHorizontal="true" />
 
         <View
             android:layout_width="fill_parent"
@@ -130,23 +162,29 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Join Event"
+            android:text="Join"
+            android:textStyle="bold"
             android:id="@+id/join_event_button"
             android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
             android:layout_alignParentEnd="true"
+            android:textColor="@android:color/white"
             android:layout_alignBottom="@id/attendees_text"
-            android:onClick="joinEvent"
-            android:visibility="invisible"/>
+            android:layout_alignTop="@id/attendees_text"
+            android:visibility="gone"
+            android:onClick="joinEvent"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Report Scores"
             android:id="@+id/report_scores"
+            android:layout_marginRight="10dp"
             android:layout_alignTop="@+id/event_type"
             android:layout_alignParentRight="true"
             android:onClick="reportScores"
-            android:visibility="invisible"
+            android:visibility="gone"
             android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
