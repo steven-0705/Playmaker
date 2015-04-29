@@ -22,7 +22,7 @@ import casuals.filthy.playmaker.data.beans.GroupBean;
 public class GroupFragment extends Fragment implements AsyncResponse{
 
     private static String[] from = {"MESSAGE", "NAME", "DATE"};
-    private static int[] to = {R.id.notify_message, R.id.notify_name, R.id.member_date};
+    private static int[] to = {R.id.notify_message, R.id.notify_name, R.id.notify_date};
 
     public static GroupBean group;
 

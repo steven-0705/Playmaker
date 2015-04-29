@@ -272,7 +272,7 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
             userNames.add(user.getName());
         }
        String[] from = {"MESSAGE", "NAME", "DATE"};
-        int[] to = {R.id.notify_message, R.id.notify_name, R.id.member_date};
+        int[] to = {R.id.notify_message, R.id.notify_name, R.id.notify_date};
         ListAdapter membersAdapter = new ArrayAdapter<String>(getBaseContext(), R.layout.members_view,R.id.member_name ,userNames);
         members.setAdapter(membersAdapter);
         alert.setView(members);
