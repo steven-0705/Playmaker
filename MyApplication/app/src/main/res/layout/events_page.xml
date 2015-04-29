@@ -172,7 +172,6 @@
             android:textColor="@android:color/white"
             android:layout_alignBottom="@id/attendees_text"
             android:layout_alignTop="@id/attendees_text"
-            android:visibility="gone"
             android:onClick="joinEvent"/>
 
         <Button
