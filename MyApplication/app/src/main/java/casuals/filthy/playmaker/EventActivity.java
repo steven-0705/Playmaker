@@ -157,8 +157,12 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
         }
 
         // populate attendees
-        if (!event.getAttending().keySet().contains(GroupActivity.getUserId()))
-            ((Button) findViewById(R.id.join_event_button)).setVisibility(View.VISIBLE);
+        if (!event.getAttending().keySet().contains(GroupActivity.getUserId())) {
+            ((Button) findViewById(R.id.join_event_button)).setText("Join");
+        }
+        else {
+            ((Button) findViewById(R.id.join_event_button)).setText("Leave");
+        }
 
         LinearLayout attendees = (LinearLayout) findViewById(R.id.attendees_list);
         attendees.removeAllViews();
@@ -210,10 +214,15 @@ public class EventActivity extends BaseActivity implements AsyncResponse {
     }
 
     public void joinEvent(View v) {
-        ((Button) findViewById(R.id.join_event_button)).setVisibility(View.GONE);
-        DatastoreAdapter da = new DatastoreAdapter(this);
-        da.joinEvent(GroupActivity.getGroupId(), event.getId(), GroupActivity.getUserId());
-        Toast.makeText(this, "Joined event", Toast.LENGTH_SHORT).show();
+        if (event.getAttending().containsKey(GroupActivity.getUserId())) {
+            new DatastoreAdapter(this).leaveEvent(eventId, GroupActivity.getUserId());
+            Toast.makeText(this, "Left event", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            DatastoreAdapter da = new DatastoreAdapter(this);
+            da.joinEvent(GroupActivity.getGroupId(), event.getId(), GroupActivity.getUserId());
+            Toast.makeText(this, "Joined event", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void reportScores(View v) {

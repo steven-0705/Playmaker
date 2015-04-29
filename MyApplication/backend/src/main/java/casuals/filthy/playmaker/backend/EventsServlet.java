@@ -244,4 +244,71 @@ public class EventsServlet extends HttpServlet {
         resp.getWriter().flush();
         resp.getWriter().close();
     }
+
+    public void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String eventIdString = req.getParameter("event_id");
+        String userId = req.getParameter("user_id");
+        String action = req.getParameter("action");
+
+        if (eventIdString == null || userId == null || action == null) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing parameters");
+            return;
+        }
+
+        long eventId = Long.parseLong(eventIdString);
+
+        EventData event = ofy().load().type(EventData.class).id(eventId).now();
+
+        if (event == null) {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND, "event not found");
+            return;
+        }
+
+        if (action.equals("leave")) {
+            event.removeUser(userId);
+
+            ofy().save().entity(event).now();
+
+            String eventJson = gson.toJson(event);
+            resp.setStatus(HttpServletResponse.SC_OK);
+            resp.setContentType("application/json");
+            resp.getWriter().write(eventJson);
+            resp.getWriter().flush();
+            resp.getWriter().close();
+            return;
+        }
+
+        if (action.equals("delete")) {
+
+            GroupData group = ofy().load().type(GroupData.class).id(event.getGroupId()).now();
+
+            if (group == null) {
+                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "group not found");
+                return;
+            }
+
+            if (!group.isUserAdmin(userId)) {
+                resp.sendError(HttpServletResponse.SC_FORBIDDEN, "You can't do this!");
+                return;
+            }
+
+            for (int i = 0; i < group.getEvents().size(); i++) {
+                if (group.getEvents().get(i).getEventId() == event.getId()) {
+                    group.getEvents().remove(i);
+                    break;
+                }
+            }
+
+            ofy().save().entities(group).now();
+            ofy().delete().entity(event);
+
+            String groupJson = gson.toJson(group);
+            resp.setStatus(HttpServletResponse.SC_OK);
+            resp.setContentType("application/json");
+            resp.getWriter().write(groupJson);
+            resp.getWriter().flush();
+            resp.getWriter().close();
+        }
+    }
+
 }

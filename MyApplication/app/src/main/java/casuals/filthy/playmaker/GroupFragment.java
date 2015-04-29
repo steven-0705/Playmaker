@@ -59,12 +59,13 @@ public class GroupFragment extends Fragment implements AsyncResponse{
         ListAdapter notificationsAdapter = new SimpleAdapter(getActivity().getBaseContext(), notificationList, R.layout.notification_view, from, to);
         notifications.setAdapter(notificationsAdapter);
 
-        ((Button)getView().findViewById(R.id.members_button)).setText("Members ("+group.getUsers().size()+")");
+
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        updateView();
     }
 }

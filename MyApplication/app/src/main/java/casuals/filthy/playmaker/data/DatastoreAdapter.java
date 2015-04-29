@@ -64,7 +64,7 @@ public class DatastoreAdapter {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 200:
-                    if (caller != null) {
+                    if (caller != null && type != null) {
                         Object response = gson.fromJson(task.getResponse(), type);
                         caller.response(response);
                     }
@@ -444,6 +444,25 @@ public class DatastoreAdapter {
         request.execute(post);
     }
 
+    public void leaveEvent(long eventId, String userId) {
+        HttpDelete post = new HttpDelete(SERVER_URL + SERVLET_EVENTS
+                + "?user_id="+userId+"&event_id="+eventId+"&action=leave");
+
+        type = EventBean.class;
+        ServletHttpAsyncTask request = new ServletHttpAsyncTask();
+        task = request;
+        request.execute(post);
+    }
+
+    public void deleteEvent(long eventId, String userId) {
+        HttpDelete post = new HttpDelete(SERVER_URL + SERVLET_EVENTS
+                + "?user_id="+userId+"&event_id="+eventId+"&action=delete");
+
+        type = GroupBean.class;
+        ServletHttpAsyncTask request = new ServletHttpAsyncTask();
+        task = request;
+        request.execute(post);
+    }
 
     class ServletHttpAsyncTask extends AsyncTask<HttpUriRequest, Void, HttpResponse> {
         //private Context context;

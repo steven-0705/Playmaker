@@ -2,24 +2,34 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/playmaker_green"
+        android:id="@+id/group_name_holder"
+        android:padding="15dp">
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/black"
+        android:background="@color/playmaker_green"
         android:text="Group Name"
         android:gravity="center"
         android:id="@+id/group_name"
-        android:textColor="@color/wallet_holo_blue_light"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:textSize="46sp" />
+
+    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Upcoming Events"
         android:id="@+id/upcoming_text"
-        android:layout_below="@id/group_name"
+        android:layout_below="@id/group_name_holder"
         android:layout_marginTop="20dp"
         android:textSize="24sp"
         android:layout_marginLeft="10dp"/>
@@ -55,5 +65,8 @@
         android:text="Create Event"
         android:id="@+id/eventCreate"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:background="@color/playmaker_green"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
 </RelativeLayout>
