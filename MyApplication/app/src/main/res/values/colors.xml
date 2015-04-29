@@ -4,5 +4,6 @@
 
     <color name="playmaker_green">#008100</color>
     <color name="light_grey">#D4D4DB</color>
+    <color name="transparent">#000000</color>
 
 </resources>

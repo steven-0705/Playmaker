@@ -1,8 +1,18 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
         <!-- Customize your theme here. -->
+        <item name="android:actionBarTabTextStyle">@style/ActionBarTabText.Playmaker</item>
+        <item name="android:actionBarTabStyle">@style/ActionBarTabView.Playmaker</item>
+    </style>
+
+    <style name="ActionBarTabText.Playmaker" parent="@android:style/Widget.Holo.Light.ActionBar.TabText">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="ActionBarTabView.Playmaker" parent="@android:style/Widget.Holo.Light.ActionBar.TabView">
+        <item name="android:background">@drawable/tab_bar_background</item>
     </style>
 
 </resources>
