@@ -448,7 +448,7 @@ public class DatastoreAdapter {
         HttpDelete post = new HttpDelete(SERVER_URL + SERVLET_EVENTS
                 + "?user_id="+userId+"&event_id="+eventId+"&action=leave");
 
-        type = null;
+        type = EventBean.class;
         ServletHttpAsyncTask request = new ServletHttpAsyncTask();
         task = request;
         request.execute(post);
@@ -458,7 +458,7 @@ public class DatastoreAdapter {
         HttpDelete post = new HttpDelete(SERVER_URL + SERVLET_EVENTS
                 + "?user_id="+userId+"&event_id="+eventId+"&action=delete");
 
-        type = null;
+        type = GroupBean.class;
         ServletHttpAsyncTask request = new ServletHttpAsyncTask();
         task = request;
         request.execute(post);

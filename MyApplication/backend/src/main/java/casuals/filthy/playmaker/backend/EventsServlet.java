@@ -269,7 +269,12 @@ public class EventsServlet extends HttpServlet {
 
             ofy().save().entity(event).now();
 
+            String eventJson = gson.toJson(event);
             resp.setStatus(HttpServletResponse.SC_OK);
+            resp.setContentType("application/json");
+            resp.getWriter().write(eventJson);
+            resp.getWriter().flush();
+            resp.getWriter().close();
             return;
         }
 
