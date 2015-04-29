@@ -23,7 +23,7 @@
             android:layout_centerHorizontal="true"
             android:background="@color/playmaker_green"
             android:textColor="@android:color/white"
-            android:textAlignment="center"
+            android:gravity="center"
             android:text="Event Name"
             android:textSize="46sp" />
 
