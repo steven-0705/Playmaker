@@ -5,11 +5,12 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/black"
+        android:background="@color/playmaker_green"
         android:text="Group Name"
         android:gravity="center"
         android:id="@+id/group_name"
-        android:textColor="@color/wallet_holo_blue_light"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:textSize="46sp" />

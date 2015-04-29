@@ -75,7 +75,19 @@ public class EventData extends DataObject {
     }
 
     public void removeUser(String userId) {
+        if (attending == null) return;
+        attending.remove(userId);
 
+        if (numTeams > 0 && autoTeams)
+            updateTeams();
+        else if (numTeams == 0 && teams != null) {
+            for (int i = 0; i < teams.size(); i++) {
+                if (teams.get(i).getMembers().get(i).equals(userId)) {
+                    teams.remove(i);
+                    break;
+                }
+            }
+        }
     }
 
     public void checkPoll() {

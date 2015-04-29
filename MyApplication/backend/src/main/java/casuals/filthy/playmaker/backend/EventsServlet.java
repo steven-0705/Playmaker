@@ -244,4 +244,30 @@ public class EventsServlet extends HttpServlet {
         resp.getWriter().flush();
         resp.getWriter().close();
     }
+
+    public void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String eventIdString = req.getParameter("event_id");
+        String userId = req.getParameter("user_id");
+
+        if (eventIdString == null || userId == null) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing parameters");
+            return;
+        }
+
+        long eventId = Long.parseLong(eventIdString);
+
+        EventData event = ofy().load().type(EventData.class).id(eventId).now();
+
+        if (event == null) {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND, "event not found");
+            return;
+        }
+
+        event.removeUser(userId);
+
+        ofy().save().entity(event).now();
+
+        resp.setStatus(HttpServletResponse.SC_OK);
+    }
+
 }
