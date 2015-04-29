@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,6 +57,9 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
         final TextView user_name = (TextView) findViewById(R.id.user_display);
         final TextView user_email = (TextView) findViewById(R.id.user_user);
         final Button createGroup = (Button) findViewById(R.id.groupCreate);
+        ImageView previewThumbnail = (ImageView) findViewById(R.id.user_image);
+        Bitmap b = BaseActivity.personImageView;
+        previewThumbnail.setImageBitmap(b);
 
         TabHost host = (TabHost)findViewById(R.id.user_tabHost);
         host.setup();
@@ -84,7 +88,7 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
-                final EditText input= new EditText(v.getContext());
+                final EditText input = new EditText(v.getContext());
                 input.setImeOptions(EditorInfo.IME_ACTION_DONE);
                 input.setSingleLine();
                 alert.setTitle("Enter a name for your group.");
@@ -123,8 +127,36 @@ public class UserActivity extends BaseActivity implements AsyncResponse{
         super.signOut();
     }
 
+    public static Button userSignOut;
+    public void checkforSignOut(View v){
+        if(userSignOut == null)
+        {
+            try{
 
-       @Override
+                userSignOut = (Button) findViewById(R.id.signOut);
+                userSignOut.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        BaseActivity.login=3;
+                        userSignOut = null;
+                        signOut();
+                        Intent i = new Intent(getApplicationContext(), BaseActivity.class);
+                        startActivity(i);
+                        finish();
+                    }
+                });
+                userSignOut=null;
+            }
+            catch(Exception e)
+            {
+                return;
+            }
+        }
+    }
+
+
+
+    @Override
        public void response(Object o) {
            if(!(o instanceof UserBean)) {
                return;
