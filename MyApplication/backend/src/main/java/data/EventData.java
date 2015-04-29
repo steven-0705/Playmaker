@@ -74,6 +74,10 @@ public class EventData extends DataObject {
             datePoll.addVote(user, choice);
     }
 
+    public void removeUser(String userId) {
+
+    }
+
     public void checkPoll() {
         if (!closed && closeDate < System.currentTimeMillis()) {
             int[] results = datePoll.compile();
