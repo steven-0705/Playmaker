@@ -1,13 +1,7 @@
 package casuals.filthy.playmaker.backend;
 
-import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.repackaged.com.google.api.client.util.store.DataStoreFactory;
-import com.google.appengine.repackaged.com.google.api.client.util.store.DataStoreUtils;
 import com.google.gson.Gson;
-import com.googlecode.objectify.ObjectifyService;
-import com.googlecode.objectify.annotation.Entity;
-import com.sun.deploy.net.HttpResponse;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -112,11 +106,7 @@ public class GroupsServlet extends HttpServlet {
                 return;
             }
 
-            for (GroupUserDetailed userData: group.getUsers()) {
-                if (userData.getId().equals(userId)) {
-                    userData.setAdmin(true);
-                }
-            }
+            group.getUserById(newAdmin).setAdmin(true);
 
             // respond
             String groupJson = gson.toJson(group);

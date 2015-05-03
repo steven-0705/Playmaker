@@ -318,6 +318,19 @@ public class Utils {
         return group;
     }
 
+    public static GroupData addAdmin(long groupId, String newAdmin, String userId) {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("user_id", userId);
+        params.put("group_id", groupId+"");
+        params.put("new_admin", newAdmin);
+        params.put("action", "make_admin");
+
+        String resp = Utils.postReq(Utils.GROUPS_URL, params);
+        System.out.println(resp);
+        GroupData group = gson.fromJson(resp, GroupData.class);
+        return group;
+    }
+
     public static UserData deleteGroup(String userId, long groupId) {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("user_id", userId);

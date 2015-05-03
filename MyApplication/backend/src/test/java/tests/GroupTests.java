@@ -153,4 +153,14 @@ public class GroupTests {
             assertEquals(0, user2.getInvites().size());
     }
 
+    @Test
+    public void groupsAddAdmin() {
+        GroupData group = Utils.addGroup(user1.getId(), "groupsssszzzz");
+        user2 = Utils.joinGroup(user2.getId(), group.getId());
+
+        group = Utils.addAdmin(group.getId(), user2.getId(), user1.getId());
+
+        assertTrue(group.getUserById(user2.getId()).isAdmin());
+    }
+
 }
