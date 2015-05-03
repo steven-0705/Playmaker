@@ -7,6 +7,7 @@ import com.google.appengine.repackaged.com.google.api.client.util.store.DataStor
 import com.google.gson.Gson;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.Entity;
+import com.sun.deploy.net.HttpResponse;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -76,6 +77,46 @@ public class GroupsServlet extends HttpServlet {
             group.addNotification(userName, message);
 
             ofy().save().entities(group).now();
+
+            // respond
+            String groupJson = gson.toJson(group);
+            resp.setStatus(HttpServletResponse.SC_OK);
+            resp.setContentType("application/json");
+            resp.getWriter().write(groupJson);
+            resp.getWriter().flush();
+            resp.getWriter().close();
+
+        }
+        else if (action != null && action.equals("make_admin")) {
+            String groupIdString = (String) params.get("group_id");
+            if (groupIdString == null) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing fields");
+                return;
+            }
+            long groupId = Long.parseLong(groupIdString);
+
+            group = ofy().load().type(GroupData.class).id(groupId).now();
+            if (group == null) {
+                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "group not found");
+                return;
+            }
+
+            String newAdmin = (String) params.get("new_admin");
+            if (newAdmin == null) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing new_admin field");
+                return;
+            }
+
+            if (!group.getUserById(userId).isAdmin()) {
+                resp.sendError(HttpServletResponse.SC_FORBIDDEN, "must be an admin");
+                return;
+            }
+
+            for (GroupUserDetailed userData: group.getUsers()) {
+                if (userData.getId().equals(userId)) {
+                    userData.setAdmin(true);
+                }
+            }
 
             // respond
             String groupJson = gson.toJson(group);
