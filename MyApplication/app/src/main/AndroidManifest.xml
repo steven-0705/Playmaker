@@ -70,6 +70,8 @@
             android:label="PlayMaker"></activity>
 
 
+        <service android:name="MyService" ></service>
+        <receiver android:name="MyStartServiceReceiver" ></receiver>
     </application>
 
 </manifest>

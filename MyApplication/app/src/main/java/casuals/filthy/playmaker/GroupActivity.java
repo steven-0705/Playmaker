@@ -2,19 +2,24 @@ package casuals.filthy.playmaker;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import casuals.filthy.playmaker.data.DatastoreAdapter;
@@ -24,9 +29,12 @@ import casuals.filthy.playmaker.data.beans.GroupUserBean;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.ToggleButton;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 public class GroupActivity extends BaseActivity implements ActionBar.TabListener, AsyncResponse{
     ActionBar actionbar;
@@ -38,6 +46,10 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
     private static List<Long> eventIds;
     private ProgressDialog progress;
     private static boolean admin;
+    Calendar updateTime;
+    Intent downloader;
+    PendingIntent pendingIntent;
+    AlarmManager alarmManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,6 +99,9 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
 
         DatastoreAdapter adapter = new DatastoreAdapter(this);
         adapter.getGroup(GroupActivity.getGroupId());
+
+        MyService.noteNumber = 0;
+
 
     }
 
@@ -241,6 +256,45 @@ public class GroupActivity extends BaseActivity implements ActionBar.TabListener
             }
         });
         alert.setNegativeButton("Cancel", null).show();
+    }
+
+    public void onToggleClicked(View view) {
+        // Is the toggle on?
+        boolean on = ((Switch) view).isChecked();
+
+        if (on) {
+            setRecurringAlarm(this);
+        } else {
+            cancelRecurringAlarm(this);
+        }
+    }
+
+
+
+    private void setRecurringAlarm(Context context) {
+
+        updateTime = Calendar.getInstance();
+        updateTime.setTimeZone(TimeZone.getDefault());
+        updateTime.set(Calendar.HOUR_OF_DAY, 0);
+        updateTime.set(Calendar.MINUTE, 0);
+        downloader = new Intent(context, MyStartServiceReceiver.class);
+        downloader.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        pendingIntent = PendingIntent.getBroadcast(context, 0, downloader,       PendingIntent.FLAG_CANCEL_CURRENT);
+
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(), 30000, pendingIntent);
+
+        Log.d("MyActivity", "Set alarmManager.setRepeating to: " + updateTime.getTime().toLocaleString());
+
+    }
+
+    private void cancelRecurringAlarm(Context context) {
+        if(alarmManager != null) {
+            alarmManager.cancel(pendingIntent);
+            Log.d("MyActivity", "Turn off Notifications");
+        }
     }
 
 //    public void showMembers(View v) {
