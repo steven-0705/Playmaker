@@ -434,6 +434,27 @@ public class DatastoreAdapter {
         request.execute(post);
     }
 
+    public void makeAdmin(long groupId, String userId, String newAdminId) {
+        HttpPost post = new HttpPost(SERVER_URL + SERVLET_GROUPS);
+
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("user_id", userId);
+        params.put("group_id", groupId+"");
+        params.put("new_admin", newAdminId);
+        params.put("action", "make_admin");
+        post.setHeader("Content-Type", "application/json");
+        try {
+            post.setEntity(new StringEntity(gson.toJson(params)));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        type = GroupBean.class;
+        ServletHttpAsyncTask request = new ServletHttpAsyncTask();
+        task = request;
+        request.execute(post);
+    }
+
     public void leaveGroup(long groupId, String userId) {
         HttpDelete post = new HttpDelete(SERVER_URL + SERVLET_GROUPS
                 + "?user_id="+userId+"&group_id="+groupId);

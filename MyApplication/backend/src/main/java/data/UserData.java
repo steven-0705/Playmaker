@@ -96,6 +96,20 @@ public class UserData extends DataObject{
         if (invites == null) {
             invites = new ArrayList<Invite>();
         }
+
+        if (groups != null) {
+            for (UserGroup group : groups) {
+                if (group.getId() == groupId) {
+                    return;
+                }
+            }
+        }
+
+        for (Invite invite: invites) {
+            if (invite.getGroupId() == groupId)
+                return;
+        }
+
         invites.add(new Invite(groupId, userName, System.currentTimeMillis()));
     }
 
